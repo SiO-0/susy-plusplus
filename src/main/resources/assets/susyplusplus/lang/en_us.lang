@@ -1,0 +1,67 @@
+# Susy Plus Plus - en_us
+# 物品（MetaItem 默认翻译键格式：metaitem.<unlocalizedName>.name）
+metaitem.waterproof_spray_can.name=Waterproof Spray Can
+
+# 材料 / 流体（Material.getUnlocalizedName() = <modid>.material.<name>）
+susyplusplus.material.waterproof_paint=Waterproof Paint
+
+# 物品 tooltip
+susyplusplus.tooltip.waterproof_spray_can.right_click=Right-click a placed machine: set it waterproof
+susyplusplus.tooltip.waterproof_spray_can.offhand=Hold in offhand while placing a machine: apply waterproofing automatically
+susyplusplus.tooltip.waterproof_spray_can.uses=Remaining uses: %,d
+
+# The One Probe
+info.susyplusplus.waterproof=Waterproof
+info.susyplusplus.not_waterproof=Not Waterproof
+
+# 电池盒 / Battery Case
+metaitem.battery_case.name=Battery Case
+susyplusplus.tooltip.battery_case.charge=Energy: %s / %s EU
+susyplusplus.tooltip.battery_case.tier=Voltage: %s
+susyplusplus.tooltip.battery_case.tier_empty=Voltage: (no battery)
+susyplusplus.tooltip.battery_case.count=Batteries: %s / %s
+susyplusplus.tooltip.battery_case.open_ui=Right-click to open the battery case
+susyplusplus.tooltip.battery_case.toggle_mode=Sneak + right-click to toggle discharge mode
+susyplusplus.tooltip.battery_case.same_tier=Accepts batteries of the same voltage tier only
+
+# 强化土高炉 / Reinforced PBF
+tile.reinforced_firebrick.name=Reinforced Firebrick
+susyplusplus.machine.reinforced_pbf.name=Reinforced Blast Furnace
+susyplusplus.machine.reinforced_pbf.description=A reinforced Primitive Blast Furnace. No power required, no maintenance needed; its casing can be replaced by item/fluid hatches.
+susyplusplus.machine.reinforced_pbf.tooltip.recipe=Uses the Primitive Blast Furnace recipes
+susyplusplus.machine.reinforced_pbf.tooltip.no_energy=No energy required
+susyplusplus.machine.reinforced_pbf.tooltip.no_maintenance=No maintenance required
+susyplusplus.machine.reinforced_pbf.tooltip.parallel=Processes 4 recipes in parallel
+susyplusplus.machine.reinforced_pbf.tooltip.hatch=Casing can be replaced by item/fluid hatches
+
+# 无线能量传输塔 / Wireless Energy Transmission Tower
+susyplusplus.machine.wireless_energy_tower.name=Wireless Energy Transmission Tower
+susyplusplus.machine.wireless_energy_tower.description=A multiblock that charges machines remotely via marked drones.
+susyplusplus.machine.wireless_energy_tower.tooltip.drone=Put a Susy-Core cargo drone in the input bus, renamed with an anvil to "x y z"
+susyplusplus.machine.wireless_energy_tower.tooltip.battery=Total battery capacity sets the tower's energy cap; transfer voltage = lowest battery voltage
+susyplusplus.machine.wireless_energy_tower.tooltip.energy=Energy hatches charge it from the grid, and batteries in the bus discharge into it
+susyplusplus.machine.wireless_energy_tower.tooltip.target=Up to 9 marked drones (= up to 9 targets)
+susyplusplus.machine.wireless_energy_tower.tooltip.maintenance=Requires maintenance
+
+susyplusplus.multiblock.wireless_energy_tower.running=Transmitting
+susyplusplus.multiblock.wireless_energy_tower.energy=Energy: %s / %s EU
+susyplusplus.multiblock.wireless_energy_tower.batteries=Batteries: %s / %s
+susyplusplus.multiblock.wireless_energy_tower.voltage=Transfer voltage: %s EU/t
+susyplusplus.multiblock.wireless_energy_tower.targets=Active targets: %s / drones: %s
+susyplusplus.multiblock.wireless_energy_tower.no_battery=No battery
+susyplusplus.multiblock.wireless_energy_tower.too_many_batteries=Too many batteries (max %s)
+susyplusplus.multiblock.wireless_energy_tower.no_drone=No drone
+susyplusplus.multiblock.wireless_energy_tower.too_many_drones=Too many drones (max %s)
+susyplusplus.multiblock.wireless_energy_tower.invalid_target=%s drone(s) have no coordinates in their name (rename with an anvil to "x y z")
+susyplusplus.multiblock.wireless_energy_tower.target_offline=%s target position(s) have no chargeable machine
+susyplusplus.multiblock.wireless_energy_tower.no_energy=The tower's stored energy is empty
+susyplusplus.multiblock.wireless_energy_tower.progress=Transfer progress: %s / %s ticks
+susyplusplus.multiblock.wireless_energy_tower.output=Output: %s EU/t
+susyplusplus.multiblock.wireless_energy_tower.idling=Idling
+
+# The One Probe: Wireless Energy Transmission Tower
+susyplusplus.top.wireless_energy_tower.progress=Transfer progress
+susyplusplus.top.wireless_energy_tower.output=Output
+susyplusplus.top.wireless_energy_tower.energy=Energy
+susyplusplus.top.wireless_energy_tower.targets=Target drones
+susyplusplus.top.wireless_energy_tower.idling=Idling

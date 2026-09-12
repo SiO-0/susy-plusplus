@@ -1,7 +1,8 @@
-## TemplateDevEnv
-_For Kotlin see [TemplateDevEnvKt](https://github.com/CleanroomMC/TemplateDevEnvKt)_
+## Susy Plus Plus
 
-Template workspace for modding Minecraft 1.12.2. Licensed under MIT, it is made for public use.
+面向 **SUSY** 整合包的实用附属模组，基于 Minecraft 1.12.2 Forge 开发。
+
+本工程派生自 [TemplateDevEnv](https://github.com/CleanroomMC/TemplateDevEnv) 模板（模板部分仍为 MIT 许可，见 [`LICENSE-TemplateDevEnv-MIT.txt`](LICENSE-TemplateDevEnv-MIT.txt)），本工程自身采用 **GNU Lesser General Public License v3.0（LGPL-3.0）** 许可，详见 [许可证](#许可证--license)。
 
 This template runs on **Java 25**, **Gradle 9.7.0** + **[RetroFuturaGradle](https://github.com/GTNewHorizons/RetroFuturaGradle) 2.0.3** + **Forge 14.23.5.2847**.
 
@@ -19,3 +20,30 @@ With **coremod and mixin support** that is easy to configure.
 - Dependencies script in [gradle/scripts/dependencies.gradle](gradle/scripts/dependencies.gradle), explanations are commented in the file.
 - Publishing script in [gradle/scripts/publishing.gradle](gradle/scripts/publishing.gradle).
 - When writing Mixins on IntelliJ, it is advisable to use latest [MinecraftDev Fork for RetroFuturaGradle](https://github.com/eigenraven/MinecraftDev/releases).
+
+---
+
+## 内容 / Features
+
+| 内容 | 说明 | 开关（默认） | 文档 |
+| --- | --- | --- | --- |
+| 防水喷漆 | 让机器防水（阻止遇水/地形爆炸），TOP 显示防水状态 | `enableWaterproofSprayCan`（开） | [docs/waterproof_spray_can.md](docs/waterproof_spray_can.md) |
+| 电池盒 | 可放电池的饰品/物品，带 GUI 与释能模式 | `enableBatteryCase`（开） | [docs/battery_case.md](docs/battery_case.md) |
+| 强化土高炉 | 用原版土高炉配方、不耗电、无需维护、4 并行、可换仓室 | `enableReinforcedPbf`（开） | [docs/reinforced_pbf.md](docs/reinforced_pbf.md) |
+| 无线能量传输塔 | 用铁砧改名的 Susy-Core 无人机作为目标，电池总容量决定上限、最低电池电压决定传输电压，最后 3 秒输出 `电压 × 电池个数 × 64` | `enableWirelessEnergyTower`（开） | [docs/wireless_energy_tower.md](docs/wireless_energy_tower.md) |
+| 橡胶管道修改 | 橡胶流体管道速率对齐钢 + 合金炉配方 | `enableRubberPipeTweaks`（**关**） | [docs/config.md](docs/config.md) |
+| 火种科技配方 | 干燥机 / 提取机 / 锻造锤配方 | `enablePyrotechRecipeTweaks`（开） | [docs/config.md](docs/config.md) |
+
+全部开关在 `config/susyplusplus.cfg`，均为**加载期**开关（改动后需重启）。
+
+---
+
+## 许可证 / License
+
+本工程（Susy Plus Plus）采用 **GNU Lesser General Public License version 3**。
+
+- [`LICENSE`](LICENSE) —— GNU Lesser General Public License v3（LGPL-3.0）全文
+- [`COPYING`](COPYING) —— GNU General Public License v3（GPL-3.0）全文（LGPL-3.0 以其为基础条款）
+- [`LICENSE-TemplateDevEnv-MIT.txt`](LICENSE-TemplateDevEnv-MIT.txt) —— 上游 [TemplateDevEnv](https://github.com/CleanroomMC/TemplateDevEnv) 构建脚本的 MIT 许可与 CleanroomMC 版权声明（按 MIT 要求予以保留）
+
+> SPDX-License-Identifier: `LGPL-3.0-only`

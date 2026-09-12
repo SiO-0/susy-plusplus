@@ -3,3 +3,33 @@
 
 // If you wish to use the default helper methods, uncomment the line below
 // apply from: 'gradle/scripts/helpers.gradle'
+
+/**
+ * 让 run（runClient / runServer 等）能加载本模组。
+ *
+ * 背景：本工程的 run/ 目录是一个完整的 SUSY 整合包实例（生产环境，Cleanroom/SRG 名称），
+ * FML 只会从 `run/mods`（以及 `run/mods/1.12.2`）搜索模组，而 RFG 的产物默认不会进入该目录。
+ *
+ * 关键：必须使用 **重混淆后的生产 jar（reobfJar）**，不能用 dev jar（`jar` 任务产物）。
+ * 因为 dev jar 使用 MCP 名称，在生产环境（SRG 名称）下会出现
+ * `NoSuchMethodError: net.minecraft.client.resources.I18n.format(...)` 之类的崩溃。
+ */
+def reobfJar = tasks.named('reobfJar')
+
+def copyModToRunMods = tasks.register('copyModToRunMods', Copy) {
+    group = 'cleanroom helpers'
+    description = 'Copies the reobfuscated production jar into run/mods so FML loads this mod.'
+    dependsOn reobfJar
+    from reobfJar
+    into file('run/mods')
+    // 固定文件名，避免每次构建产生 “版本号不同” 的重复模组
+    rename { String ignored -> 'susyplusplus.jar' }
+    doLast {
+        // 清理早期误放进 run/mods 的 dev jar（MCP 名称，会在生产环境崩溃）
+        file('run/mods/susyplusplus-dev.jar').delete()
+    }
+}
+
+tasks.matching { it.name in ['runClient', 'runServer', 'runObfClient', 'runObfServer'] }.configureEach {
+    dependsOn copyModToRunMods
+}

@@ -1,0 +1,13 @@
+{
+  "package": "com.susy.plusplus.mixin",
+  "required": true,
+  "refmap": "mixins.susyplusplus.refmap.json",
+  "target": "@env(DEFAULT)",
+  "minVersion": "0.8.5",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "MetaTileEntityWaterproofMixin"
+  ],
+  "server": [],
+  "client": []
+}

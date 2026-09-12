@@ -1,0 +1,67 @@
+# Susy Plus Plus - zh_cn
+# 物品（MetaItem 默认翻译键格式：metaitem.<unlocalizedName>.name）
+metaitem.waterproof_spray_can.name=防水喷漆
+
+# 材料 / 流体（Material.getUnlocalizedName() = <modid>.material.<name>）
+susyplusplus.material.waterproof_paint=防水漆液
+
+# 物品 tooltip
+susyplusplus.tooltip.waterproof_spray_can.right_click=右键已放置的机器：设为防水
+susyplusplus.tooltip.waterproof_spray_can.offhand=副手持有，主手放置机器：自动防水
+susyplusplus.tooltip.waterproof_spray_can.uses=剩余次数：%,d
+
+# The One Probe
+info.susyplusplus.waterproof=防水
+info.susyplusplus.not_waterproof=不防水
+
+# 电池盒 / Battery Case
+metaitem.battery_case.name=电池盒
+susyplusplus.tooltip.battery_case.charge=电量：%s / %s EU
+susyplusplus.tooltip.battery_case.tier=电压：%s
+susyplusplus.tooltip.battery_case.tier_empty=电压：（无电池）
+susyplusplus.tooltip.battery_case.count=电池数：%s / %s
+susyplusplus.tooltip.battery_case.open_ui=右键打开电池盒
+susyplusplus.tooltip.battery_case.toggle_mode=潜行右键切换释能模式
+susyplusplus.tooltip.battery_case.same_tier=仅可放入相同电压等级的电池
+
+# 强化土高炉 / Reinforced PBF
+tile.reinforced_firebrick.name=强化耐火砖
+susyplusplus.machine.reinforced_pbf.name=强化土高炉
+susyplusplus.machine.reinforced_pbf.description=强化版土高炉。不耗电、无需维护；外壳可替换为物品/流体仓室。
+susyplusplus.machine.reinforced_pbf.tooltip.recipe=使用原版土高炉的配方
+susyplusplus.machine.reinforced_pbf.tooltip.no_energy=不消耗电力
+susyplusplus.machine.reinforced_pbf.tooltip.no_maintenance=无需维护
+susyplusplus.machine.reinforced_pbf.tooltip.parallel=4 并行处理
+susyplusplus.machine.reinforced_pbf.tooltip.hatch=外壳可替换为物品/流体仓室
+
+# 无线能量传输塔 / Wireless Energy Transmission Tower
+susyplusplus.machine.wireless_energy_tower.name=无线能量传输塔
+susyplusplus.machine.wireless_energy_tower.description=用标记无人机远程给机器充能的多方块。
+susyplusplus.machine.wireless_energy_tower.tooltip.drone=输入总线放 Susy-Core 货运无人机，用铁砧改名为「x y z」
+susyplusplus.machine.wireless_energy_tower.tooltip.battery=电池总容量决定主方块电量上限；传输电压取最低电池电压
+susyplusplus.machine.wireless_energy_tower.tooltip.energy=能源仓从电网充电，总线里的电池也会放电充入
+susyplusplus.machine.wireless_energy_tower.tooltip.target=最多 9 个标记无人机（= 最多 9 个目标）
+susyplusplus.machine.wireless_energy_tower.tooltip.maintenance=需要维护
+
+susyplusplus.multiblock.wireless_energy_tower.running=正在传输
+susyplusplus.multiblock.wireless_energy_tower.energy=电量：%s / %s EU
+susyplusplus.multiblock.wireless_energy_tower.batteries=电池：%s / %s
+susyplusplus.multiblock.wireless_energy_tower.voltage=传输电压：%s EU/t
+susyplusplus.multiblock.wireless_energy_tower.targets=工作中目标：%s 个 / 无人机：%s 个
+susyplusplus.multiblock.wireless_energy_tower.no_battery=没有电池
+susyplusplus.multiblock.wireless_energy_tower.too_many_batteries=电池过多（最多 %s 个）
+susyplusplus.multiblock.wireless_energy_tower.no_drone=没有无人机
+susyplusplus.multiblock.wireless_energy_tower.too_many_drones=无人机过多（最多 %s 个）
+susyplusplus.multiblock.wireless_energy_tower.invalid_target=%s 个无人机名称里没有坐标（需铁砧改为「x y z」）
+susyplusplus.multiblock.wireless_energy_tower.target_offline=%s 个目标位置没有可充能的机器
+susyplusplus.multiblock.wireless_energy_tower.no_energy=主方块电量已耗尽
+susyplusplus.multiblock.wireless_energy_tower.progress=传输进度：%s / %s tick
+susyplusplus.multiblock.wireless_energy_tower.output=输出：%s EU/t
+susyplusplus.multiblock.wireless_energy_tower.idling=待机
+
+# The One Probe：无线能量传输塔
+susyplusplus.top.wireless_energy_tower.progress=传输进度
+susyplusplus.top.wireless_energy_tower.output=输出
+susyplusplus.top.wireless_energy_tower.energy=电量
+susyplusplus.top.wireless_energy_tower.targets=目标无人机
+susyplusplus.top.wireless_energy_tower.idling=待机

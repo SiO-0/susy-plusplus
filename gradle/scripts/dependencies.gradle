@@ -25,6 +25,16 @@ repositories {
             includeGroup 'maven.modrinth'
         }
     }
+    // CodeChickenLib / JEI 等
+    maven {
+        name 'BlameJared'
+        url 'https://maven.blamejared.com'
+    }
+    // GTCEu 官方 maven
+    maven {
+        name 'GTCEu Maven'
+        url 'https://maven.gtceu.com'
+    }
     mavenLocal() // Must be last for caching to work
 }
 
@@ -38,6 +48,39 @@ dependencies {
     runtimeOnly 'com.cleanroommc:strip-latest-forge-requirements:1.0'
     // Include OSXNarratorBlocker by default for the dev env, for M1+ Macs
     runtimeOnly 'com.cleanroommc:osxnarratorblocker:1.0'
+
+    // ============================================================================
+    // SUSY Plus Plus 必需依赖
+    //
+    // 1) GregTech CE: Unofficial (GTCEu) —— 本附属所依据的 API
+    //    CurseForge: https://www.curseforge.com/minecraft/mc-mods/gregtech-ce-unofficial (项目ID 557242)
+    //    Modrinth  : https://modrinth.com/mod/gregtech-ce-unofficial
+    //    注意：若下面的 Modrinth 版本号在你的环境不可用，请改为 CurseMaven 形式：
+    //      implementation rfg.deobf('curse.maven:gregtech-ce-unofficial-557242:<fileId>')
+    //    （fileId 从 CurseForge 对应文件的 Files 页复制）
+    implementation rfg.deobf('maven.modrinth:gregtech-ce-unofficial:2.8.7-beta')
+    // 备选（CurseMaven，fileId 需从 CurseForge 文件页复制）：
+    // implementation rfg.deobf('curse.maven:gregtech-ce-unofficial-557242:<fileId>')
+    // 2) GT 的公开 API 传递依赖（GT 自身以 api 形式发布，编译其 API 需要）
+    implementation 'codechicken:codechickenlib:3.2.3.358'
+    implementation('com.cleanroommc:modularui:3.0.4') { transitive = false }
+    implementation('com.cleanroommc:groovyscript:1.2.0-hotfix1') { transitive = false }
+    // Baubles（1.12.2 饰品栏 API）—— 电池盒复用 GT 的 BaubleBehavior 需要
+    compileOnly rfg.deobf('curse.maven:baubles-227083:2518667')
+    // 3) The One Probe（1.12.2）—— 提供 mcjty.theoneprobe.api.*
+    implementation rfg.deobf('curse.maven:top-245211:2667280') // TOP 1.4.28
+    // 4) 编译期最小 stub：GT 的 MetaItem 声明实现了
+    //    com.enderio.core.common.interfaces.IOverlayRenderAware（EnderCore，@Optional.Interface），
+    //    但 GT 发布 jar 不含该 api stub。这里用等价最小 stub 仅供编译，不会打进 jar。
+    //    生成方式见 docs/waterproof_spray_can.md（javac 输出到 libs/enderio-stub-classes）。
+    compileOnly files('libs/enderio-stub-classes')
+    // 5) Susy-Core（本整合包自带的核心 mod，modid = susy）
+    //    它提供 supersymmetry.api.recipes.SuSyRecipeMaps —— 其中 DRYER_RECIPES（干燥机）
+    //    是原版 GTCEu 的 RecipeMaps 里没有的（已用 javap 核实 2.8.7 / 2.8.10 均无 DRYER_RECIPES）。
+    //    仅编译期需要（运行期由 run/mods 提供）；用 fileTree 而非固定文件名，
+    //    文件不存在时不会让构建直接失败。
+    compileOnly fileTree(dir: 'run/mods', include: ['Susy-Core-*.jar'])
+    // ============================================================================
 
     // Example - Dependency descriptor:
     // 'com.google.code.gson:gson:2.8.6' << group: com.google.code.gson, name:gson, version:2.8.6
