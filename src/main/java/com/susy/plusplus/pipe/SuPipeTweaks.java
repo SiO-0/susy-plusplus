@@ -66,6 +66,11 @@ public final class SuPipeTweaks {
 
     /** 由 {@code SusyPlusPlus#preInit} 调用（此时 GT 已建好管道、GroovyScript 也已加好属性）。 */
     public static void applyRubberFluidPipeThroughput() {
+        // 适配原版 GT：橡胶管道是本整合包用 GroovyScript 补的，原版 GT 下没有 → 直接跳过。
+        if (SuConfig.vanillaGtCompat) {
+            SusyPlusPlus.LOGGER.info("[SusyPlusPlus] Rubber pipe tweaks are skipped (vanilla GT compat mode).");
+            return;
+        }
         if (!SuConfig.enableRubberPipeTweaks) {
             SusyPlusPlus.LOGGER.info("[SusyPlusPlus] Rubber pipe tweaks are DISABLED in config.");
             return;

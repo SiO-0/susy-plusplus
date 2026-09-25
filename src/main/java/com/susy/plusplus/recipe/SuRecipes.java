@@ -54,15 +54,20 @@ public final class SuRecipes {
     public static void init() {
         // 受配置文件（config/susyplusplus.cfg）控制，默认全部开启
         if (SuConfig.enableWaterproofSprayCan) {
-            registerCannerRecipes();
-            registerMixerRecipes();
+            if (SuConfig.vanillaGtCompat) {
+                // 适配原版 GT：不注册「防水漆液」材料，改用液态硅橡胶在灌装机合成。
+                registerVanillaGtSprayCanRecipe();
+            } else {
+                registerCannerRecipes();
+                registerMixerRecipes();
+            }
         }
         if (SuConfig.enableBatteryCase) {
             registerBatteryCaseRecipe();
         }
 
-        // 火种科技(Pyrotech) 相关配方
-        if (SuConfig.enablePyrotechRecipeTweaks) {
+        // 火种科技(Pyrotech) 相关配方（适配原版 GT 时跳过）
+        if (SuConfig.enablePyrotechRecipeTweaks && !SuConfig.vanillaGtCompat) {
             registerDryerRecipes();
             registerExtractorRecipes();
             registerForgeHammerRecipes();
@@ -72,7 +77,8 @@ public final class SuRecipes {
             registerReinforcedPbfCraftingRecipes();
         }
 
-        if (SuConfig.enableWirelessEnergyTower) {
+        // 无线能量传输塔（适配原版 GT 时禁用：它依赖 Susy-Core 的货运无人机）
+        if (SuConfig.enableWirelessEnergyTower && !SuConfig.vanillaGtCompat) {
             registerWirelessEnergyTowerRecipe();
         }
 
@@ -91,8 +97,8 @@ public final class SuRecipes {
             registerStorageScannerRecipe();
         }
 
-        // 橡胶流体管道相关配方
-        if (SuConfig.enableRubberPipeTweaks) {
+        // 橡胶流体管道相关配方（适配原版 GT 时跳过）
+        if (SuConfig.enableRubberPipeTweaks && !SuConfig.vanillaGtCompat) {
             registerRubberPipeRecipes();
         }
     }
@@ -453,8 +459,32 @@ public final class SuRecipes {
     }
 
     // ==========================================================================
-    // 原有的防水喷漆配方
+    // 防水喷漆配方
     // ==========================================================================
+
+    /**
+     * 适配原版 GT（非 SUSY）时的防水喷漆配方：
+     * 「空喷漆罐 + 液态硅橡胶 576 mB」在<b>灌装机</b>里合成（32 ticks / 8 EU/t）。
+     *
+     * <p>
+     * 与 {@link #registerCannerRecipes()} 的唯一区别是把自定义的「防水漆液」换成 GT 原生的
+     * {@code Materials.SiliconeRubber} 流体 —— 因此<b>不需要注册任何自定义材料</b>。
+     * 由 {@code SuConfig#vanillaGtCompat} 控制（该模式下 {@link #registerMixerRecipes()}
+     * 与 {@code SuMaterials.WaterproofPaint} 都不会注册）。
+     * </p>
+     */
+    private static void registerVanillaGtSprayCanRecipe() {
+        if (SuMetaItems.WATERPROOF_SPRAY_CAN == null) {
+            return;
+        }
+        RecipeMaps.CANNER_RECIPES.recipeBuilder()
+                .inputs(MetaItems.SPRAY_EMPTY.getStackForm())
+                .fluidInputs(Materials.SiliconeRubber.getFluid(GTValues.L * 4))
+                .outputs(SuMetaItems.WATERPROOF_SPRAY_CAN.getStackForm())
+                .duration(32)
+                .EUt(8)
+                .buildAndRegister();
+    }
 
     /** 灌装机：空喷漆罐 x1 + 防水漆液 576 mB -> 防水喷漆 x1（32 ticks / 8 EU/t）。 */
     private static void registerCannerRecipes() {

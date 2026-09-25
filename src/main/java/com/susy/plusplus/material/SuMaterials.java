@@ -1,6 +1,7 @@
 package com.susy.plusplus.material;
 
 import com.susy.plusplus.Tags;
+import com.susy.plusplus.config.SuConfig;
 
 import gregtech.api.GregTechAPI;
 import gregtech.api.fluids.FluidBuilder;
@@ -53,6 +54,11 @@ public final class SuMaterials {
     /** 创建“防水漆液”材料（仅流体）。 */
     @SubscribeEvent
     public static void onMaterial(MaterialEvent event) {
+        // 适配原版 GT 模式（SuConfig#vanillaGtCompat）：不注册「防水漆液」材料 ——
+        // 防水喷漆改为「空喷漆罐 + 液态硅橡胶 576 mB」在灌装机合成（见 SuRecipes）。
+        if (SuConfig.vanillaGtCompat) {
+            return;
+        }
         if (WaterproofPaint != null) {
             return;
         }

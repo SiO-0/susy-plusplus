@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.2] - 2026-09-25
+
+### Added
+- New top-of-file config option `vanillaGtCompat` (default `false`) to adapt the mod to **vanilla GregTech** (no SUSY / GroovyScript extras). When enabled:
+  - the `Waterproof Paint` fluid material is **not registered**;
+  - the Waterproof Spray Can is instead made in the **canner** from Empty Spray Can + **Liquid Silicone Rubber 576 mB** (`Materials.SiliconeRubber`, a vanilla GT fluid); no mixer recipe;
+  - the **Wireless Energy Transmission Tower** is not registered;
+  - the rubber fluid-pipe tweaks and the Pyrotech recipe tweaks are skipped.
+- Docs: new "适配原版 GT" section in [docs/config.md](docs/config.md).
+
 ## [1.0.1] - 2026-09-25
 
 ### Added

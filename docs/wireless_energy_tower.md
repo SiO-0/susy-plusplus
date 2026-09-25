@@ -14,7 +14,7 @@
 | MTE 数字 ID | `32101` |
 | 本地化键 | `susyplusplus.machine.wireless_energy_tower.name` |
 | 控制器方块 | 顶层第 4 行第 3 列（`S`） |
-| 配置开关 | `enableWirelessEnergyTower`（默认 `true`） |
+| 配置开关 | `enableWirelessEnergyTower`（默认 `true`；适配原版 GT 时由 `vanillaGtCompat` 强制关闭，不注册） |
 | 配方 | **无**（不是配方机器，因此 `RecipeMapMultiblockController` 不适用） |
 | 耗电 | **机器自身不消耗 EU** |
 | 维护 | **需要维护**（结构里必须有 1 个维护仓） |

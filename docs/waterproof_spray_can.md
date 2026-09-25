@@ -93,6 +93,10 @@ compileOnly files('libs/enderio-stub-classes')
 时间 32 ticks，EU/t 8
 ```
 
+> **适配原版 GT（`vanillaGtCompat = true`）时**：不再注册「防水漆液」材料 ——
+> 上面的配方改为「空喷漆罐 x1 + **液态硅橡胶 576 mB**（`Materials.SiliconeRubber`，GT 原生流体）」，
+> 且 §3.2 的搅拌机配方不再注册。详见 [`config.md`](config.md)。
+
 ### 3.2 防水漆液合成（MIXER_RECIPES，替代路线）
 ```
 PolyvinylAcetate 1000 mB + SiliconeRubber 250 mB + Polydimethylsiloxane 粉 x1

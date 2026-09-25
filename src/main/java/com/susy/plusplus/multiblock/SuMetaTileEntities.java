@@ -109,9 +109,14 @@ public final class SuMetaTileEntities {
                 ID_STORAGE_SCANNER);
     }
 
-    /** 无线能量传输塔：受 {@code enableWirelessEnergyTower} 控制。 */
+    /** 无线能量传输塔：受 {@code enableWirelessEnergyTower} 控制；适配原版 GT 时不注册。 */
     private static void registerWirelessEnergyTower() {
         if (WIRELESS_ENERGY_TOWER != null) {
+            return;
+        }
+        if (SuConfig.vanillaGtCompat) {
+            SusyPlusPlus.LOGGER.info(
+                    "[SusyPlusPlus] Wireless Energy Tower is DISABLED (vanilla GT compat mode).");
             return;
         }
         if (!SuConfig.enableWirelessEnergyTower) {

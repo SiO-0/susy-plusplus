@@ -30,6 +30,22 @@ import net.minecraftforge.common.config.Config;
 public class SuConfig {
 
         @Config.Comment({
+                        "Adapt to VANILLA GregTech instead of SUSY (适配原版 GT 而不是 SUSY).",
+                        "When ON:",
+                        "  1) the 'Waterproof Paint' fluid material is NOT registered;",
+                        "  2) the Waterproof Spray Can is instead made in the CANNER from",
+                        "     Empty Spray Can + Liquid Silicone Rubber 576 mB (no mixer recipe);",
+                        "  3) the Wireless Energy Transmission Tower is NOT registered;",
+                        "  4) the rubber fluid-pipe tweaks are skipped;",
+                        "  5) the Pyrotech recipe tweaks are skipped.",
+                        "启用后：不再注册「防水漆液」流体材料；防水喷漆改为在灌装机里用",
+                        "「空喷漆罐 + 液态硅橡胶 576 mB」合成（不再有搅拌机配方）；",
+                        "同时不注册无线能量传输塔、跳过橡胶管道修改与火种科技配方。",
+                        "Default: false"
+        })
+        public static boolean vanillaGtCompat = false;
+
+        @Config.Comment({
                         "Enable the Waterproof Spray Can item (and its canner/mixer recipes).",
                         "启用防水喷漆物品（以及灌装机/搅拌机的相关配方）。",
                         "Default: true"

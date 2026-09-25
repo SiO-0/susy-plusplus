@@ -27,6 +27,7 @@ With **coremod and mixin support** that is easy to configure.
 
 | 内容 | 说明 | 开关（默认） | 文档 |
 | --- | --- | --- | --- |
+| **适配原版 GT** | 总开关：不注册「防水漆液」、防水喷漆改用液态硅橡胶、禁用无线能量塔 / 橡胶管道修改 / 火种科技配方 | `vanillaGtCompat`（**关**） | [docs/config.md](docs/config.md) |
 | 防水喷漆 | 让机器防水（阻止遇水/地形爆炸），TOP 显示防水状态 | `enableWaterproofSprayCan`（开） | [docs/waterproof_spray_can.md](docs/waterproof_spray_can.md) |
 | 电池盒 | 可放电池的饰品/物品，带 GUI 与释能模式 | `enableBatteryCase`（开） | [docs/battery_case.md](docs/battery_case.md) |
 | 强化土高炉 | 用原版土高炉配方、不耗电、无需维护、4 并行、可换仓室 | `enableReinforcedPbf`（开） | [docs/reinforced_pbf.md](docs/reinforced_pbf.md) |

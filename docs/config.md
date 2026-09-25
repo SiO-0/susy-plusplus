@@ -22,6 +22,7 @@
 
 | 选项 | 类型 | 默认 | 说明 |
 | --- | --- | --- | --- |
+| `vanillaGtCompat` | boolean | `false` | **适配原版 GT（非 SUSY）总开关**（位于最上方；见下方小节） |
 | `enableWaterproofSprayCan` | boolean | `true` | 防水喷漆物品，以及灌装机 / 搅拌机的相关配方 |
 | `enableBatteryCase` | boolean | `true` | 电池盒物品，以及其组装机配方 |
 | `enableReinforcedPbf` | boolean | `true` | 强化土高炉多方块机器，以及其工作台配方（强化耐火砖方块始终可用） |
@@ -32,6 +33,22 @@
 | `enableStorageScanner` | boolean | `true` | 存储检测器机器（MV 扫描周围容器并聚合暴露库存；见 [`storage_scanner.md`](storage_scanner.md)） |
 | `enableRubberPipeTweaks` | boolean | `false` | 橡胶管道修改（见 §3） |
 | `enablePyrotechRecipeTweaks` | boolean | `true` | 火种科技(Pyrotech) 相关配方（见 §4） |
+
+### 适配原版 GT（`vanillaGtCompat`，默认关）
+
+这是**总开关**，用于把本模组适配到「纯 GTCEu（没有 SUSY / GroovyScript 附加内容）」的环境。
+打开后：
+
+| 项目 | 关闭（默认，SUSY 环境） | 打开（原版 GT 环境） |
+| --- | --- | --- |
+| 「防水漆液」流体材料 | 注册（`susyplusplus:waterproof_paint`） | **不注册** |
+| 防水喷漆配方 | 灌装机：空喷漆罐 + 防水漆液 576 mB；搅拌机：自制防水漆液 | 灌装机：**空喷漆罐 + 液态硅橡胶 576 mB**（`Materials.SiliconeRubber`，GT 原生流体） |
+| 无线能量传输塔 | 注册（受 `enableWirelessEnergyTower` 控制） | **不注册**（它依赖 Susy-Core 的货运无人机） |
+| 橡胶管道修改 | 受 `enableRubberPipeTweaks` 控制 | **强制跳过**（橡胶管道 / 橡胶锭是整合包用 GroovyScript 补的，原版 GT 没有） |
+| 火种科技(Pyrotech) 配方 | 受 `enablePyrotechRecipeTweaks` 控制 | **强制跳过** |
+
+> 该开关**不会**影响 `enableWaterproofSprayCan` 等单项开关：防水喷漆物品本身照常注册，
+> 只是换了配方来源（见 [`waterproof_spray_can.md`](waterproof_spray_can.md)）。
 
 ### 被关闭时会发生什么
 
