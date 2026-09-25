@@ -3,8 +3,10 @@ package com.susy.plusplus;
 import com.susy.plusplus.integration.top.SuTopIntegration;
 import com.susy.plusplus.item.SuMetaItems;
 import com.susy.plusplus.client.SuClientEvents;
+import com.susy.plusplus.gui.SuGuiFactories;
 import com.susy.plusplus.material.SuMaterials;
 import com.susy.plusplus.multiblock.SuMetaTileEntities;
+import com.susy.plusplus.network.SuNetwork;
 import com.susy.plusplus.pipe.SuPipeTweaks;
 import com.susy.plusplus.recipe.SuRecipes;
 
@@ -54,6 +56,14 @@ public class SusyPlusPlus {
         // Materials.Rubber 还没有 FLUID_PIPE 属性，那是本整合包的 GroovyScript 之后才补上的；
         // 而我们的 preInit 一定晚于 GT 的 preInit，此时属性与管道方块都已就绪。
         SuPipeTweaks.applyRubberFluidPipeThroughput();
+
+        // 网络层（客户端 → 服务端：请求打开配置器界面）。
+        // 客户端与服务端都要注册同一个频道。
+        SuNetwork.init();
+
+        // ModularUI 的工厂必须在两端都注册：服务端打开界面时只把"工厂名"发给客户端，
+        // 客户端要靠这个名字在自己的 GuiManager 里找到同名工厂。
+        SuGuiFactories.init();
 
         LOGGER.info("{} preInit 完成。", Tags.MOD_NAME);
     }

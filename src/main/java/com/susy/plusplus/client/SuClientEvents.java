@@ -5,6 +5,8 @@ import com.susy.plusplus.block.SuBlocks;
 import com.susy.plusplus.config.SuConfig;
 import com.susy.plusplus.item.ItemWaterproofSprayCan;
 import com.susy.plusplus.item.battery.ItemBatteryCase;
+import com.susy.plusplus.item.configurator.ItemConfigurator;
+import com.susy.plusplus.item.trolley.ItemTrolley;
 import com.susy.plusplus.item.SuMetaItems;
 
 import gregtech.api.items.metaitem.MetaItem;
@@ -47,6 +49,10 @@ public final class SuClientEvents {
         // 迟于该时机创建的 ICubeRenderer 永远不会注册图标，
         // 渲染对应 MTE 物品时会 NPE（CCL: "caught an exception whilst rendering an item"）。
         SuTextures.init();
+
+        // 配置器快捷键（Shift+V）+ 它的按键事件监听。
+        ConfiguratorKeys.init();
+        MinecraftForge.EVENT_BUS.register(ConfiguratorKeys.class);
 
         SusyPlusPlus.LOGGER.info("[SusyPlusPlus] SuClientEvents registered on client event bus.");
     }
@@ -92,6 +98,30 @@ public final class SuClientEvents {
             batteryCase.registerModels();
             batteryCase.registerTextureMesh();
             SusyPlusPlus.LOGGER.info("[SusyPlusPlus] Registered models + texture mesh for battery case.");
+        }
+
+        // 配置器
+        ItemConfigurator configurator = SuMetaItems.CONFIGURATOR_ITEM;
+        if (configurator == null) {
+            if (SuConfig.enableConfigurator) {
+                SusyPlusPlus.LOGGER.warn("[SusyPlusPlus] CONFIGURATOR_ITEM is null; skip model registration.");
+            }
+        } else {
+            configurator.registerModels();
+            configurator.registerTextureMesh();
+            SusyPlusPlus.LOGGER.info("[SusyPlusPlus] Registered models + texture mesh for configurator.");
+        }
+
+        // 手推车
+        ItemTrolley trolley = SuMetaItems.TROLLEY_ITEM;
+        if (trolley == null) {
+            if (SuConfig.enableTrolley) {
+                SusyPlusPlus.LOGGER.warn("[SusyPlusPlus] TROLLEY_ITEM is null; skip model registration.");
+            }
+        } else {
+            trolley.registerModels();
+            trolley.registerTextureMesh();
+            SusyPlusPlus.LOGGER.info("[SusyPlusPlus] Registered models + texture mesh for trolley.");
         }
     }
 }

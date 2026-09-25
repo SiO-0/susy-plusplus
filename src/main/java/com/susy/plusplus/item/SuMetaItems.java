@@ -4,6 +4,8 @@ import com.susy.plusplus.SusyPlusPlus;
 import com.susy.plusplus.config.SuConfig;
 import com.susy.plusplus.item.battery.BatteryCaseBaubles;
 import com.susy.plusplus.item.battery.ItemBatteryCase;
+import com.susy.plusplus.item.configurator.ItemConfigurator;
+import com.susy.plusplus.item.trolley.ItemTrolley;
 
 import gregtech.api.items.metaitem.MetaItem;
 
@@ -37,6 +39,16 @@ public final class SuMetaItems {
     public static ItemBatteryCase BATTERY_CASE_ITEM;
     public static MetaItem<?>.MetaValueItem BATTERY_CASE;
 
+    // ---------- 配置器 ----------
+
+    public static ItemConfigurator CONFIGURATOR_ITEM;
+    public static MetaItem<?>.MetaValueItem CONFIGURATOR;
+
+    // ---------- 手推车 ----------
+
+    public static ItemTrolley TROLLEY_ITEM;
+    public static MetaItem<?>.MetaValueItem TROLLEY;
+
     private SuMetaItems() {
     }
 
@@ -69,6 +81,24 @@ public final class SuMetaItems {
             SusyPlusPlus.LOGGER.info("[SusyPlusPlus] Registered item: susyplusplus:battery_case");
         } else {
             SusyPlusPlus.LOGGER.info("[SusyPlusPlus] Battery case is DISABLED in config.");
+        }
+
+        // ---------- 配置器 ----------
+        if (SuConfig.enableConfigurator) {
+            CONFIGURATOR_ITEM = new ItemConfigurator();
+            CONFIGURATOR = CONFIGURATOR_ITEM.configurator;
+            SusyPlusPlus.LOGGER.info("[SusyPlusPlus] Registered item: susyplusplus:configurator");
+        } else {
+            SusyPlusPlus.LOGGER.info("[SusyPlusPlus] Configurator is DISABLED in config.");
+        }
+
+        // ---------- 手推车 ----------
+        if (SuConfig.enableTrolley) {
+            TROLLEY_ITEM = new ItemTrolley();
+            TROLLEY = TROLLEY_ITEM.trolley;
+            SusyPlusPlus.LOGGER.info("[SusyPlusPlus] Registered item: susyplusplus:trolley");
+        } else {
+            SusyPlusPlus.LOGGER.info("[SusyPlusPlus] Trolley is DISABLED in config.");
         }
     }
 }

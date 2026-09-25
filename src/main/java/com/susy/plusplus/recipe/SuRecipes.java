@@ -16,6 +16,7 @@ import gregtech.api.unification.material.MarkerMaterials;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.api.unification.stack.UnificationEntry;
+import gregtech.common.blocks.BlockMachineCasing;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.items.MetaItems;
@@ -73,6 +74,21 @@ public final class SuRecipes {
 
         if (SuConfig.enableWirelessEnergyTower) {
             registerWirelessEnergyTowerRecipe();
+        }
+
+        // 配置器
+        if (SuConfig.enableConfigurator) {
+            registerConfiguratorRecipe();
+        }
+
+        // 手推车
+        if (SuConfig.enableTrolley) {
+            registerTrolleyRecipe();
+        }
+
+        // 存储检测器
+        if (SuConfig.enableStorageScanner) {
+            registerStorageScannerRecipe();
         }
 
         // 橡胶流体管道相关配方
@@ -229,6 +245,124 @@ public final class SuRecipes {
                 .outputs(SuMetaTileEntities.WIRELESS_ENERGY_TOWER.getStackForm())
                 .duration(1200)
                 .EUt(512)
+                .buildAndRegister();
+    }
+
+    // ==========================================================================
+    // 组装机：配置器
+    // ==========================================================================
+
+    /**
+     * 组装机（{@code ASSEMBLER_RECIPES}）：LV 时代可造。
+     *
+     * <ul>
+     * <li>1x LV 电路（矿词 {@code circuit} + {@code MarkerMaterials.Tier.LV}）</li>
+     * <li>4x 钢板</li>
+     * <li>2x 红石</li>
+     * <li>2x 玻璃板</li>
+     * <li>1x 扳手（矿词 {@code craftingToolWrench}；GT 的扳手由 {@code ToolItems} 注册该矿词）</li>
+     * </ul>
+     *
+     * <p>
+     * 200 ticks / 30 EU/t（LV 电压）。扳手矿词为空时只打 WARN 并跳过，不会写出无效配方。
+     * </p>
+     */
+    private static void registerConfiguratorRecipe() {
+        if (SuMetaItems.CONFIGURATOR == null) {
+            return;
+        }
+        ItemStack wrench = OreDictUnifier.get("craftingToolWrench");
+        if (wrench.isEmpty()) {
+            SusyPlusPlus.LOGGER.warn(
+                    "[SusyPlusPlus] Skip configurator recipe: ore dict 'craftingToolWrench' is empty.");
+            return;
+        }
+
+        RecipeMaps.ASSEMBLER_RECIPES.recipeBuilder()
+                .input(OrePrefix.circuit, MarkerMaterials.Tier.LV, 1)
+                .input(OrePrefix.plate, Materials.Steel, 4)
+                .inputs(new ItemStack(Items.REDSTONE, 2))
+                .input(OrePrefix.plate, Materials.Glass, 2)
+                .inputs(wrench)
+                .outputs(SuMetaItems.CONFIGURATOR.getStackForm())
+                .duration(200)
+                .EUt(30)
+                .buildAndRegister();
+    }
+
+    /**
+     * 「手推车」的 LV 组装机配方。
+     *
+     * <ul>
+     * <li>1x <b>12 号编程电路</b>（{@code circuitMeta(12)}，<b>不消耗</b>，用于与其它配方区分）</li>
+     * <li>4x <b>铁</b>板（⚠ 刻意用铁板而不是钢板）</li>
+     * <li>2x 红石</li>
+     * <li>2x 玻璃板</li>
+     * <li>1x 扳手（矿词 {@code craftingToolWrench}；作为耗材）</li>
+     * </ul>
+     *
+     * <p>
+     * 200 ticks / 30 EU/t（LV 电压）。扳手矿词为空时只打 WARN 并跳过，不会写出无效配方。
+     * </p>
+     *
+     * <p>
+     * <b>⚠ 为什么用铁板而不是钢板（配方冲突修复）</b>：GT 机器只需要"输入槽里包含配方所需物品"，
+     * 因此若手推车的输入集合是配置器的<b>真子集</b>（配置器 = 钢板×4 + 红石×2 + 玻璃板×2 + 扳手
+     * <b>+ LV 电路</b>），那么摆齐配置器的材料时<b>两个配方都会命中</b> → 冲突。
+     * 改用铁板后，两边的输入集合<b>互不包含</b>（手推车有铁板、配置器有电路），冲突消除。
+     * </p>
+     */
+    /**
+     * 「存储检测器」的 <b>MV</b> 组装机配方（用户确认）：
+     *
+     * <ul>
+     * <li>1x MV 电路</li>
+     * <li>4x MV 机器外壳（{@code MachineCasingType.MV}）</li>
+     * <li>2x 物品探测覆盖板（{@code MetaItems.COVER_ITEM_DETECTOR}）</li>
+     * <li>2x 玻璃板</li>
+     * <li>1x MV 传送带（{@code MetaItems.CONVEYOR_MODULE_MV}）</li>
+     * </ul>
+     *
+     * <p>
+     * 120 EU/t（MV）/ 300 ticks。机器未注册时直接跳过。
+     * </p>
+     */
+    private static void registerStorageScannerRecipe() {
+        if (SuMetaTileEntities.STORAGE_SCANNER == null) {
+            return;
+        }
+        RecipeMaps.ASSEMBLER_RECIPES.recipeBuilder()
+                .input(OrePrefix.circuit, MarkerMaterials.Tier.MV, 1)
+                .inputs(MetaBlocks.MACHINE_CASING.getItemVariant(BlockMachineCasing.MachineCasingType.MV, 4))
+                .inputs(MetaItems.COVER_ITEM_DETECTOR.getStackForm(2))
+                .input(OrePrefix.plate, Materials.Glass, 2)
+                .inputs(MetaItems.CONVEYOR_MODULE_MV.getStackForm())
+                .outputs(SuMetaTileEntities.STORAGE_SCANNER.getStackForm())
+                .duration(300)
+                .EUt(120)
+                .buildAndRegister();
+    }
+
+    private static void registerTrolleyRecipe() {
+        if (SuMetaItems.TROLLEY == null) {
+            return;
+        }
+        ItemStack wrench = OreDictUnifier.get("craftingToolWrench");
+        if (wrench.isEmpty()) {
+            SusyPlusPlus.LOGGER.warn(
+                    "[SusyPlusPlus] Skip trolley recipe: ore dict 'craftingToolWrench' is empty.");
+            return;
+        }
+
+        RecipeMaps.ASSEMBLER_RECIPES.recipeBuilder()
+                .circuitMeta(12) // 12 号编程电路：不消耗，只用于把本配方与其它组装机配方区分开
+                .input(OrePrefix.plate, Materials.Iron, 4)
+                .inputs(new ItemStack(Items.REDSTONE, 2))
+                .input(OrePrefix.plate, Materials.Glass, 2)
+                .inputs(wrench)
+                .outputs(SuMetaItems.TROLLEY.getStackForm())
+                .duration(200)
+                .EUt(30)
                 .buildAndRegister();
     }
 

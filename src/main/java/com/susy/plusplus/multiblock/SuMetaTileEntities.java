@@ -3,6 +3,7 @@ package com.susy.plusplus.multiblock;
 import com.susy.plusplus.Tags;
 import com.susy.plusplus.SusyPlusPlus;
 import com.susy.plusplus.config.SuConfig;
+import com.susy.plusplus.machine.StorageScannerMachine;
 import com.susy.plusplus.multiblock.wireless.MetaTileEntityWirelessEnergyTower;
 
 import gregtech.common.metatileentities.MetaTileEntities;
@@ -51,11 +52,20 @@ public final class SuMetaTileEntities {
      */
     private static final int ID_WIRELESS_ENERGY_TOWER = 32101;
 
+    /** 存储检测器的数字 ID（{@code susyplusplus:storage_scanner}）。 */
+    private static final int ID_STORAGE_SCANNER = 32102;
+
+    /** MV 电压等级（{@code GTValues.MV}）。 */
+    private static final int TIER_MV = 2;
+
     /** 强化土高炉控制器（注册名 {@code susyplusplus:reinforced_pbf}）。 */
     public static MetaTileEntityReinforcedPBF REINFORCED_PBF;
 
     /** 无线能量传输塔控制器（注册名 {@code susyplusplus:wireless_energy_tower}）。 */
     public static MetaTileEntityWirelessEnergyTower WIRELESS_ENERGY_TOWER;
+
+    /** 「存储检测器」单方块机器（注册名 {@code susyplusplus:storage_scanner}）。 */
+    public static StorageScannerMachine STORAGE_SCANNER;
 
     private SuMetaTileEntities() {
     }
@@ -64,6 +74,7 @@ public final class SuMetaTileEntities {
     public static void init() {
         registerReinforcedPbf();
         registerWirelessEnergyTower();
+        registerStorageScanner();
     }
 
     /** 强化土高炉：受 {@code enableReinforcedPbf} 控制。 */
@@ -80,6 +91,22 @@ public final class SuMetaTileEntities {
         SusyPlusPlus.LOGGER.info(
                 "[SusyPlusPlus] Registered MetaTileEntity susyplusplus:reinforced_pbf (id={}, parallel={})",
                 ID_REINFORCED_PBF, SuConfig.reinforcedPbfParallel);
+    }
+
+    /** 存储检测器（MV）：受 {@code enableStorageScanner} 控制。 */
+    private static void registerStorageScanner() {
+        if (STORAGE_SCANNER != null) {
+            return;
+        }
+        if (!SuConfig.enableStorageScanner) {
+            SusyPlusPlus.LOGGER.info("[SusyPlusPlus] Storage Scanner is DISABLED in config.");
+            return;
+        }
+        STORAGE_SCANNER = MetaTileEntities.registerMetaTileEntity(ID_STORAGE_SCANNER,
+                new StorageScannerMachine(new ResourceLocation(Tags.MOD_ID, "storage_scanner"), TIER_MV));
+        SusyPlusPlus.LOGGER.info(
+                "[SusyPlusPlus] Registered MetaTileEntity susyplusplus:storage_scanner (id={}, tier=MV)",
+                ID_STORAGE_SCANNER);
     }
 
     /** 无线能量传输塔：受 {@code enableWirelessEnergyTower} 控制。 */

@@ -27,6 +27,9 @@
 | `enableReinforcedPbf` | boolean | `true` | 强化土高炉多方块机器，以及其工作台配方（强化耐火砖方块始终可用） |
 | `reinforcedPbfParallel` | int (1~64) | `4` | 强化土高炉的并行数 |
 | `enableWirelessEnergyTower` | boolean | `true` | 无线能量传输塔多方块机器（见 [`wireless_energy_tower.md`](wireless_energy_tower.md)） |
+| `enableConfigurator` | boolean | `true` | 配置器物品（Shift+V 打开界面；见 [`configurator.md`](configurator.md)） |
+| `enableTrolley` | boolean | `true` | 手推车物品（Shift+右键搬起机器 / 右键放下；见 [`trolley.md`](trolley.md)） |
+| `enableStorageScanner` | boolean | `true` | 存储检测器机器（MV 扫描周围容器并聚合暴露库存；见 [`storage_scanner.md`](storage_scanner.md)） |
 | `enableRubberPipeTweaks` | boolean | `false` | 橡胶管道修改（见 §3） |
 | `enablePyrotechRecipeTweaks` | boolean | `true` | 火种科技(Pyrotech) 相关配方（见 §4） |
 

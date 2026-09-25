@@ -71,6 +71,46 @@ public class SuConfig {
         public static boolean enableWirelessEnergyTower = true;
 
         @Config.Comment({
+                        "Enable the Configurator item (Shift+V opens its UI).",
+                        "启用配置器物品（Shift+V 打开界面）。",
+                        "Default: true"
+        })
+        public static boolean enableConfigurator = true;
+
+        @Config.Comment({
+                        "Enable the Trolley item: Shift+right-click a GT machine to pick it up (no drops),",
+                        "right-click to put it back down (full NBT is kept, including caches and covers).",
+                        "Multiblock controllers / multiblock parts cannot be picked up.",
+                        "启用手推车物品：Shift+右键 GT 机器搬起（零掉落），右键放下",
+                        "（完整保留 NBT，含缓存与封面）。多方块控制器 / 多方块部件不可搬起。",
+                        "Default: true"
+        })
+        public static boolean enableTrolley = true;
+
+        @Config.Comment({
+                        "Enable the Storage Scanner machine (MV).",
+                        "It scans nearby block entities that expose an item inventory (chests, furnaces,",
+                        "GT machines, other mods' containers - including non player placed ones) and",
+                        "exposes them as ONE aggregate inventory, so hoppers can pull items out of it.",
+                        "启用存储检测器机器（MV）：扫描周围带物品库存的方块实体（箱子/熔炉/GT 机器/",
+                        "其它 mod 容器，含非玩家放置的），并聚合成一个库存对外暴露，漏斗可直接抽取。",
+                        "Default: true"
+        })
+        public static boolean enableStorageScanner = true;
+
+        @Config.Comment({
+                        "Storage Scanner: de-duplicate containers that share ONE inventory.",
+                        "Multiblock storages (e.g. Industrial Renewal's storage rank) return the SAME",
+                        "inventory from every block entity, which would make the scanned items count",
+                        "N times (N = number of blocks). Enable to count such shared inventories once.",
+                        "存储检测器：对“共享同一份库存”的容器去重。",
+                        "多方块存储（例如工业复兴 storage rank）的每个方块实体都返回同一份库存，",
+                        "不去重会把扫到的物品按方块数重复计算 N 倍。",
+                        "Default: true"
+        })
+        public static boolean storageScannerDedupeMultiblockStorage = true;
+
+        @Config.Comment({
                         "Rubber pipe tweaks:",
                         "  1) make the Rubber fluid pipe's throughput equal to Steel's;",
                         "  2) add Alloy Smelter recipes for rubber fluid pipes",

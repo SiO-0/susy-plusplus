@@ -31,6 +31,9 @@ With **coremod and mixin support** that is easy to configure.
 | 电池盒 | 可放电池的饰品/物品，带 GUI 与释能模式 | `enableBatteryCase`（开） | [docs/battery_case.md](docs/battery_case.md) |
 | 强化土高炉 | 用原版土高炉配方、不耗电、无需维护、4 并行、可换仓室 | `enableReinforcedPbf`（开） | [docs/reinforced_pbf.md](docs/reinforced_pbf.md) |
 | 无线能量传输塔 | 用铁砧改名的 Susy-Core 无人机作为目标，电池总容量决定上限、最低电池电压决定传输电压，最后 3 秒输出 `电压 × 电池个数 × 64` | `enableWirelessEnergyTower`（开） | [docs/wireless_energy_tower.md](docs/wireless_energy_tower.md) |
+| **配置器** | Shift+V 选模式：改机器输出面 / 复制机器配置 / 机器工具箱 | `enableConfigurator`（开） | [docs/configurator.md](docs/configurator.md) |
+| **手推车** | Shift+右键搬起机器（零掉落、封面/缓存/朝向全保留），右键放下；多方块不可搬 | `enableTrolley`（开） | [docs/trolley.md](docs/trolley.md) |
+| **存储检测器** | MV 单方块机器：扫描周围容器（含非玩家放置）并聚合成一个库存，漏斗可直接抽取 | `enableStorageScanner`（开） | [docs/storage_scanner.md](docs/storage_scanner.md) |
 | 橡胶管道修改 | 橡胶流体管道速率对齐钢 + 合金炉配方 | `enableRubberPipeTweaks`（**关**） | [docs/config.md](docs/config.md) |
 | 火种科技配方 | 干燥机 / 提取机 / 锻造锤配方 | `enablePyrotechRecipeTweaks`（开） | [docs/config.md](docs/config.md) |
 
