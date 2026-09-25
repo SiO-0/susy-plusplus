@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.0.4] - 2026-09-25
+
+### Added
+- **Multiblock storage upgrades** (`enableMultiblockStorage`, default on), registered with MTE ids 32110–32119:
+  - **Steel / Clean Stainless Steel / Reinforced Titanium Multiblock Crate** — single-item-type bulk storage of 1,000,000 / 16,000,000 / 32,000,000 items, using the same `long`-counter approach as GT's quantum chest.
+  - **Clean Stainless Steel / Reinforced Titanium Multiblock Tank** — 16,000,000 / 32,000,000 mB. Implemented as subclasses of GT's own `MetaTileEntityMultiblockTank` (only the structure casing/valve, the base texture and `createMetaTileEntity` are overridden), so inventory, GUI, `IFluidHandler` capability, tooltip and "no maintenance" behaviour are inherited unchanged.
+  - **Item Valve / Tank Valve** for each tier — expose the controller's inventory (`IItemHandlerModifiable` / `IFluidHandler`) bidirectionally, auto-output downward when facing down, and have no GUI. The item valve uses a new custom `MultiblockAbility` (`susyplusplus_item_valve`).
+  - Structure is identical to GT's steel multiblock tank (fixed 3x3x3, controller at the bottom centre, casing >= 23, at most 2 valves).
+  - Casings reuse GT's existing blocks: `STEEL_SOLID`, `STAINLESS_CLEAN`, `TITANIUM_STABLE`; textures reuse GT's existing renderers (no new PNGs).
+  - Recipes (10) written the same way as GT's own: **shaped crafting-table recipes** (`ModHandler.addShapedRecipe`), mirroring GT's `steel_multiblock_tank` (`" R "` / `"hCw"` / `" R "`), `steel_tank_valve` (bottom rotor) and `steel_crate` (plates). No recipe uses a lower-tier controller/valve as an ingredient (no chained crafting). JEI multiblock preview is automatic via `MetaTileEntities.registerMetaTileEntity`.
+  - Docs: [docs/multiblock_crate_and_tank_upgrades.md](docs/multiblock_crate_and_tank_upgrades.md).
+- New config option `enableMultiblockStorage` (default `true`).
+- **Fluid Sample Storage (MV / HV / EV)** (MTE ids 32120–32122) — mirrors Susy-Core's `fluid_samples_storage`: **32 independent fluid tanks** per machine, no item slots, no recipe processing and **no energy usage**. Per-tank capacity 32,000 / 64,000 / 128,000 L. Crafted exactly like the original (8 large fluid cells around 1 casing), using the aluminium / stainless-steel / titanium large fluid cells and the matching MV / HV / EV machine casing. Textures are reused from GT (no new PNGs). Docs: [docs/fluid_samples_storage.md](docs/fluid_samples_storage.md).
+- New config option `enableFluidSamplesStorage` (default `true`).
+
+### Changed
+- Multiblock crate GUI: the item slot was **removed** — the stored item type and its count are written into the controller's NBT (`StoredItem` / `StoredCount`) and displayed as text; all insertion/extraction goes through the Item Valve / pipes / hoppers / AE2.
+- `vanillaGtCompat` now also disables the **Fluid Sample Storage** machines (and their recipes), since they reuse Susy-Core's `fluid_samples_storage` look and recipe.
+
+### Fixed
+- **Texture crash** ("材质崩溃") on the Fluid Sample Storage machines: the custom `OrientedOverlayRenderer` was held in a static field of a *common* class, so (a) a client-only renderer was constructed on the server side too and (b) it could miss `Textures.iconRegisters`' one-shot pass at texture-stitch time, leaving `getParticleSprite()` null and NPE'ing when the machine's item/particles were rendered. The overlay now lives in the `@SideOnly(CLIENT)` `SuStorageTextures`, is force-initialised during **client preInit** (the same rule already documented for `SuTextures`), and `getParticleTexture()` falls back to `VOLTAGE_CASINGS[tier]` if the sprite is still null.
+
 ## [1.0.3] - 2026-09-25
 
 ### Fixed

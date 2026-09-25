@@ -31,6 +31,8 @@
 | `enableConfigurator` | boolean | `true` | 配置器物品（Shift+V 打开界面；见 [`configurator.md`](configurator.md)） |
 | `enableTrolley` | boolean | `true` | 手推车物品（Shift+右键搬起机器 / 右键放下；见 [`trolley.md`](trolley.md)） |
 | `enableStorageScanner` | boolean | `true` | 存储检测器机器（MV 扫描周围容器并聚合暴露库存；见 [`storage_scanner.md`](storage_scanner.md)） |
+| `enableMultiblockStorage` | boolean | `true` | 多方块存储升级：板条箱 / 储罐 / 物品阀门 / 储罐阀门（见 [`multiblock_crate_and_tank_upgrades.md`](multiblock_crate_and_tank_upgrades.md)） |
+| `enableFluidSamplesStorage` | boolean | `true` | 流体样品存储 MV / HV / EV（32 格 × 32,000 / 64,000 / 128,000 L、不耗电；见 [`fluid_samples_storage.md`](fluid_samples_storage.md)） |
 | `enableRubberPipeTweaks` | boolean | `false` | 橡胶管道修改（见 §3） |
 | `enablePyrotechRecipeTweaks` | boolean | `true` | 火种科技(Pyrotech) 相关配方（见 §4） |
 
@@ -44,6 +46,7 @@
 | 「防水漆液」流体材料 | 注册（`susyplusplus:waterproof_paint`） | **不注册** |
 | 防水喷漆配方 | 灌装机：空喷漆罐 + 防水漆液 576 mB；搅拌机：自制防水漆液 | 灌装机：**空喷漆罐 + 液态硅橡胶 576 mB**（`Materials.SiliconeRubber`，GT 原生流体） |
 | 无线能量传输塔 | 注册（受 `enableWirelessEnergyTower` 控制） | **不注册**（它依赖 Susy-Core 的货运无人机） |
+| 流体样品存储（MV/HV/EV） | 注册（受 `enableFluidSamplesStorage` 控制） | **不注册**（沿用 Susy-Core 的 `fluid_samples_storage` 外观 / 配方，纯 GT 环境不保证可用） |
 | 橡胶管道修改 | 受 `enableRubberPipeTweaks` 控制 | **强制跳过**（橡胶管道 / 橡胶锭是整合包用 GroovyScript 补的，原版 GT 没有） |
 | 火种科技(Pyrotech) 配方 | 受 `enablePyrotechRecipeTweaks` 控制 | **强制跳过** |
 

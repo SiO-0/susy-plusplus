@@ -148,3 +148,41 @@ susyplusplus.gui.storage_scanner.state.running=运行中（正在维持库存暴
 susyplusplus.gui.storage_scanner.state.no_power=缺电（无法维持暴露 / 扫描）
 susyplusplus.gui.storage_scanner.state.no_container=运行中，但范围内没有容器（默认 5×5×5，可用 -1/+1 调大）
 susyplusplus.gui.storage_scanner.state.disabled=已关机
+
+# 多方块存储升级 / Multiblock storage upgrades
+susyplusplus.machine.steel_multiblock_crate.name=钢制多方块板条箱
+susyplusplus.machine.clean_stainless_steel_multiblock_tank.name=洁净不锈钢多方块储罐
+susyplusplus.machine.clean_stainless_steel_multiblock_crate.name=洁净不锈钢多方块板条箱
+susyplusplus.machine.reinforced_titanium_multiblock_tank.name=加强钛多方块储罐
+susyplusplus.machine.reinforced_titanium_multiblock_crate.name=加强钛多方块板条箱
+susyplusplus.machine.steel_item_valve.name=钢制物品阀门
+susyplusplus.machine.clean_stainless_steel_tank_valve.name=洁净不锈钢储罐阀门
+susyplusplus.machine.clean_stainless_steel_item_valve.name=洁净不锈钢物品阀门
+susyplusplus.machine.reinforced_titanium_tank_valve.name=加强钛储罐阀门
+susyplusplus.machine.reinforced_titanium_item_valve.name=加强钛物品阀门
+susyplusplus.machine.multiblock_crate.tooltip.single_type=单物品类型大容量存储（换物品种类需先取空）
+susyplusplus.machine.multiblock_crate.tooltip.valve=需要对应物品阀门才能与管道 / 漏斗 / AE2 交互
+susyplusplus.machine.item_valve.tooltip=多方块板条箱的取放口（管道 / 漏斗 / AE2 可双向存取）
+susyplusplus.machine.item_valve.tooltip.down=朝下安装时自动把物品输出到下方
+susyplusplus.gui.crate.capacity=容量：%s 物品
+susyplusplus.gui.crate.stored=已存储：%s
+susyplusplus.gui.crate.hint=取放物品请使用物品阀门 / 管道 / 漏斗 / AE2
+
+# 流体样品存储 / Fluid Sample Storage（MV / HV / EV）
+susyplusplus.machine.fluid_samples_storage_mv.name=流体样品存储（MV）
+susyplusplus.machine.fluid_samples_storage_hv.name=流体样品存储（HV）
+susyplusplus.machine.fluid_samples_storage_ev.name=流体样品存储（EV）
+susyplusplus.machine.fluid_samples_storage.tooltip.tanks=%s 个独立储罐，每格 %s L
+susyplusplus.machine.fluid_samples_storage.tooltip.no_energy=不耗电
+
+# 兼容用（部分情况下 GT 用 block.<ns>.<path> 作键）
+block.susyplusplus.steel_multiblock_crate=钢制多方块板条箱
+block.susyplusplus.clean_stainless_steel_multiblock_tank=洁净不锈钢多方块储罐
+block.susyplusplus.clean_stainless_steel_multiblock_crate=洁净不锈钢多方块板条箱
+block.susyplusplus.reinforced_titanium_multiblock_tank=加强钛多方块储罐
+block.susyplusplus.reinforced_titanium_multiblock_crate=加强钛多方块板条箱
+block.susyplusplus.steel_item_valve=钢制物品阀门
+block.susyplusplus.clean_stainless_steel_tank_valve=洁净不锈钢储罐阀门
+block.susyplusplus.clean_stainless_steel_item_valve=洁净不锈钢物品阀门
+block.susyplusplus.reinforced_titanium_tank_valve=加强钛储罐阀门
+block.susyplusplus.reinforced_titanium_item_valve=加强钛物品阀门

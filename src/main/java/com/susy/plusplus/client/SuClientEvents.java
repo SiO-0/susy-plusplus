@@ -50,6 +50,10 @@ public final class SuClientEvents {
         // 渲染对应 MTE 物品时会 NPE（CCL: "caught an exception whilst rendering an item"）。
         SuTextures.init();
 
+        // 同理：FluidSamplesStorageMachine 用的 OrientedOverlayRenderer 也必须在 stitch 之前构造，
+        // 否则它不会被登记进 Textures.iconRegisters，渲染该 MTE 的物品时会 NPE（"材质崩溃"）。
+        com.susy.plusplus.multiblock.storage.SuStorageTextures.init();
+
         // 配置器快捷键（Shift+V）+ 它的按键事件监听。
         ConfiguratorKeys.init();
         MinecraftForge.EVENT_BUS.register(ConfiguratorKeys.class);

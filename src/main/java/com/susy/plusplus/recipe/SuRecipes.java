@@ -101,6 +101,207 @@ public final class SuRecipes {
         if (SuConfig.enableRubberPipeTweaks && !SuConfig.vanillaGtCompat) {
             registerRubberPipeRecipes();
         }
+
+        // 多方块存储升级：板条箱 / 储罐 / 对应阀门
+        if (SuConfig.enableMultiblockStorage) {
+            registerMultiblockStorageRecipes();
+        }
+
+        // 流体样品存储（MV / HV / EV；适配原版 GT 时跳过）
+        if (SuConfig.enableFluidSamplesStorage && !SuConfig.vanillaGtCompat) {
+            registerFluidSamplesStorageRecipes();
+        }
+    }
+
+    // ==========================================================================
+    // 流体样品存储：MV / HV / EV（照 Susy-Core 的 fluid_samples_storage 形状）
+    // ==========================================================================
+
+    /**
+     * 原配方（GroovyScript，见 {@code run/groovy/postInit/mod/MachineRecipes.groovy}）：
+     *
+     * <pre>
+     * RecyclingHelper.addShaped("susy:fluid_samples_storage", metaitem('susy:fluid_samples_storage'), [
+     *     [large_fluid_cell.steel, large_fluid_cell.steel, large_fluid_cell.steel],
+     *     [large_fluid_cell.steel, item('gregtech:boiler_casing', 1), large_fluid_cell.steel],
+     *     [large_fluid_cell.steel, large_fluid_cell.steel, large_fluid_cell.steel]])
+     * </pre>
+     *
+     * <p>
+     * 也就是 <b>8 个大型流体单元 + 1 个外壳</b>。这里保持完全相同的形状，
+     * 按需求把材料换成 铝 / 不锈钢 / 钛 的相应物品（大型流体单元 + 对应电压的机器外壳）：
+     * </p>
+     *
+     * <ul>
+     * <li>MV：8× {@code FLUID_CELL_LARGE_ALUMINIUM} + 1× MV 机器外壳</li>
+     * <li>HV：8× {@code FLUID_CELL_LARGE_STAINLESS_STEEL} + 1× HV 机器外壳</li>
+     * <li>EV：8× {@code FLUID_CELL_LARGE_TITANIUM} + 1× EV 机器外壳</li>
+     * </ul>
+     *
+     * <p>
+     * 三条配方的材质互不相同，且与 Susy-Core 原版（钢）也不同，不存在冲突。
+     * </p>
+     */
+    private static void registerFluidSamplesStorageRecipes() {
+        if (SuMetaTileEntities.FLUID_SAMPLES_STORAGE_MV != null) {
+            ModHandler.addShapedRecipe("susyplusplus_fluid_samples_storage_mv",
+                    SuMetaTileEntities.FLUID_SAMPLES_STORAGE_MV.getStackForm(),
+                    "CCC", "CHC", "CCC",
+                    'C', MetaItems.FLUID_CELL_LARGE_ALUMINIUM.getStackForm(),
+                    'H', MetaBlocks.MACHINE_CASING
+                            .getItemVariant(BlockMachineCasing.MachineCasingType.MV));
+        }
+        if (SuMetaTileEntities.FLUID_SAMPLES_STORAGE_HV != null) {
+            ModHandler.addShapedRecipe("susyplusplus_fluid_samples_storage_hv",
+                    SuMetaTileEntities.FLUID_SAMPLES_STORAGE_HV.getStackForm(),
+                    "CCC", "CHC", "CCC",
+                    'C', MetaItems.FLUID_CELL_LARGE_STAINLESS_STEEL.getStackForm(),
+                    'H', MetaBlocks.MACHINE_CASING
+                            .getItemVariant(BlockMachineCasing.MachineCasingType.HV));
+        }
+        if (SuMetaTileEntities.FLUID_SAMPLES_STORAGE_EV != null) {
+            ModHandler.addShapedRecipe("susyplusplus_fluid_samples_storage_ev",
+                    SuMetaTileEntities.FLUID_SAMPLES_STORAGE_EV.getStackForm(),
+                    "CCC", "CHC", "CCC",
+                    'C', MetaItems.FLUID_CELL_LARGE_TITANIUM.getStackForm(),
+                    'H', MetaBlocks.MACHINE_CASING
+                            .getItemVariant(BlockMachineCasing.MachineCasingType.EV));
+        }
+    }
+
+    // ==========================================================================
+    // 多方块存储升级：板条箱 / 储罐 / 阀门（有序合成，照 GT 原有配方）
+    // ==========================================================================
+
+    /**
+     * 配方<b>完全照 GT 原有的写法</b>（工作台有序合成，GT 的
+     * {@link ModHandler#addShapedRecipe(String, ItemStack, Object...)}），
+     * <b>不再用"上一档控制器 / 阀门"当材料</b>，因此没有任何套娃。
+     *
+     * <pre>
+     * GT 的 steel_multiblock_tank :  " R " / "hCw" / " R "    R = ring(Steel),  C = METAL_CASING STEEL_SOLID
+     * GT 的 steel_tank_valve      :  " R " / "hCw" / " O "    O = rotor(Steel)
+     * GT 的 steel_crate（单方块） :  "RPR" / "PhP" / "RPR"    P = plate(Steel), R = stickLong(Steel)
+     * </pre>
+     *
+     * <p>
+     * 小写字母 {@code h}/{@code w} 是 GT 的约定：{@code addShapedRecipe} 会自动补上
+     * "硬锤 / 扳手"工具要求，因此这里不需要自己写键。
+     * </p>
+     *
+     * <p>
+     * <b>互不冲突</b>（有序配方逐格比对，下面每一条在"形状 + 材料"上都与其它条不同）：
+     * </p>
+     *
+     * <ul>
+     * <li>储罐用<b>环</b>（照 GT 储罐）、板条箱用<b>板</b>（照 GT 箱子）→ 互不相同；</li>
+     * <li>储罐阀门底部是<b>转子</b>（照 GT 储罐阀门）、物品阀门底部是<b>传送带</b> → 互不相同；</li>
+     * <li>各档材质不同（钢 / 不锈钢 / 钛），互不相同；</li>
+     * <li>也与 GT 自己的 {@code steel_multiblock_tank} / {@code steel_tank_valve} / {@code steel_crate}
+     * 不同（它们用的是环 / 转子 / 长杆）。</li>
+     * </ul>
+     */
+    private static void registerMultiblockStorageRecipes() {
+        // ---------------- 钢制档（基础档） ----------------
+        // ---------- 钢制板条箱：照 GT 储罐形状，但把"环"换成"板"（照 GT 箱子）----------
+        if (SuMetaTileEntities.STEEL_MULTIBLOCK_CRATE != null) {
+            ModHandler.addShapedRecipe("susyplusplus_steel_multiblock_crate",
+                    SuMetaTileEntities.STEEL_MULTIBLOCK_CRATE.getStackForm(),
+                    " P ", "hCw", " P ",
+                    'P', new UnificationEntry(OrePrefix.plate, Materials.Steel),
+                    'C', MetaBlocks.METAL_CASING
+                            .getItemVariant(BlockMetalCasing.MetalCasingType.STEEL_SOLID));
+        }
+        // ---------- 钢制物品阀门：照 GT 储罐阀门形状，底部用"传送带"（物品味）----------
+        if (SuMetaTileEntities.STEEL_ITEM_VALVE != null) {
+            ModHandler.addShapedRecipe("susyplusplus_steel_item_valve",
+                    SuMetaTileEntities.STEEL_ITEM_VALVE.getStackForm(),
+                    " P ", "hCw", " O ",
+                    'P', new UnificationEntry(OrePrefix.plate, Materials.Steel),
+                    'C', MetaBlocks.METAL_CASING
+                            .getItemVariant(BlockMetalCasing.MetalCasingType.STEEL_SOLID),
+                    'O', MetaItems.CONVEYOR_MODULE_LV.getStackForm());
+        }
+
+        // ---------------- 洁净不锈钢档 ----------------
+        // ---------- 洁净不锈钢储罐：照 GT 储罐形状（" R ","hCw"," R "）----------
+        if (SuMetaTileEntities.CLEAN_STAINLESS_STEEL_MULTIBLOCK_TANK != null) {
+            ModHandler.addShapedRecipe("susyplusplus_clean_stainless_steel_multiblock_tank",
+                    SuMetaTileEntities.CLEAN_STAINLESS_STEEL_MULTIBLOCK_TANK.getStackForm(),
+                    " R ", "hCw", " R ",
+                    'R', new UnificationEntry(OrePrefix.ring, Materials.StainlessSteel),
+                    'C', MetaBlocks.METAL_CASING
+                            .getItemVariant(BlockMetalCasing.MetalCasingType.STAINLESS_CLEAN));
+        }
+        // ---------- 洁净不锈钢储罐阀门：照 GT 储罐阀门形状（底部转子）----------
+        if (SuMetaTileEntities.CLEAN_STAINLESS_STEEL_TANK_VALVE != null) {
+            ModHandler.addShapedRecipe("susyplusplus_clean_stainless_steel_tank_valve",
+                    SuMetaTileEntities.CLEAN_STAINLESS_STEEL_TANK_VALVE.getStackForm(),
+                    " R ", "hCw", " O ",
+                    'R', new UnificationEntry(OrePrefix.ring, Materials.StainlessSteel),
+                    'C', MetaBlocks.METAL_CASING
+                            .getItemVariant(BlockMetalCasing.MetalCasingType.STAINLESS_CLEAN),
+                    'O', new UnificationEntry(OrePrefix.rotor, Materials.StainlessSteel));
+        }
+        // ---------- 洁净不锈钢板条箱：板版（照 GT 箱子）----------
+        if (SuMetaTileEntities.CLEAN_STAINLESS_STEEL_MULTIBLOCK_CRATE != null) {
+            ModHandler.addShapedRecipe("susyplusplus_clean_stainless_steel_multiblock_crate",
+                    SuMetaTileEntities.CLEAN_STAINLESS_STEEL_MULTIBLOCK_CRATE.getStackForm(),
+                    " P ", "hCw", " P ",
+                    'P', new UnificationEntry(OrePrefix.plate, Materials.StainlessSteel),
+                    'C', MetaBlocks.METAL_CASING
+                            .getItemVariant(BlockMetalCasing.MetalCasingType.STAINLESS_CLEAN));
+        }
+        // ---------- 洁净不锈钢物品阀门：底部传送带 ----------
+        if (SuMetaTileEntities.CLEAN_STAINLESS_STEEL_ITEM_VALVE != null) {
+            ModHandler.addShapedRecipe("susyplusplus_clean_stainless_steel_item_valve",
+                    SuMetaTileEntities.CLEAN_STAINLESS_STEEL_ITEM_VALVE.getStackForm(),
+                    " P ", "hCw", " O ",
+                    'P', new UnificationEntry(OrePrefix.plate, Materials.StainlessSteel),
+                    'C', MetaBlocks.METAL_CASING
+                            .getItemVariant(BlockMetalCasing.MetalCasingType.STAINLESS_CLEAN),
+                    'O', MetaItems.CONVEYOR_MODULE_MV.getStackForm());
+        }
+
+        // ---------------- 加强钛档 ----------------
+        // ---------- 加强钛储罐：照 GT 储罐形状 ----------
+        if (SuMetaTileEntities.REINFORCED_TITANIUM_MULTIBLOCK_TANK != null) {
+            ModHandler.addShapedRecipe("susyplusplus_reinforced_titanium_multiblock_tank",
+                    SuMetaTileEntities.REINFORCED_TITANIUM_MULTIBLOCK_TANK.getStackForm(),
+                    " R ", "hCw", " R ",
+                    'R', new UnificationEntry(OrePrefix.ring, Materials.Titanium),
+                    'C', MetaBlocks.METAL_CASING
+                            .getItemVariant(BlockMetalCasing.MetalCasingType.TITANIUM_STABLE));
+        }
+        // ---------- 加强钛储罐阀门：照 GT 储罐阀门形状（底部转子）----------
+        if (SuMetaTileEntities.REINFORCED_TITANIUM_TANK_VALVE != null) {
+            ModHandler.addShapedRecipe("susyplusplus_reinforced_titanium_tank_valve",
+                    SuMetaTileEntities.REINFORCED_TITANIUM_TANK_VALVE.getStackForm(),
+                    " R ", "hCw", " O ",
+                    'R', new UnificationEntry(OrePrefix.ring, Materials.Titanium),
+                    'C', MetaBlocks.METAL_CASING
+                            .getItemVariant(BlockMetalCasing.MetalCasingType.TITANIUM_STABLE),
+                    'O', new UnificationEntry(OrePrefix.rotor, Materials.Titanium));
+        }
+        // ---------- 加强钛板条箱：板版 ----------
+        if (SuMetaTileEntities.REINFORCED_TITANIUM_MULTIBLOCK_CRATE != null) {
+            ModHandler.addShapedRecipe("susyplusplus_reinforced_titanium_multiblock_crate",
+                    SuMetaTileEntities.REINFORCED_TITANIUM_MULTIBLOCK_CRATE.getStackForm(),
+                    " P ", "hCw", " P ",
+                    'P', new UnificationEntry(OrePrefix.plate, Materials.Titanium),
+                    'C', MetaBlocks.METAL_CASING
+                            .getItemVariant(BlockMetalCasing.MetalCasingType.TITANIUM_STABLE));
+        }
+        // ---------- 加强钛物品阀门：底部传送带 ----------
+        if (SuMetaTileEntities.REINFORCED_TITANIUM_ITEM_VALVE != null) {
+            ModHandler.addShapedRecipe("susyplusplus_reinforced_titanium_item_valve",
+                    SuMetaTileEntities.REINFORCED_TITANIUM_ITEM_VALVE.getStackForm(),
+                    " P ", "hCw", " O ",
+                    'P', new UnificationEntry(OrePrefix.plate, Materials.Titanium),
+                    'C', MetaBlocks.METAL_CASING
+                            .getItemVariant(BlockMetalCasing.MetalCasingType.TITANIUM_STABLE),
+                    'O', MetaItems.CONVEYOR_MODULE_HV.getStackForm());
+        }
     }
 
     // ==========================================================================

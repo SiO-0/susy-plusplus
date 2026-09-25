@@ -148,3 +148,41 @@ susyplusplus.gui.storage_scanner.state.running=Running (exposing inventory)
 susyplusplus.gui.storage_scanner.state.no_power=No power (cannot expose / scan)
 susyplusplus.gui.storage_scanner.state.no_container=Running, but no containers in range (default 5x5x5, use -1/+1 to widen)
 susyplusplus.gui.storage_scanner.state.disabled=Disabled
+
+# Multiblock storage upgrades
+susyplusplus.machine.steel_multiblock_crate.name=Steel Multiblock Crate
+susyplusplus.machine.clean_stainless_steel_multiblock_tank.name=Clean Stainless Steel Multiblock Tank
+susyplusplus.machine.clean_stainless_steel_multiblock_crate.name=Clean Stainless Steel Multiblock Crate
+susyplusplus.machine.reinforced_titanium_multiblock_tank.name=Reinforced Titanium Multiblock Tank
+susyplusplus.machine.reinforced_titanium_multiblock_crate.name=Reinforced Titanium Multiblock Crate
+susyplusplus.machine.steel_item_valve.name=Steel Item Valve
+susyplusplus.machine.clean_stainless_steel_tank_valve.name=Clean Stainless Steel Tank Valve
+susyplusplus.machine.clean_stainless_steel_item_valve.name=Clean Stainless Steel Item Valve
+susyplusplus.machine.reinforced_titanium_tank_valve.name=Reinforced Titanium Tank Valve
+susyplusplus.machine.reinforced_titanium_item_valve.name=Reinforced Titanium Item Valve
+susyplusplus.machine.multiblock_crate.tooltip.single_type=Single-item-type bulk storage (empty it before switching item type)
+susyplusplus.machine.multiblock_crate.tooltip.valve=Needs the matching Item Valve to interact with pipes / hoppers / AE2
+susyplusplus.machine.item_valve.tooltip=Access port of a multiblock crate (bidirectional for pipes / hoppers / AE2)
+susyplusplus.machine.item_valve.tooltip.down=Auto-outputs items downward when placed facing down
+susyplusplus.gui.crate.capacity=Capacity: %s items
+susyplusplus.gui.crate.stored=Stored: %s
+susyplusplus.gui.crate.hint=Insert / extract items through the Item Valve, pipes, hoppers or AE2
+
+# Fluid Sample Storage (MV / HV / EV)
+susyplusplus.machine.fluid_samples_storage_mv.name=Fluid Sample Storage (MV)
+susyplusplus.machine.fluid_samples_storage_hv.name=Fluid Sample Storage (HV)
+susyplusplus.machine.fluid_samples_storage_ev.name=Fluid Sample Storage (EV)
+susyplusplus.machine.fluid_samples_storage.tooltip.tanks=%s independent tanks, %s L each
+susyplusplus.machine.fluid_samples_storage.tooltip.no_energy=No energy required
+
+# Compatibility (GT may use block.<ns>.<path> as the key in some paths)
+block.susyplusplus.steel_multiblock_crate=Steel Multiblock Crate
+block.susyplusplus.clean_stainless_steel_multiblock_tank=Clean Stainless Steel Multiblock Tank
+block.susyplusplus.clean_stainless_steel_multiblock_crate=Clean Stainless Steel Multiblock Crate
+block.susyplusplus.reinforced_titanium_multiblock_tank=Reinforced Titanium Multiblock Tank
+block.susyplusplus.reinforced_titanium_multiblock_crate=Reinforced Titanium Multiblock Crate
+block.susyplusplus.steel_item_valve=Steel Item Valve
+block.susyplusplus.clean_stainless_steel_tank_valve=Clean Stainless Steel Tank Valve
+block.susyplusplus.clean_stainless_steel_item_valve=Clean Stainless Steel Item Valve
+block.susyplusplus.reinforced_titanium_tank_valve=Reinforced Titanium Tank Valve
+block.susyplusplus.reinforced_titanium_item_valve=Reinforced Titanium Item Valve

@@ -37,10 +37,11 @@ public class SuConfig {
                         "     Empty Spray Can + Liquid Silicone Rubber 576 mB (no mixer recipe);",
                         "  3) the Wireless Energy Transmission Tower is NOT registered;",
                         "  4) the rubber fluid-pipe tweaks are skipped;",
-                        "  5) the Pyrotech recipe tweaks are skipped.",
+                        "  5) the Pyrotech recipe tweaks are skipped;",
+                        "  6) the Fluid Sample Storage machines (MV / HV / EV) are NOT registered.",
                         "启用后：不再注册「防水漆液」流体材料；防水喷漆改为在灌装机里用",
                         "「空喷漆罐 + 液态硅橡胶 576 mB」合成（不再有搅拌机配方）；",
-                        "同时不注册无线能量传输塔、跳过橡胶管道修改与火种科技配方。",
+                        "同时不注册无线能量传输塔与流体样品存储、跳过橡胶管道修改与火种科技配方。",
                         "Default: false"
         })
         public static boolean vanillaGtCompat = false;
@@ -144,4 +145,26 @@ public class SuConfig {
                         "Default: true"
         })
         public static boolean enablePyrotechRecipeTweaks = true;
+
+        @Config.Comment({
+                        "Enable the multiblock storage upgrades added by this mod:",
+                        "  - Steel Multiblock Crate (1,000,000 items) + Steel Item Valve",
+                        "  - Clean Stainless Steel Multiblock Tank (16,000,000 mB) + Tank Valve",
+                        "  - Clean Stainless Steel Multiblock Crate (16,000,000 items) + Item Valve",
+                        "  - Reinforced Titanium Multiblock Tank (32,000,000 mB) + Tank Valve",
+                        "  - Reinforced Titanium Multiblock Crate (32,000,000 items) + Item Valve",
+                        "启用本模组添加的多方块存储升级（板条箱 / 储罐 / 对应阀门，详见 docs/multiblock_crate_and_tank_upgrades.md）。",
+                        "Default: true"
+        })
+        public static boolean enableMultiblockStorage = true;
+
+        @Config.Comment({
+                        "Enable the Fluid Sample Storage machines (MV / HV / EV) added by this mod:",
+                        "32 independent fluid tanks each, no items, no recipe processing, NO energy usage.",
+                        "Per-tank capacity: MV = 32,000 L, HV = 64,000 L, EV = 128,000 L.",
+                        "启用本模组添加的流体样品存储（MV / HV / EV）：各 32 个独立储罐、无物品槽、不处理配方、不耗电。",
+                        "每格容量：MV = 32,000 L，HV = 64,000 L，EV = 128,000 L。",
+                        "Default: true"
+        })
+        public static boolean enableFluidSamplesStorage = true;
 }

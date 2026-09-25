@@ -35,6 +35,10 @@ With **coremod and mixin support** that is easy to configure.
 | **配置器** | Shift+V 选模式：改机器输出面 / 复制机器配置 / 机器工具箱 | `enableConfigurator`（开） | [docs/configurator.md](docs/configurator.md) |
 | **手推车** | Shift+右键搬起机器（零掉落、封面/缓存/朝向全保留），右键放下；多方块不可搬 | `enableTrolley`（开） | [docs/trolley.md](docs/trolley.md) |
 | **存储检测器** | MV 单方块机器：扫描周围容器（含非玩家放置）并聚合成一个库存，漏斗可直接抽取 | `enableStorageScanner`（开） | [docs/storage_scanner.md](docs/storage_scanner.md) |
+| **多方块板条箱** | 单物品类型的大容量物品存储（钢制 1M / 洁净不锈钢 16M / 加强钛 32M 物品） | `enableMultiblockStorage`（开） | [docs/multiblock_crate_and_tank_upgrades.md](docs/multiblock_crate_and_tank_upgrades.md) |
+| **多方块储罐升级** | 洁净不锈钢 16M mB / 加强钛 32M mB 储罐；钢制档直接用 GT 的 `gregtech:tank.steel` | `enableMultiblockStorage`（开） | [docs/multiblock_crate_and_tank_upgrades.md](docs/multiblock_crate_and_tank_upgrades.md) |
+| **物品阀门 / 储罐阀门** | 板条箱 / 储罐的取放口（双向，暴露 IItemHandler / IFluidHandler，朝下自动输出） | `enableMultiblockStorage`（开） | [docs/multiblock_crate_and_tank_upgrades.md](docs/multiblock_crate_and_tank_upgrades.md) |
+| **流体样品存储** | 32 个独立储罐、无物品槽、不耗电；MV / HV / EV 每格 32,000 / 64,000 / 128,000 L | `enableFluidSamplesStorage`（开） | [docs/fluid_samples_storage.md](docs/fluid_samples_storage.md) |
 | 橡胶管道修改 | 橡胶流体管道速率对齐钢 + 合金炉配方 | `enableRubberPipeTweaks`（**关**） | [docs/config.md](docs/config.md) |
 | 火种科技配方 | 干燥机 / 提取机 / 锻造锤配方 | `enablePyrotechRecipeTweaks`（开） | [docs/config.md](docs/config.md) |
 
