@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.3] - 2026-09-25
+
+### Fixed
+- **Crash on startup when The One Probe is not installed** (pure GregTech packs): `SusyPlusPlus.init` called `SuTopIntegration.init()` unconditionally, and loading `SuTopIntegration` links `mcjty/theoneprobe/api/ITheOneProbe` (it appears in the method's stack map table), so the JVM threw `NoClassDefFoundError` **before** the `Loader.isModLoaded("theoneprobe")` guard inside that class could run. The check is now performed in the caller, so `SuTopIntegration` (and the TOP providers it uses) is never touched when TOP is absent.
+
 ## [1.0.2] - 2026-09-25
 
 ### Added

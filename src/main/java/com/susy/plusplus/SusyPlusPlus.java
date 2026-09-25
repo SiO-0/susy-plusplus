@@ -11,6 +11,7 @@ import com.susy.plusplus.pipe.SuPipeTweaks;
 import com.susy.plusplus.recipe.SuRecipes;
 
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -68,9 +69,22 @@ public class SusyPlusPlus {
         LOGGER.info("{} preInit 完成。", Tags.MOD_NAME);
     }
 
+    /** The One Probe 的 modid（可选依赖）。 */
+    private static final String TOP_MODID = "theoneprobe";
+
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-        SuTopIntegration.init();
+        // ⚠ TOP 集成必须**在调用方**先判断是否加载，绝不能把判断放在 SuTopIntegration 内部：
+        // SuTopIntegration 的方法体里直接引用了 mcjty.theoneprobe 的类型
+        // （局部变量 → 会进入 StackMapTable），JVM 在**加载/校验该类时**就会去链接
+        // mcjty/theoneprobe/api/ITheOneProbe；未装 TOP 时直接抛 NoClassDefFoundError，
+        // 那时类内部的 Loader.isModLoaded 判断根本来不及执行（纯 GT 环境实测崩溃）。
+        // 放在这里判断后，未装 TOP 时根本不会触碰 SuTopIntegration，该类也就不会被加载。
+        if (Loader.isModLoaded(TOP_MODID)) {
+            SuTopIntegration.init();
+        } else {
+            LOGGER.info("未检测到 The One Probe（{}），跳过 TOP 集成。", TOP_MODID);
+        }
 
         // 注册多方块控制器。放在 init 阶段（GT 的 MTE 已注册完毕、
         // 且 MTE 注册表尚未冻结）；MetaTileEntities.registerMetaTileEntity
