@@ -22,6 +22,10 @@ import com.cleanroommc.modularui.value.sync.InteractionSyncHandler;
 import com.cleanroommc.modularui.value.sync.PanelSyncManager;
 import com.cleanroommc.modularui.widgets.ButtonWidget;
 
+import com.susy.plusplus.machine.MachineExtraState;
+
+import net.minecraftforge.items.IItemHandler;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -115,6 +119,16 @@ public final class MachineToolboxUI implements IGuiHolder<PosGuiData> {
                         entries.add(new ToolboxEntry("susyplusplus.gui.configurator.toolbox.sound",
                                         () -> state(mte.isMuffled()),
                                         machine -> machine.toggleMuffled()));
+
+                        // 功能二：不允许不同槽位被动输入相同物品（只有"有物品输入槽位"的机器才出现该开关）
+                        // 状态由 MachineExtraState 持有：写入机器 NBT 持久化，并通过初次同步送到客户端。
+                        final IItemHandler importInventory = mte.getItemInventory();
+                        if (importInventory != null && importInventory.getSlots() > 0) {
+                                entries.add(new ToolboxEntry("susyplusplus.gui.configurator.toolbox.no_duplicate_import",
+                                                () -> state(MachineExtraState.isNoDuplicateImport(mte)),
+                                                machine -> MachineExtraState.setNoDuplicateImport(machine,
+                                                                !MachineExtraState.isNoDuplicateImport(machine))));
+                        }
 
                         final IControllable controllable = capability(mte,
                                         GregtechTileCapabilities.CAPABILITY_CONTROLLABLE);

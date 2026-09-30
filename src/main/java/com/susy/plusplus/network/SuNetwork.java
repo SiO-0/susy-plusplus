@@ -42,6 +42,9 @@ public final class SuNetwork {
         instance = NetworkRegistry.INSTANCE.newSimpleChannel(CHANNEL_NAME);
         instance.registerMessage(PacketOpenConfigurator.Handler.class, PacketOpenConfigurator.class,
                 nextMessageId++, Side.SERVER);
+        // 功能三：把「容量限制（仅流体）」界面填的容量写进机器
+        instance.registerMessage(PacketSetFluidCapacity.Handler.class, PacketSetFluidCapacity.class,
+                nextMessageId++, Side.SERVER);
         SusyPlusPlus.LOGGER.info("[SusyPlusPlus] Network channel '{}' registered.", CHANNEL_NAME);
     }
 

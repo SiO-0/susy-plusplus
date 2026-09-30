@@ -8,6 +8,7 @@ import com.susy.plusplus.item.SuMetaItems;
 import com.susy.plusplus.item.configurator.ConfiguratorData;
 import com.susy.plusplus.item.configurator.ConfiguratorMode;
 import com.susy.plusplus.item.configurator.MachineConfig;
+import com.susy.plusplus.machine.FluidCapacityHelper;
 import com.susy.plusplus.waterproof.WaterproofHelper;
 
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -156,6 +157,17 @@ public final class ConfiguratorEventHandler {
                         SuGuiFactories.openToolbox(serverPlayer, event.getPos());
                         acted = true;
                     }
+                    break;
+                case FLUID_CAPACITY:
+                    // 功能三：普通右键容器 → 打开「容量限制（仅流体）」界面
+                    if (mte == null) {
+                        message(player, "susyplusplus.message.configurator.no_machine");
+                    } else if (FluidCapacityHelper.tanks(mte).isEmpty()) {
+                        message(player, "susyplusplus.message.configurator.no_fluid_tank");
+                    } else {
+                        SuGuiFactories.openFluidCapacityUI(serverPlayer, event.getPos());
+                    }
+                    acted = true;
                     break;
                 default:
                     break;

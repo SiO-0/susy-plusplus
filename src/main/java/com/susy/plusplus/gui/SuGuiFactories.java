@@ -58,14 +58,18 @@ public final class SuGuiFactories {
     private static final SuPosGuiFactory TOOLBOX_UI = new SuPosGuiFactory(MachineToolboxUI.FACTORY_NAME,
             data -> new MachineToolboxUI());
 
+    /** 容量限制（仅流体）界面工厂（功能三）。 */
+    private static final SuPosGuiFactory FLUID_CAPACITY_UI = new SuPosGuiFactory(FluidCapacityUI.FACTORY_NAME,
+            data -> new FluidCapacityUI());
+
     private SuGuiFactories() {
     }
 
     /** 在 {@code preInit}（客户端与服务端都执行）调用。 */
     public static void init() {
         ConfiguratorMainUI.init();
-        SusyPlusPlus.LOGGER.info("[SusyPlusPlus] Configurator GUI factories: faceUI={}, toolboxUI={}",
-                FACE_UI.getFactoryName(), TOOLBOX_UI.getFactoryName());
+        SusyPlusPlus.LOGGER.info("[SusyPlusPlus] Configurator GUI factories: faceUI={}, toolboxUI={}, fluidCapacityUI={}",
+                FACE_UI.getFactoryName(), TOOLBOX_UI.getFactoryName(), FLUID_CAPACITY_UI.getFactoryName());
     }
 
     /** 服务端：打开「修改机器输出面」界面。 */
@@ -76,6 +80,11 @@ public final class SuGuiFactories {
     /** 服务端：打开「机器工具箱」界面。 */
     public static void openToolbox(EntityPlayerMP player, BlockPos pos) {
         TOOLBOX_UI.open(player, pos);
+    }
+
+    /** 服务端：打开「容量限制（仅流体）」界面（功能三）。 */
+    public static void openFluidCapacityUI(EntityPlayerMP player, BlockPos pos) {
+        FLUID_CAPACITY_UI.open(player, pos);
     }
 
     /**

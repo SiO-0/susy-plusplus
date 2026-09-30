@@ -8,6 +8,8 @@
   "plugin": "com.susy.plusplus.mixin.SuMixinPlugin",
   "mixins": [
     "MetaTileEntityWaterproofMixin",
+    "MetaTileEntityExtraStateMixin",
+    "SimpleMachineItemCapabilityMixin",
     "xnet.TileEntityControllerMixin",
     "holoinventory.HoloInventoryTileRequestMixin"
   ],

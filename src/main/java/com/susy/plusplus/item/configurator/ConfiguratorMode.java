@@ -22,7 +22,10 @@ public enum ConfiguratorMode {
     COPY_CONFIG(2, "copy_config"),
 
     /** 3 = 机器工具箱。 */
-    MACHINE_TOOLBOX(3, "machine_toolbox");
+    MACHINE_TOOLBOX(3, "machine_toolbox"),
+
+    /** 4 = 容量限制（仅流体）。<b>追加在末尾</b>，保证旧存档的 {@code Mode} 数值不变。 */
+    FLUID_CAPACITY(4, "fluid_capacity");
 
     /** 物品 NBT 键。 */
     public static final String NBT_MODE = "Mode";
