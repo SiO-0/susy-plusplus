@@ -167,4 +167,24 @@ public class SuConfig {
                         "Default: true"
         })
         public static boolean enableFluidSamplesStorage = true;
+
+        @Config.Comment({
+                        "Master switch for the two 'third-party patches' (both default ON, purely cosmetic):",
+                        "  1) XNet: the UI strings that are HARDCODED in xnet's code (controller messages and",
+                        "     the redstone-proxy tooltips) are replaced with localisable keys, so they follow",
+                        "     the game language. NOTE: the plain XNet translation file",
+                        "     (assets/xnet/lang/zh_cn.lang) shipped by this mod is NOT affected by this switch.",
+                        "  2) HoloInventory: aiming at a GT machine now shows the machine's real name instead of",
+                        "     nothing (HoloInventory asks the item handler for a name via its api, which GT",
+                        "     predates - this patch supplies the name).",
+                        "Set to false to restore the untouched third-party behaviour.",
+                        "第三方补丁总开关（默认开，纯显示层面）：",
+                        "  1) XNet：把 xnet 里【硬编码】的界面文字（控制器提示、红石代理方块 tooltip）",
+                        "     换成可本地化的键，从而跟随游戏语言；",
+                        "     ⚠ 本模组附带的 xnet 中文语言文件不受此开关影响。",
+                        "  2) HoloInventory：对准 GT 机器时显示真正的机器名（原本因缺少名称接口而空白）。",
+                        "设为 false 即恢复第三方 mod 的原始行为。",
+                        "Default: true"
+        })
+        public static boolean enableThirdPartyPatches = true;
 }

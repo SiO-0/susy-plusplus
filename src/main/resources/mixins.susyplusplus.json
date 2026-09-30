@@ -5,9 +5,27 @@
   "target": "@env(DEFAULT)",
   "minVersion": "0.8.5",
   "compatibilityLevel": "JAVA_8",
+  "plugin": "com.susy.plusplus.mixin.SuMixinPlugin",
   "mixins": [
-    "MetaTileEntityWaterproofMixin"
+    "MetaTileEntityWaterproofMixin",
+    "xnet.TileEntityControllerMixin",
+    "holoinventory.HoloInventoryTileRequestMixin"
   ],
   "server": [],
-  "client": []
+  "client": [
+    "xnet.GuiControllerMixin",
+    "xnet.GuiConnectorMixin",
+    "xnet.GuiRouterMixin",
+    "xnet.AbstractEditorPanelMixin",
+    "xnet.ItemConnectorSettingsMixin",
+    "xnet.ItemChannelSettingsMixin",
+    "xnet.FluidConnectorSettingsMixin",
+    "xnet.FluidChannelSettingsMixin",
+    "xnet.EnergyConnectorSettingsMixin",
+    "xnet.LogicConnectorSettingsMixin",
+    "xnet.AbstractConnectorSettingsMixin",
+    "xnet.RedstoneProxyBlockMixin",
+    "xnet.RedstoneProxyUBlockMixin",
+    "mcjtylib.McjtyAbstractLabelI18nMixin"
+  ]
 }

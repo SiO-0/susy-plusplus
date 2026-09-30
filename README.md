@@ -39,6 +39,7 @@ With **coremod and mixin support** that is easy to configure.
 | **多方块储罐升级** | 洁净不锈钢 16M mB / 加强钛 32M mB 储罐；钢制档直接用 GT 的 `gregtech:tank.steel` | `enableMultiblockStorage`（开） | [docs/multiblock_crate_and_tank_upgrades.md](docs/multiblock_crate_and_tank_upgrades.md) |
 | **物品阀门 / 储罐阀门** | 板条箱 / 储罐的取放口（双向，暴露 IItemHandler / IFluidHandler，朝下自动输出） | `enableMultiblockStorage`（开） | [docs/multiblock_crate_and_tank_upgrades.md](docs/multiblock_crate_and_tank_upgrades.md) |
 | **流体样品存储** | 32 个独立储罐、无物品槽、不耗电；MV / HV / EV 每格 32,000 / 64,000 / 128,000 L | `enableFluidSamplesStorage`（开） | [docs/fluid_samples_storage.md](docs/fluid_samples_storage.md) |
+| **第三方补丁** | XNet 中文语言文件 + XNet 硬编码文字本地化 + HoloInventory 显示 GT 机器名（**没装对应 mod 则完全不执行**） | `enableThirdPartyPatches`（开） | [docs/third_party_patches.md](docs/third_party_patches.md) |
 | 橡胶管道修改 | 橡胶流体管道速率对齐钢 + 合金炉配方 | `enableRubberPipeTweaks`（**关**） | [docs/config.md](docs/config.md) |
 | 火种科技配方 | 干燥机 / 提取机 / 锻造锤配方 | `enablePyrotechRecipeTweaks`（开） | [docs/config.md](docs/config.md) |
 

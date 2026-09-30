@@ -33,6 +33,7 @@
 | `enableStorageScanner` | boolean | `true` | 存储检测器机器（MV 扫描周围容器并聚合暴露库存；见 [`storage_scanner.md`](storage_scanner.md)） |
 | `enableMultiblockStorage` | boolean | `true` | 多方块存储升级：板条箱 / 储罐 / 物品阀门 / 储罐阀门（见 [`multiblock_crate_and_tank_upgrades.md`](multiblock_crate_and_tank_upgrades.md)） |
 | `enableFluidSamplesStorage` | boolean | `true` | 流体样品存储 MV / HV / EV（32 格 × 32,000 / 64,000 / 128,000 L、不耗电；见 [`fluid_samples_storage.md`](fluid_samples_storage.md)） |
+| `enableThirdPartyPatches` | boolean | `true` | 第三方补丁总开关：XNet 硬编码文字本地化 + HoloInventory 显示 GT 机器名（见 [`third_party_patches.md`](third_party_patches.md)；**没装对应 mod 时完全不生效**） |
 | `enableRubberPipeTweaks` | boolean | `false` | 橡胶管道修改（见 §3） |
 | `enablePyrotechRecipeTweaks` | boolean | `true` | 火种科技(Pyrotech) 相关配方（见 §4） |
 

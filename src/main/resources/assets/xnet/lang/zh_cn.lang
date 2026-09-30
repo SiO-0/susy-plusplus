@@ -1,0 +1,94 @@
+#PARSE_ESCAPES
+
+# ==========================================================================
+# Susy Plus Plus 提供的 XNet 简体中文语言文件
+#
+# 背景：xnet-1.12-1.8.4-ynet.jar 自带的语言文件只有
+#   de_de / ru_ru / tr_tr / en_us —— 没有 zh_cn，
+# 所以中文环境下所有方块/物品/提示都是英文。
+# XNet 本身没有 zh_cn.lang，因此本模组在自己的 jar 里直接补一份，
+# 不存在"文件级覆盖"冲突（游戏只会在找不到 zh_cn 时才退回 en_us）。
+#
+# 键名与数值格式完全照抄 xnet 的 en_us.lang（%s 占位符、@f/@6 颜色码、\n 换行都保留）。
+# ==========================================================================
+
+item.xnet.xnet_manual.name=XNet 手册
+item.xnet.connector_upgrade.name=连接器升级组件
+
+tile.xnet.facade.name=伪装板
+tile.xnet.facade_blue.name=蓝色伪装板
+tile.xnet.facade_red.name=红色伪装板
+tile.xnet.facade_yellow.name=黄色伪装板
+tile.xnet.facade_green.name=绿色伪装板
+tile.xnet.facade_routing.name=路由伪装板
+
+tile.xnet.connector.name=连接器
+tile.xnet.connector_blue.name=蓝色连接器
+tile.xnet.connector_red.name=红色连接器
+tile.xnet.connector_yellow.name=黄色连接器
+tile.xnet.connector_green.name=绿色连接器
+tile.xnet.connector_routing.name=路由连接器
+
+tile.xnet.advanced_connector.name=高级连接器
+tile.xnet.advanced_connector_blue.name=高级蓝色连接器
+tile.xnet.advanced_connector_red.name=高级红色连接器
+tile.xnet.advanced_connector_yellow.name=高级黄色连接器
+tile.xnet.advanced_connector_green.name=高级绿色连接器
+tile.xnet.advanced_connector_routing.name=高级路由连接器（不可用）
+
+tile.xnet.netcable.name=网络线缆
+tile.xnet.netcable_blue.name=蓝色网络线缆
+tile.xnet.netcable_red.name=红色网络线缆
+tile.xnet.netcable_yellow.name=黄色网络线缆
+tile.xnet.netcable_green.name=绿色网络线缆
+tile.xnet.netcable_routing.name=路由网络线缆
+
+tile.xnet.redstone_proxy.name=红石代理方块
+tile.xnet.redstone_proxy_upd.name=红石代理方块（触发更新）
+
+tile.xnet.controller.name=控制器
+tile.xnet.router.name=路由器
+
+# ---- 频道类型（控制器 GUI 的下拉框）----
+# XNet 的 IChannelType#getID() 返回下面这些键，GUI 直接把 getID() 塞进控件；
+# 而 mcjtylib 的控件不会调用 I18n，所以必须由本模组
+# 的 McjtyAbstractLabelI18nMixin 在 setText 时按 "xnet." 前缀做翻译，
+# 光有这几行语言文件是不会生效的。
+# 显示文本被翻译、取值仍是原始 ID，因此不影响建频道。
+xnet.item=物品
+xnet.energy=能量
+xnet.fluid=流体
+xnet.logic=逻辑
+tile.xnet.wireless_router.name=无线路由器
+tile.xnet.antenna.name=天线
+tile.xnet.antenna_base.name=天线基座
+tile.xnet.antenna_dish.name=天线碟
+
+itemGroup.XNet=XNet
+
+message.xnet.shiftmessage=<按住 Shift>
+
+message.xnet.router=\
+    @f用这个方块可以连接\n\
+    @f多个频道（控制器）
+message.xnet.wireless_router=\
+    @f用这个方块可以远程连接\n\
+    @f多个频道\n\
+    @f用路由线缆把它接到\n\
+    @f普通路由器上\n\
+    @6这需要一根天线！
+message.xnet.controller=\
+    @fXNet 自动化的\n\
+    @f基础方块
+message.xnet.antenna=\
+    @f在基座顶上放一或两根天线。\n\
+    @6一根：范围 %s（%s rf/t/频道）\n\
+    @6两根：范围 %s（%s rf/t/频道）
+message.xnet.antenna_base=\
+    @f天线基座必须放在\n\
+    @f无线路由器顶上
+message.xnet.antenna_dish=\
+    @f天线碟必须放在天线\n\
+    @f基座顶上，并且能让\n\
+    @f无线范围变得极大\n\
+    @6（%s rf/t/频道）

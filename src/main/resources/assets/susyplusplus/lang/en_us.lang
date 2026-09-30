@@ -175,6 +175,23 @@ susyplusplus.machine.fluid_samples_storage_ev.name=Fluid Sample Storage (EV)
 susyplusplus.machine.fluid_samples_storage.tooltip.tanks=%s independent tanks, %s L each
 susyplusplus.machine.fluid_samples_storage.tooltip.no_energy=No energy required
 
+# Third-party patch texts (see config enableThirdPartyPatches)
+susyplusplus.patch.xnet.highlighted=The block is now highlighted
+susyplusplus.patch.xnet.copied_channel=Copied channel
+susyplusplus.patch.xnet.remove_channel_prefix=Really remove channel
+susyplusplus.patch.xnet.proxy.line1=Acts as a proxy block for
+susyplusplus.patch.xnet.proxy.line2=redstone. XNet can connect to this
+susyplusplus.patch.xnet.proxy.no_update=This version does no block update!
+susyplusplus.patch.xnet.proxy.with_update=This version does a block update!
+susyplusplus.patch.xnet.err.copy_connector=Error copying connector!
+susyplusplus.patch.xnet.err.channel_unsupported=Channel does not support this!
+susyplusplus.patch.xnet.err.invalid_connector=Invalid connector json!
+susyplusplus.patch.xnet.err.wrong_channel_type=Wrong channel type!
+susyplusplus.patch.xnet.err.need_advanced=Advanced connector is needed!
+susyplusplus.patch.xnet.err.paste_failed=Error pasting clipboard data!
+susyplusplus.patch.xnet.err.invalid_channel=Invalid channel json!
+susyplusplus.patch.xnet.err.partial_paste=Not everything could be pasted!
+
 # Compatibility (GT may use block.<ns>.<path> as the key in some paths)
 block.susyplusplus.steel_multiblock_crate=Steel Multiblock Crate
 block.susyplusplus.clean_stainless_steel_multiblock_tank=Clean Stainless Steel Multiblock Tank

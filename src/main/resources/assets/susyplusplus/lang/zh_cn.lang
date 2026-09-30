@@ -175,6 +175,136 @@ susyplusplus.machine.fluid_samples_storage_ev.name=流体样品存储（EV）
 susyplusplus.machine.fluid_samples_storage.tooltip.tanks=%s 个独立储罐，每格 %s L
 susyplusplus.machine.fluid_samples_storage.tooltip.no_energy=不耗电
 
+# 第三方 mod 兼容补丁的文本（见配置 enableThirdPartyPatches）
+susyplusplus.patch.xnet.highlighted=该方块已高亮
+susyplusplus.patch.xnet.copied_channel=已复制频道
+susyplusplus.patch.xnet.remove_channel_prefix=确定要移除频道
+susyplusplus.patch.xnet.proxy.line1=作为红石代理方块使用
+susyplusplus.patch.xnet.proxy.line2=XNet 可以连接到这个方块
+susyplusplus.patch.xnet.proxy.no_update=这个版本不触发方块更新！
+susyplusplus.patch.xnet.proxy.with_update=这个版本会触发方块更新！
+susyplusplus.patch.xnet.err.copy_connector=复制连接器出错！
+susyplusplus.patch.xnet.err.channel_unsupported=该频道不支持此操作！
+susyplusplus.patch.xnet.err.invalid_connector=连接器 JSON 无效！
+susyplusplus.patch.xnet.err.wrong_channel_type=频道类型不匹配！
+susyplusplus.patch.xnet.err.need_advanced=需要高级连接器！
+susyplusplus.patch.xnet.err.paste_failed=粘贴剪贴板数据出错！
+susyplusplus.patch.xnet.err.invalid_channel=频道 JSON 无效！
+susyplusplus.patch.xnet.err.partial_paste=未能全部粘贴！
+
+# ---- 控制器 GUI：列表/按钮/标签/提示（GuiControllerMixin）----
+susyplusplus.patch.xnet.channel_label=频道
+susyplusplus.patch.xnet.create=创建
+susyplusplus.patch.xnet.paste=粘贴
+susyplusplus.patch.xnet.cancel=取消
+susyplusplus.patch.xnet.ok=确定
+susyplusplus.patch.xnet.connector_label=连接器
+susyplusplus.patch.xnet.block_label=方块
+susyplusplus.patch.xnet.position_label=位置
+susyplusplus.patch.xnet.doubleclick_hint=（双击以高亮）
+susyplusplus.patch.xnet.enable_processing=启用此频道的处理
+susyplusplus.patch.xnet.channel_name_tip=频道名称
+susyplusplus.patch.xnet.remove_channel_tip=移除此频道
+susyplusplus.patch.xnet.remove_connector_tip=移除此连接器
+susyplusplus.patch.xnet.copy_channel_1=复制此频道到
+susyplusplus.patch.xnet.the_clipboard=剪贴板
+susyplusplus.patch.xnet.copy_connector_1=复制此连接器
+susyplusplus.patch.xnet.to_the_clipboard=到剪贴板
+susyplusplus.patch.xnet.create_channel_1=创建一个新频道
+susyplusplus.patch.xnet.create_connector_1=创建一个新连接器
+susyplusplus.patch.xnet.from_the_clipboard=（来自剪贴板）
+susyplusplus.patch.xnet.nothing_selected=未选择任何项目！
+susyplusplus.patch.xnet.err.copy_clipboard=复制到剪贴板出错！
+susyplusplus.patch.xnet.err.clipboard_too_large=剪贴板内容过大！
+susyplusplus.patch.xnet.err.unsupported_type=不支持的频道类型：
+susyplusplus.patch.xnet.err.clipboard_no_connector=剪贴板中没有连接器！
+susyplusplus.patch.xnet.err.clipboard_no_channel=剪贴板中没有频道！
+susyplusplus.patch.xnet.err.read_clipboard=读取剪贴板出错！
+
+# ---- 连接器 / 路由器界面 ----
+susyplusplus.patch.xnet.conn.name_tip=设置此连接器的名称
+susyplusplus.patch.xnet.conn.name_label=名称：
+susyplusplus.patch.xnet.conn.directions=方向：
+susyplusplus.patch.xnet.router.ch=频道
+susyplusplus.patch.xnet.router.pos=坐标
+susyplusplus.patch.xnet.router.index=序号
+
+# ---- 枚举选项名（由 AbstractEditorPanel 用 StringUtils.capitalize 现算，只能在显示层翻译）----
+susyplusplus.patch.xnet.mode.ins=输入
+susyplusplus.patch.xnet.mode.ext=提取
+susyplusplus.patch.xnet.item.stack_single=单个
+susyplusplus.patch.xnet.item.stack_stack=一组
+susyplusplus.patch.xnet.item.stack_count=指定数量
+susyplusplus.patch.xnet.item.extract_first=最先可用
+susyplusplus.patch.xnet.item.extract_rnd=随机槽位
+susyplusplus.patch.xnet.item.extract_order=按顺序
+susyplusplus.patch.xnet.chanmode.priority=优先级
+susyplusplus.patch.xnet.chanmode.roundrobin=轮询
+susyplusplus.patch.xnet.chanmode.distribute=平均分配
+susyplusplus.patch.xnet.logic.sensor=传感器
+susyplusplus.patch.xnet.logic.output=输出
+susyplusplus.patch.xnet.sensor.item=物品
+susyplusplus.patch.xnet.sensor.fluid=流体
+susyplusplus.patch.xnet.sensor.energy=能量
+susyplusplus.patch.xnet.sensor.rs=红石
+
+# ---- 红石模式按钮 / 提示 ----
+susyplusplus.patch.xnet.rs.ignored_label=忽略
+susyplusplus.patch.xnet.rs.ignored=红石模式：忽略
+susyplusplus.patch.xnet.rs.off_label=关
+susyplusplus.patch.xnet.rs.off=红石模式：关闭时激活
+susyplusplus.patch.xnet.rs.on_label=开
+susyplusplus.patch.xnet.rs.on=红石模式：开启时激活
+susyplusplus.patch.xnet.rs.pulse_label=脉冲
+susyplusplus.patch.xnet.rs.pulse=收到脉冲时执行一次操作
+
+# ---- 连接器/频道设置界面：公共与物品 ----
+susyplusplus.patch.xnet.settings.mode=输入 / 提取模式
+susyplusplus.patch.xnet.settings.speed=每次操作的间隔（tick）
+susyplusplus.patch.xnet.settings.priority=输入优先级
+susyplusplus.patch.xnet.settings.side=操作所用的面
+susyplusplus.patch.xnet.settings.color=该颜色时启用
+susyplusplus.patch.xnet.label.pri=优先级
+susyplusplus.patch.xnet.label.rate=速率
+susyplusplus.patch.xnet.label.min=最小
+susyplusplus.patch.xnet.label.max=最大
+susyplusplus.patch.xnet.label.filter=过滤
+susyplusplus.patch.xnet.item.stack=单个物品 / 一组 / 指定数量
+susyplusplus.patch.xnet.item.extract_amount=每次操作提取的物品数量
+susyplusplus.patch.xnet.item.count_keep=目标容器中保留的数量
+susyplusplus.patch.xnet.item.count_max=目标容器中的最大数量
+susyplusplus.patch.xnet.item.extract_mode=提取模式（最先可用 / 随机槽位 / 轮询）
+susyplusplus.patch.xnet.item.blacklist=启用黑名单模式
+susyplusplus.patch.xnet.item.oredict=矿物词典匹配
+susyplusplus.patch.xnet.item.meta=元数据匹配
+susyplusplus.patch.xnet.item.nbt=NBT 匹配
+susyplusplus.patch.xnet.item.bl_label=黑名单
+susyplusplus.patch.xnet.item.ore_label=矿物
+susyplusplus.patch.xnet.item.meta_label=元数据
+susyplusplus.patch.xnet.item_channel.mode=物品分配模式
+
+# ---- 连接器/频道设置界面：流体 ----
+susyplusplus.patch.xnet.fluid.extract_rate=流体提取速率（最大
+susyplusplus.patch.xnet.fluid.insert_rate=流体注入速率（最大
+susyplusplus.patch.xnet.fluid.mb=mb）
+susyplusplus.patch.xnet.fluid.minmax_ext=储罐中保留的流体量
+susyplusplus.patch.xnet.fluid.minmax_ins=流体过多时禁止注入
+susyplusplus.patch.xnet.fluid_channel.mode=流体分配模式
+
+# ---- 连接器设置界面：能量 ----
+susyplusplus.patch.xnet.energy.extract_rate=最大能量提取速率
+susyplusplus.patch.xnet.energy.insert_rate=最大能量注入速率
+susyplusplus.patch.xnet.energy.limited_to=（上限
+susyplusplus.patch.xnet.energy.per_tick=/t）
+susyplusplus.patch.xnet.energy.minmax_ext=能量过低时禁止提取
+susyplusplus.patch.xnet.energy.minmax_ins=能量过高时禁止注入
+
+# ---- 连接器设置界面：逻辑 ----
+susyplusplus.patch.xnet.logic.mode=传感器 / 输出模式
+susyplusplus.patch.xnet.logic.speed_check=每次检测的间隔（tick）
+susyplusplus.patch.xnet.logic.redstone=红石：
+susyplusplus.patch.xnet.logic.rsout=红石输出值
+
 # 兼容用（部分情况下 GT 用 block.<ns>.<path> 作键）
 block.susyplusplus.steel_multiblock_crate=钢制多方块板条箱
 block.susyplusplus.clean_stainless_steel_multiblock_tank=洁净不锈钢多方块储罐
