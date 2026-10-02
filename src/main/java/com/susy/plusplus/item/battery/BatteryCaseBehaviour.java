@@ -204,6 +204,8 @@ public class BatteryCaseBehaviour implements IItemComponent, IItemCapabilityProv
         long maxCharge = inventory == null ? 0L : inventory.getTotalMaxCharge();
         int tier = inventory == null ? -1 : inventory.getTier();
         int count = inventory == null ? 0 : inventory.getBatteryCount();
+        // 槽位数是可配置的（2/4/8/16），按实际值显示，不写死常量。
+        int slots = inventory == null ? BatteryCaseInventory.configuredSize() : inventory.getSlots();
 
         lines.add(I18n.format("susyplusplus.tooltip.battery_case.charge",
                 TextFormattingUtil.formatNumbers(charge), TextFormattingUtil.formatNumbers(maxCharge)));
@@ -214,7 +216,7 @@ public class BatteryCaseBehaviour implements IItemComponent, IItemCapabilityProv
         }
         lines.add(I18n.format(isInDischargeMode(itemStack) ? "metaitem.electric.discharge_mode.enabled"
                 : "metaitem.electric.discharge_mode.disabled"));
-        lines.add(I18n.format("susyplusplus.tooltip.battery_case.count", count, BatteryCaseInventory.SIZE));
+        lines.add(I18n.format("susyplusplus.tooltip.battery_case.count", count, slots));
         lines.add(I18n.format("susyplusplus.tooltip.battery_case.open_ui"));
         lines.add(I18n.format("susyplusplus.tooltip.battery_case.toggle_mode"));
         lines.add(I18n.format("susyplusplus.tooltip.battery_case.same_tier"));
@@ -223,12 +225,19 @@ public class BatteryCaseBehaviour implements IItemComponent, IItemCapabilityProv
     // ------------------------------------------------------------------ UI
 
     /**
-     * 构建物品 UI：标题 + 4 个电池槽（1 行 4 列）+ 玩家背包。
+     * 构建物品 UI：标题 + 电池槽（按槽位数排布）+ 玩家背包。
+     *
+     * <p>
+     * 槽位数由配置 {@code batteryCaseSlots} 决定（2 / 4 / 8 / 16），排布为：
+     * 2 槽 1 行 ×2、4 槽 2×2、8 槽 2 行 ×4、16 槽 4×4 —— 即列数
+     * {@code slots <= 4 ? 2 : 4}，行数取上整。每多一行，玩家背包与整体高度各下移 18px，
+     * 所以默认的 4 槽布局与原来完全一致（176×166、背包 y=84）。
+     * </p>
      *
      * <p>
      * 槽位使用 {@link SlotWidget} 绑定到物品的 {@link BatteryCaseInventory}，
      * 放置限制由 {@link BatteryCaseInventory#isItemValid(int, ItemStack)} 保证（仅同 tier
-     * 电池）。
+     * 电池；是否允许套娃也由那里按配置决定）。
      * 槽位变动会写进电池盒物品的 NBT（{@link BatteryCaseInventory#onContentsChanged(int)}），
      * 并通过 {@code holder.markAsDirty()} 让服务端把新 NBT 同步给客户端。
      * </p>
@@ -239,12 +248,23 @@ public class BatteryCaseBehaviour implements IItemComponent, IItemCapabilityProv
         BatteryCaseInventory found = getInventory(stack);
         final BatteryCaseInventory inventory = found == null ? new BatteryCaseInventory(stack) : found;
 
-        ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND, GUI_WIDTH, GUI_HEIGHT)
+        // 槽位排布：列数 2（<=4 槽）或 4（8/16 槽），行数取上整。
+        int slots = inventory.getSlots();
+        int columns = slots <= 4 ? 2 : 4;
+        int rows = (slots + columns - 1) / columns;
+        // 每多一行，整体高度与玩家背包各下移 18px（默认 2 行时就是原来的 166 / 84）。
+        int extraRows = Math.max(0, rows - 2);
+        int guiHeight = GUI_HEIGHT + extraRows * 18;
+        int playerInvY = PLAYER_INV_Y + extraRows * 18;
+        int startX = (GUI_WIDTH - columns * 18) / 2;
+
+        ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND, GUI_WIDTH, guiHeight)
                 .label(8, 6, stack.getDisplayName(), 0x404040);
 
-        // 4 格排成一行，水平居中：(176 - 4 * 18) / 2 = 52
-        for (int i = 0; i < inventory.getSlots(); i++) {
-            SlotWidget slot = new SlotWidget(inventory, i, 52 + i * 18, 24)
+        for (int i = 0; i < slots; i++) {
+            int column = i % columns;
+            int row = i / columns;
+            SlotWidget slot = new SlotWidget(inventory, i, startX + column * 18, 24 + row * 18)
                     .setBackgroundTexture(GuiTextures.SLOT)
                     .setChangeListener(new Runnable() {
 
@@ -256,7 +276,7 @@ public class BatteryCaseBehaviour implements IItemComponent, IItemCapabilityProv
             builder.widget(slot);
         }
 
-        builder.bindPlayerInventory(player.inventory, PLAYER_INV_Y);
+        builder.bindPlayerInventory(player.inventory, playerInvY);
         return builder.build(holder, player);
     }
 

@@ -61,6 +61,29 @@ public class SuConfig {
         public static boolean enableBatteryCase = true;
 
         @Config.Comment({
+                        "Item slots of the Battery Case: 2, 4, 8 or 16. Other values snap to the nearest one.",
+                        "Note: the slot count is stored in each case's own NBT, so changing this only affects",
+                        "cases that are created (or loaded with fewer slots) afterwards; an existing case never",
+                        "loses its batteries.",
+                        "电池盒的物品槽位数：2 / 4 / 8 / 16（填其它值会取最接近的一档）。",
+                        "注意：槽位数记在每个电池盒自己的 NBT 里，所以改动只影响之后创建的电池盒",
+                        "（或读档时槽位更少的那些）；已存在的电池盒不会因此丢电池。",
+                        "Default: 4"
+        })
+        @Config.RangeInt(min = 2, max = 16)
+        public static int batteryCaseSlots = 4;
+
+        @Config.Comment({
+                        "Allow putting a Battery Case inside another Battery Case (nesting).",
+                        "A nested case counts as a battery (its whole charge is aggregated), and a case can",
+                        "never be put inside itself.",
+                        "允许把电池盒放进另一个电池盒（套娃）。",
+                        "盒中的电池盒会被当作一块电池参与充放电（电量会计入总量），但电池盒不能装它自己。",
+                        "Default: false"
+        })
+        public static boolean batteryCaseNesting = false;
+
+        @Config.Comment({
                         "Enable the Reinforced PBF multiblock machine (and its crafting recipe).",
                         "强化土高炉多方块机器（以及其工作台配方）。",
                         "Note: the Reinforced Firebrick block is always available.",

@@ -60,11 +60,12 @@ addItem(0, "battery_case")
 | 能力 | 实现 | 说明 |
 | --- | --- | --- |
 | `GregtechCapabilities.CAPABILITY_ELECTRIC_ITEM` | `BatteryCaseEnergyStorage` | 电池盒对外的"能量视图" |
-| `CapabilityItemHandler.ITEM_HANDLER_CAPABILITY` | `BatteryCaseInventory` | 4 格电池库存 |
+| `CapabilityItemHandler.ITEM_HANDLER_CAPABILITY` | `BatteryCaseInventory` | 电池库存（槽位数可配置：2 / 4 / 8 / 16） |
 
 ### 数据存在哪里（关键）
 
-盒内 4 格电池保存在 **电池盒物品自身的 NBT tag** 里（键 `BatteryCaseInv`），
+盒内电池保存在 **电池盒物品自身的 NBT tag** 里（键 `BatteryCaseInv`，槽位数默认 4、可由配置
+`batteryCaseSlots` 设为 2 / 4 / 8 / 16），
 **不是** Forge 的 `ForgeCaps`。`BatteryCaseProvider` 刻意**不实现** `INBTSerializable`。
 
 原因来自 Forge 1.12.2 的真实实现
@@ -174,7 +175,8 @@ public ModularUI createUI(PlayerInventoryHolder holder, EntityPlayer player)
 - 标题为物品显示名；
 - 4 个 `SlotWidget` 排成一行，水平居中（`x = 52 + i * 18`，`y = 24`），
   背景 `GuiTextures.SLOT`；
-- 放置限制由 `BatteryCaseInventory#isItemValid` 保证；
+- 放置限制由 `BatteryCaseInventory#isItemValid` 保证（仅同 tier 电池；是否允许"电池盒装电池盒"
+  由配置 `batteryCaseNesting` 决定，无论开关如何，电池盒都不能装它自己）；
 - 槽位变动时调用 `holder.markAsDirty()`。
 
 > `PlayerInventoryHolder#createUI` 会在物品的 behaviour 列表里查找实现了

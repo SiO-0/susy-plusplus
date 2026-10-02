@@ -1,7 +1,5 @@
 # Changelog
 
-## [Unreleased]
-
 ## [1.1.0] - 2026-10-02
 
 ### Changed
@@ -11,6 +9,8 @@
 - **Electric Grinder tooltip trimmed to three short lines** (`32 parallels` / `same recipes as the Macerator` / `no maintenance`) and its now-stale keys (`recipemap.electric_grinder.name`, `block.susyplusplus.electric_grinder`) are marked unused.
 
 ### Added
+- **Battery Case: configurable slot count** (`batteryCaseSlots`, default `4`, range 2–16, snapped to **2 / 4 / 8 / 16**). The UI lay-out follows the chosen size (2 slots = 1 row, 4 = 2×2, 8 = 2 rows of 4, 16 = 4×4), and the tooltip's "x / y" readout uses the case's real slot count instead of a hard-coded constant. The slot count lives in each case's own NBT, so a case is never shrunk on load — an existing case only gets *more* slots (the extra ones empty) if the config is raised, which means no batteries can be lost. ([`BatteryCaseInventory`](src/main/java/com/susy/plusplus/item/battery/BatteryCaseInventory.java), [`BatteryCaseBehaviour`](src/main/java/com/susy/plusplus/item/battery/BatteryCaseBehaviour.java))
+- **Battery Case: optional nesting** (`batteryCaseNesting`, default `false` = the previous behaviour). When enabled, a Battery Case can be put inside another one; a nested case reports `canProvideChargeExternally() == true`, so it counts as a battery and its whole charge is aggregated into the outer case (and charged/discharged in slot order like any other battery). Putting a case inside **itself** is always rejected, since that would be a self-reference that recurses forever when serialised.
 - **Electric Grinder** (`susyplusplus:electric_grinder`, MTE id **32103**) — an **LV electric ore-grinding multiblock** that fills the gap between the steam-era **Steam Grinder** and the MV-era **Eccentric Roll Crusher**. Docs: [docs/electric_grinder.md](docs/electric_grinder.md).
   - **The gap it fills**: the Steam Grinder runs **8 parallels with a ×1.5 duration penalty** (every steam multiblock goes through `SteamMultiWorkable` — SUSY's own `MetaTileEntitySuSyLargeHammer` confirms `PARALLEL_LIMIT = 8`), while the Eccentric Roll Crusher needs **MV plus manganese steel**. Manganese requires smelting `pyrolusite` in an ERF with a carbon source for a **75% chance** of a manganese dust, which is mid-to-late MV content. So until then, ore throughput never improved.
   - **A counter-intuitive finding that shaped the balance**: the Eccentric Roll Crusher is **not** a higher ore multiplier. Comparing the two source paths side by side (GT's `OreRecipeHandler#processOre` vs SUSY's `SusyOreRecipeHandler#processOre`), both emit `round(oreMultiplier) * 2 * oreTypeMultiplier` crushed ore. For overworld stone types the yields are **identical**; the Eccentric Roll Crusher's only edges are **50 vs 400 ticks** and **two 14%/850 byproduct rolls instead of one**. (Side note: because the two use different `oreTypeMultiplier` rules, `oreAnorthosite` actually yields **half** as much in the roll crusher — a SUSY quirk this mod does not touch.) Filling the gap with a *higher multiplier* would therefore have made the macerator obsolete and the roll crusher pointless, so this machine instead buys **throughput, not yield**.

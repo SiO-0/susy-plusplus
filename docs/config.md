@@ -25,6 +25,8 @@
 | `vanillaGtCompat` | boolean | `false` | **适配原版 GT（非 SUSY）总开关**（位于最上方；见下方小节） |
 | `enableWaterproofSprayCan` | boolean | `true` | 防水喷漆物品，以及灌装机 / 搅拌机的相关配方 |
 | `enableBatteryCase` | boolean | `true` | 电池盒物品，以及其组装机配方 |
+| `batteryCaseSlots` | int | `4` | 电池盒槽位数：2 / 4 / 8 / 16（填其它值会取最接近的一档） |
+| `batteryCaseNesting` | boolean | `false` | 允许把电池盒放进另一个电池盒（套娃）；盒中的电池盒会被当作一块电池参与充放电 |
 | `enableReinforcedPbf` | boolean | `true` | 强化土高炉多方块机器，以及其工作台配方（强化耐火砖方块始终可用） |
 | `reinforcedPbfParallel` | int (1~64) | `4` | 强化土高炉的并行数 |
 | `enableElectricGrinder` | boolean | `true` | **电动碾磨机**（LV 电动矿石粗碎多方块；见 [`electric_grinder.md`](electric_grinder.md)） |

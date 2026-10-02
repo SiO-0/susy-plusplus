@@ -1,5 +1,7 @@
 package com.susy.plusplus.item.battery;
 
+import com.susy.plusplus.config.SuConfig;
+
 import gregtech.api.capability.GregtechCapabilities;
 import gregtech.api.capability.IElectricItem;
 
@@ -63,27 +65,73 @@ import net.minecraftforge.items.ItemStackHandler;
  */
 public class BatteryCaseInventory extends ItemStackHandler {
 
-    /** 槽位数量。 */
+    /** 默认槽位数量（配置 {@code batteryCaseSlots} 未改动时的值）。 */
     public static final int SIZE = 4;
+
+    /** 允许的槽位档位；配置里填其它数字会取最接近的一档。 */
+    private static final int[] ALLOWED_SIZES = { 2, 4, 8, 16 };
 
     /** 在电池盒物品 NBT 中保存本库存的键。 */
     public static final String NBT_KEY = "BatteryCaseInv";
+
+    /**
+     * 配置生效后的槽位数（2 / 4 / 8 / 16）。
+     *
+     * <p>
+     * 配置值先按档位归一（例如填 6 会取 4）——槽位的<b>排布</b>是按档位设计的
+     * （2 槽 1 行、4 槽 2×2、8 槽 2 行 4 列、16 槽 4×4），
+     * 顺便避免玩家填出 "7 槽" 这种既不好看也不符合直觉的值。
+     * </p>
+     */
+    public static int configuredSize() {
+        int requested = SuConfig.batteryCaseSlots;
+        int best = ALLOWED_SIZES[0];
+        int bestDistance = Integer.MAX_VALUE;
+        for (int allowed : ALLOWED_SIZES) {
+            int distance = Math.abs(allowed - requested);
+            if (distance < bestDistance) {
+                bestDistance = distance;
+                best = allowed;
+            }
+        }
+        return best;
+    }
 
     /** 拥有本库存的电池盒 ItemStack；NBT 读写都经由它，不缓存 NBTTagCompound。 */
     private final ItemStack owner;
 
     public BatteryCaseInventory(ItemStack owner) {
-        super(SIZE);
+        super(configuredSize());
         this.owner = owner;
         load();
     }
 
-    /** 从电池盒物品的 NBT 读回库存。 */
+    /**
+     * 从电池盒物品的 NBT 读回库存。
+     *
+     * <p>
+     * ⚠ {@code ItemStackHandler#deserializeNBT} 会用 NBT 里记录的 {@code Size}
+     * 覆盖构造时设定的槽位数。为了让"把配置调大后旧电池盒也能用上更多槽位"，
+     * 这里先把槽位数<b>只增不减</b>地撑到 NBT 记录的大小，再读回去：
+     * </p>
+     *
+     * <ul>
+     * <li>NBT 记录的槽位 > 配置值 → 用 NBT 的（旧存档继续可用，<b>绝不缩小</b>，
+     * 否则超出部分的电池会被直接丢掉）；</li>
+     * <li>NBT 记录的槽位 < 配置值 → 用配置值（多出来的槽位是空的）。</li>
+     * </ul>
+     */
     private void load() {
         NBTTagCompound tag = owner.getTagCompound();
-        if (tag != null && tag.hasKey(NBT_KEY, 10)) {
-            super.deserializeNBT(tag.getCompoundTag(NBT_KEY));
+        if (tag == null || !tag.hasKey(NBT_KEY, 10)) {
+            return;
         }
+        NBTTagCompound stored = tag.getCompoundTag(NBT_KEY);
+        int storedSize = stored.hasKey("Size", 3) ? stored.getInteger("Size") : getSlots();
+        if (storedSize > getSlots()) {
+            setSize(storedSize);
+        }
+        super.deserializeNBT(stored);
     }
 
     /**
@@ -168,10 +216,16 @@ public class BatteryCaseInventory extends ItemStackHandler {
 
     @Override
     public boolean isItemValid(int slot, ItemStack stack) {
-        // 不允许把电池盒放进它自己（否则 UI 里会出现"电池盒套电池盒"，
-        // 而且会造成自引用/无限 NBT 嵌套）
         if (stack.getItem() instanceof ItemBatteryCase) {
-            return false;
+            // 是否允许"套娃"由配置决定（默认关闭）。
+            // 即便允许，也绝不允许把电池盒放进它自己：那会造成自引用，
+            // 序列化时无限递归。
+            if (!SuConfig.batteryCaseNesting) {
+                return false;
+            }
+            if (stack == owner) {
+                return false;
+            }
         }
         IElectricItem candidate = stack.getCapability(GregtechCapabilities.CAPABILITY_ELECTRIC_ITEM, null);
         if (candidate == null || !candidate.canProvideChargeExternally()) {
