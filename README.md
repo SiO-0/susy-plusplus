@@ -31,6 +31,7 @@ With **coremod and mixin support** that is easy to configure.
 | 防水喷漆 | 让机器防水（阻止遇水/地形爆炸），TOP 显示防水状态 | `enableWaterproofSprayCan`（开） | [docs/waterproof_spray_can.md](docs/waterproof_spray_can.md) |
 | 电池盒 | 可放电池的饰品/物品，带 GUI 与释能模式 | `enableBatteryCase`（开） | [docs/battery_case.md](docs/battery_case.md) |
 | 强化土高炉 | 用原版土高炉配方、不耗电、无需维护、4 并行、可换仓室 | `enableReinforcedPbf`（开） | [docs/reinforced_pbf.md](docs/reinforced_pbf.md) |
+| **电动碾磨机** | LV 电动矿石粗碎：产率与蒸汽研磨机**完全相同**（×2 碎矿 + 1 个副产物，直接克隆研磨机配方），但 **16 并行、时长 1/4**；填「蒸汽研磨机 → 偏心破碎机」之间的空档，**不需要锰钢** | `enableElectricGrinder`（开） | [docs/electric_grinder.md](docs/electric_grinder.md) |
 | 无线能量传输塔 | 用铁砧改名的 Susy-Core 无人机作为目标，电池总容量决定上限、最低电池电压决定传输电压，最后 3 秒输出 `电压 × 电池个数 × 64` | `enableWirelessEnergyTower`（开） | [docs/wireless_energy_tower.md](docs/wireless_energy_tower.md) |
 | **配置器** | Shift+V 选模式：改机器输出面 / 复制机器配置 / 机器工具箱 | `enableConfigurator`（开） | [docs/configurator.md](docs/configurator.md) |
 | **手推车** | Shift+右键搬起机器（零掉落、封面/缓存/朝向全保留），右键放下；多方块不可搬 | `enableTrolley`（开） | [docs/trolley.md](docs/trolley.md) |

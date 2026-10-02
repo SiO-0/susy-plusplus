@@ -169,6 +169,24 @@ public class SuConfig {
         public static boolean enableFluidSamplesStorage = true;
 
         @Config.Comment({
+                        "Enable the Electric Grinder multiblock machine (LV electric macerator).",
+                        "It fills the gap between the steam-era Steam Grinder and the MV-era Eccentric Roll",
+                        "Crusher and needs no manganese steel, so it becomes available right after steel.",
+                        "It has NO recipe map of its own: it processes GT's MACERATOR_RECIPES directly, so",
+                        "every recipe (yield, byproducts, duration) is exactly the macerator's, and any",
+                        "GroovyScript change to the macerator is followed automatically. Throughput comes",
+                        "from parallelism (see electricGrinderParallel) instead.",
+                        "启用电动碾磨机多方块（LV 电动研磨机）。",
+                        "它填补「蒸汽时代的蒸汽研磨机」与「MV 中期的偏心破碎机」之间的空档，",
+                        "且不需要锰钢，拿到钢之后即可建造。",
+                        "它【没有自己的配方表】：直接处理 GT 的 MACERATOR_RECIPES，",
+                        "因此产率/副产物/耗时与研磨机逐字段相同，整合包对研磨机的改动也自动跟随；",
+                        "吞吐靠并行数提供（见 electricGrinderParallel）。",
+                        "Default: true"
+        })
+        public static boolean enableElectricGrinder = true;
+
+        @Config.Comment({
                         "Master switch for the two 'third-party patches' (both default ON, purely cosmetic):",
                         "  1) XNet: the UI strings that are HARDCODED in xnet's code (controller messages and",
                         "     the redstone-proxy tooltips) are replaced with localisable keys, so they follow",

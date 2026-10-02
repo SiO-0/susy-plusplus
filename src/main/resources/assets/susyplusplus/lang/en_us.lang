@@ -163,6 +163,17 @@ susyplusplus.gui.storage_scanner.state.no_power=No power (cannot expose / scan)
 susyplusplus.gui.storage_scanner.state.no_container=Running, but no containers in range (default 5x5x5, use -1/+1 to widen)
 susyplusplus.gui.storage_scanner.state.disabled=Disabled
 
+# Electric Grinder (LV electric macerator multiblock)
+susyplusplus.machine.electric_grinder.name=Electric Grinder
+susyplusplus.machine.electric_grinder.description=An LV electric grinding multiblock between the Steam Grinder and the Eccentric Roll Crusher.
+susyplusplus.machine.electric_grinder.tooltip.parallel=%s parallels
+susyplusplus.machine.electric_grinder.tooltip.same_yield=Same recipes as the Macerator
+susyplusplus.machine.electric_grinder.tooltip.no_maintenance=No maintenance required
+# ⚠ These two keys are no longer used: the machine has no recipe map of its own,
+# so JEI shows the Macerator's category. (GT may still use block.<ns>.<path> as a block-name key.)
+recipemap.electric_grinder.name=Electric Grinder
+block.susyplusplus.electric_grinder=Electric Grinder
+
 # Multiblock storage upgrades
 susyplusplus.machine.steel_multiblock_crate.name=Steel Multiblock Crate
 susyplusplus.machine.clean_stainless_steel_multiblock_tank.name=Clean Stainless Steel Multiblock Tank

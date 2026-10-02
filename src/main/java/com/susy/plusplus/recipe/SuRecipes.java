@@ -97,6 +97,16 @@ public final class SuRecipes {
             registerStorageScannerRecipe();
         }
 
+        // 电动碾磨机：只需要它的【组装机配方】。
+        //
+        // ⚠ 它的加工配方不在这里注册，也不需要注册：机器直接复用 GT 的
+        //   RecipeMaps.MACERATOR_RECIPES（见 MetaTileEntityElectricGrinder 的构造器），
+        //   所以研磨机的配方（含整合包用 GroovyScript 给它加的那些）自动就是它的配方，
+        //   既不会有克隆的时序问题，JEI 里显示的也是研磨机的配方分类。
+        if (SuConfig.enableElectricGrinder) {
+            registerElectricGrinderRecipe();
+        }
+
         // 橡胶流体管道相关配方（适配原版 GT 时跳过）
         if (SuConfig.enableRubberPipeTweaks && !SuConfig.vanillaGtCompat) {
             registerRubberPipeRecipes();
@@ -547,6 +557,65 @@ public final class SuRecipes {
                 .outputs(SuMetaTileEntities.STORAGE_SCANNER.getStackForm())
                 .duration(300)
                 .EUt(120)
+                .buildAndRegister();
+    }
+
+    // ==========================================================================
+    // 电动碾磨机（LV 矿石粗碎多方块）
+    // ==========================================================================
+
+    /**
+     * 电动碾磨机的组装机配方。
+     *
+     * <h2>成本定位</h2>
+     *
+     * <p>
+     * 三个参照物：
+     * </p>
+     *
+     * <ul>
+     * <li><b>蒸汽研磨机</b>（8 并行、×1.5 时长）：便宜，但必须配蒸汽系统；</li>
+     * <li><b>偏心破碎机</b>：MV 电路×4 + MV 电机×4 + MV 传送带×2 + 铝齿轮×2
+     * + 润滑油 4000，<b>外加 {@code plateDoubleManganeseSteel × 8}</b>
+     * ——锰钢才是真正的门槛；</li>
+     * <li><b>本机器</b>：应当是"拿到钢 + LV 电路之后、锰钢之前"这一档的合理投资。</li>
+     * </ul>
+     *
+     * <p>
+     * 因此刻意<b>不含任何锰钢、不含 MV 元件</b>，主要消耗大量钢材
+     * （颚板、机架本来就是钢板堆出来的）与一批 LV 元件。
+     * 需求量大但材料常见，符合"用钢铁换处理量"的蒸汽→LV 过渡期特征。
+     * </p>
+     *
+     * <h2>配方本身</h2>
+     *
+     * <ul>
+     * <li>机器：组装机（{@code ASSEMBLER_RECIPES}）</li>
+     * <li>耗时 600 tick / 30 EU/t（LV）——比偏心破碎机的 600 tick / 120 EU/t 省电，
+     * 但同样的时间，因为玩家此时只有 LV</li>
+     * <li>输入：LV 机器外壳 ×1、LV 电机 ×2、LV 电路 ×2、钢板 ×8、钢框架 ×2、
+     * 钢齿轮 ×4、钢螺丝 ×16、钢转子 ×2、润滑油 2000</li>
+     * <li>电路 13（{@code circuitMeta(13)}，不消耗）——与橡胶/管道类配方错开</li>
+     * </ul>
+     */
+    private static void registerElectricGrinderRecipe() {
+        if (SuMetaTileEntities.ELECTRIC_GRINDER == null) {
+            return;
+        }
+        RecipeMaps.ASSEMBLER_RECIPES.recipeBuilder()
+                .circuitMeta(13)
+                .inputs(MetaTileEntities.HULL[GTValues.LV].getStackForm())
+                .inputs(MetaItems.ELECTRIC_MOTOR_LV.getStackForm(2))
+                .input(OrePrefix.circuit, MarkerMaterials.Tier.LV, 2)
+                .input(OrePrefix.plate, Materials.Steel, 8)
+                .input(OrePrefix.frameGt, Materials.Steel, 2)
+                .input(OrePrefix.gear, Materials.Steel, 4)
+                .input(OrePrefix.screw, Materials.Steel, 16)
+                .input(OrePrefix.rotor, Materials.Steel, 2)
+                .fluidInputs(Materials.Lubricant.getFluid(2000))
+                .outputs(SuMetaTileEntities.ELECTRIC_GRINDER.getStackForm())
+                .duration(600)
+                .EUt(GTValues.VA[GTValues.LV])
                 .buildAndRegister();
     }
 

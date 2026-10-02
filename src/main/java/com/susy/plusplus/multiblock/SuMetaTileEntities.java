@@ -14,6 +14,8 @@ import com.susy.plusplus.multiblock.storage.SuTankValve;
 import com.susy.plusplus.multiblock.wireless.MetaTileEntityWirelessEnergyTower;
 
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
+import gregtech.api.recipes.RecipeMap;
+import gregtech.api.recipes.builders.SimpleRecipeBuilder;
 import gregtech.common.metatileentities.MetaTileEntities;
 
 import net.minecraft.util.ResourceLocation;
@@ -63,6 +65,18 @@ public final class SuMetaTileEntities {
     /** 存储检测器的数字 ID（{@code susyplusplus:storage_scanner}）。 */
     private static final int ID_STORAGE_SCANNER = 32102;
 
+    /**
+     * 电动碾磨机的数字 ID（{@code susyplusplus:electric_grinder}）。
+     *
+     * <p>
+     * 取 32103：与上面三个 ID 相邻但不同值。
+     * 已核实的占用情况：GT 本体用低位；Susy-Core 用
+     * 14500–18583 / 19000–20002 / 32000；本模组用 32100 起。
+     * 32103–32109 目前仍空闲。
+     * </p>
+     */
+    private static final int ID_ELECTRIC_GRINDER = 32103;
+
     // ------------------------------------------------------------------
     // 多方块存储升级（32110 ~ 32119）
     // ------------------------------------------------------------------
@@ -106,6 +120,9 @@ public final class SuMetaTileEntities {
 
     /** 「存储检测器」单方块机器（注册名 {@code susyplusplus:storage_scanner}）。 */
     public static StorageScannerMachine STORAGE_SCANNER;
+
+    /** 电动碾磨机多方块控制器（注册名 {@code susyplusplus:electric_grinder}）。 */
+    public static MetaTileEntityElectricGrinder ELECTRIC_GRINDER;
 
     // ------------------------------------------------------------------
     // 多方块存储 / 板条箱
@@ -158,8 +175,41 @@ public final class SuMetaTileEntities {
         registerReinforcedPbf();
         registerWirelessEnergyTower();
         registerStorageScanner();
+        registerElectricGrinder();
         registerStorageUpgrades();
         registerFluidSamplesStorage();
+    }
+
+    /**
+     * 电动碾磨机（LV 电动研磨多方块）。
+     *
+     * <p>
+     * 受 {@code enableElectricGrinder} 控制；并行数取 {@code electricGrinderParallel}。
+     * </p>
+     *
+     * <p>
+     * <b>它没有自己的配方表</b>：机器直接复用 GT 的
+     * {@code RecipeMaps.MACERATOR_RECIPES}（见 {@code MetaTileEntityElectricGrinder}
+     * 的构造器），所以产率/副产物/耗时与研磨机逐字段相同，整合包对研磨机的任何改动
+     * 也自动跟随，JEI 里显示的同样是研磨机的配方分类。
+     * </p>
+     */
+    private static void registerElectricGrinder() {
+        if (ELECTRIC_GRINDER != null) {
+            return;
+        }
+        if (!SuConfig.enableElectricGrinder) {
+            SusyPlusPlus.LOGGER.info("[SusyPlusPlus] Electric Grinder is DISABLED in config.");
+            return;
+        }
+
+        ELECTRIC_GRINDER = MetaTileEntities.registerMetaTileEntity(ID_ELECTRIC_GRINDER,
+                new MetaTileEntityElectricGrinder(new ResourceLocation(Tags.MOD_ID, "electric_grinder")));
+
+        SusyPlusPlus.LOGGER.info(
+                "[SusyPlusPlus] Registered MetaTileEntity susyplusplus:electric_grinder "
+                        + "(id={}, tier=LV, parallel={}, recipes=Macerator)",
+                ID_ELECTRIC_GRINDER, MetaTileEntityElectricGrinder.PARALLEL_LIMIT);
     }
 
     /**

@@ -27,6 +27,8 @@
 | `enableBatteryCase` | boolean | `true` | 电池盒物品，以及其组装机配方 |
 | `enableReinforcedPbf` | boolean | `true` | 强化土高炉多方块机器，以及其工作台配方（强化耐火砖方块始终可用） |
 | `reinforcedPbfParallel` | int (1~64) | `4` | 强化土高炉的并行数 |
+| `enableElectricGrinder` | boolean | `true` | **电动碾磨机**（LV 电动矿石粗碎多方块；见 [`electric_grinder.md`](electric_grinder.md)） |
+| `electricGrinderParallel` | int (1~64) | `16` | 电动碾磨机的并行数（LV 下 16 已是理论上限） |
 | `enableWirelessEnergyTower` | boolean | `true` | 无线能量传输塔多方块机器（见 [`wireless_energy_tower.md`](wireless_energy_tower.md)） |
 | `enableConfigurator` | boolean | `true` | 配置器物品（Shift+V 打开界面；见 [`configurator.md`](configurator.md)） |
 | `enableTrolley` | boolean | `true` | 手推车物品（Shift+右键搬起机器 / 右键放下；见 [`trolley.md`](trolley.md)） |

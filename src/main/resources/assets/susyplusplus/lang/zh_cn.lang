@@ -163,6 +163,17 @@ susyplusplus.gui.storage_scanner.state.no_power=缺电（无法维持暴露 / �
 susyplusplus.gui.storage_scanner.state.no_container=运行中，但范围内没有容器（默认 5×5×5，可用 -1/+1 调大）
 susyplusplus.gui.storage_scanner.state.disabled=已关机
 
+# 电动碾磨机 / Electric Grinder（LV 电动研磨多方块）
+susyplusplus.machine.electric_grinder.name=电动碾磨机
+susyplusplus.machine.electric_grinder.description=蒸汽研磨机与偏心破碎机之间的 LV 电动研磨多方块。
+susyplusplus.machine.electric_grinder.tooltip.parallel=%s 并行
+susyplusplus.machine.electric_grinder.tooltip.same_yield=配方与研磨机完全相同
+susyplusplus.machine.electric_grinder.tooltip.no_maintenance=无需维护
+# ⚠ 下面两个键现在【不再使用】：本机器没有自己的配方表，JEI 里走的是研磨机的分类。
+# （GT 有可能用 block.<ns>.<path> 作为方块名键，所以留着也无害。）
+recipemap.electric_grinder.name=电动碾磨机
+block.susyplusplus.electric_grinder=电动碾磨机
+
 # 多方块存储升级 / Multiblock storage upgrades
 susyplusplus.machine.steel_multiblock_crate.name=钢制多方块板条箱
 susyplusplus.machine.clean_stainless_steel_multiblock_tank.name=洁净不锈钢多方块储罐

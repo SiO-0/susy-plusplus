@@ -101,4 +101,5 @@ public class SusyPlusPlus {
         SuRecipes.init();
         LOGGER.info("{} postInit 完成。", Tags.MOD_NAME);
     }
+
 }
