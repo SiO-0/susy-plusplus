@@ -167,7 +167,6 @@ susyplusplus.gui.storage_scanner.state.disabled=已关机
 susyplusplus.machine.electric_grinder.name=电动碾磨机
 susyplusplus.machine.electric_grinder.description=蒸汽研磨机与偏心破碎机之间的 LV 电动研磨多方块。
 susyplusplus.machine.electric_grinder.tooltip.parallel=%s 并行
-susyplusplus.machine.electric_grinder.tooltip.same_yield=配方与研磨机完全相同
 susyplusplus.machine.electric_grinder.tooltip.no_maintenance=无需维护
 # ⚠ 下面两个键现在【不再使用】：本机器没有自己的配方表，JEI 里走的是研磨机的分类。
 # （GT 有可能用 block.<ns>.<path> 作为方块名键，所以留着也无害。）

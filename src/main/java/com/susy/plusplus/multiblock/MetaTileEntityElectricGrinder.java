@@ -262,10 +262,8 @@ public class MetaTileEntityElectricGrinder extends RecipeMapMultiblockController
     public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip,
                                boolean advanced) {
         super.addInformation(stack, player, tooltip, advanced);
-        // 并行数是常量（不再是配置项），直接显示即可。
         tooltip.add(I18n.format("susyplusplus.machine.electric_grinder.tooltip.parallel",
                 PARALLEL_LIMIT));
-        tooltip.add(I18n.format("susyplusplus.machine.electric_grinder.tooltip.same_yield"));
         tooltip.add(I18n.format("susyplusplus.machine.electric_grinder.tooltip.no_maintenance"));
     }
 

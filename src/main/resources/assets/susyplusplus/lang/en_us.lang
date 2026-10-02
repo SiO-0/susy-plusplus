@@ -167,7 +167,6 @@ susyplusplus.gui.storage_scanner.state.disabled=Disabled
 susyplusplus.machine.electric_grinder.name=Electric Grinder
 susyplusplus.machine.electric_grinder.description=An LV electric grinding multiblock between the Steam Grinder and the Eccentric Roll Crusher.
 susyplusplus.machine.electric_grinder.tooltip.parallel=%s parallels
-susyplusplus.machine.electric_grinder.tooltip.same_yield=Same recipes as the Macerator
 susyplusplus.machine.electric_grinder.tooltip.no_maintenance=No maintenance required
 # ⚠ These two keys are no longer used: the machine has no recipe map of its own,
 # so JEI shows the Macerator's category. (GT may still use block.<ns>.<path> as a block-name key.)
