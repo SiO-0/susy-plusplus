@@ -2,7 +2,7 @@
 
 ## [Unreleased]
 
-## [1.0.7] - 2026-10-02
+## [1.1.0] - 2026-10-02
 
 ### Changed
 - **Electric Grinder redesigned: it no longer clones recipes — it reuses GT's `MACERATOR_RECIPES` directly** (`super(metaTileEntityId, RecipeMaps.MACERATOR_RECIPES)`). Yield, byproducts and duration are now literally the macerator's own recipe objects (no field-copy drift possible), any GroovyScript change to the macerator is followed automatically with **no timing problem at all**, and JEI shows the standard **Macerator** category instead of a separate `electric_grinder` map. All the machinery written while trying to clone — the own `RecipeMap`, the three-pass clone with input claiming, the `@Pseudo` mixin on GroovyScript `runGroovyScriptsInLoader`, and the load-complete hook — has been **deleted**; why each of them could not work is documented in [docs/electric_grinder.md](docs/electric_grinder.md) §1.3. *(The `### Added` / `### Fixed` bullets below describe the now-removed clone approach and are kept for history.)*
