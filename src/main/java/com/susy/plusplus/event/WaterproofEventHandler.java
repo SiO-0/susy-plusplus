@@ -2,6 +2,7 @@ package com.susy.plusplus.event;
 
 import com.susy.plusplus.Tags;
 import com.susy.plusplus.item.WaterproofSprayBehaviour;
+import com.susy.plusplus.util.PlayerHeld;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -45,7 +46,7 @@ public final class WaterproofEventHandler {
             return;
         }
         EnumHand hand = event.getHand();
-        ItemStack stack = player.getHeldItem(hand);
+        ItemStack stack = PlayerHeld.get(player, hand);
         WaterproofSprayBehaviour behaviour = WaterproofSprayBehaviour.getBehaviour(stack);
         if (behaviour == null) {
             return;
@@ -80,7 +81,7 @@ public final class WaterproofEventHandler {
             return;
         }
         EntityPlayer player = (EntityPlayer) event.getEntity();
-        ItemStack offhand = player.getHeldItemOffhand();
+        ItemStack offhand = PlayerHeld.off(player);
         WaterproofSprayBehaviour behaviour = WaterproofSprayBehaviour.getBehaviour(offhand);
         if (behaviour == null) {
             return;

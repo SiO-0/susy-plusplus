@@ -9,6 +9,7 @@ import com.susy.plusplus.item.configurator.ConfiguratorData;
 import com.susy.plusplus.item.configurator.ConfiguratorMode;
 import com.susy.plusplus.item.configurator.MachineConfig;
 import com.susy.plusplus.machine.FluidCapacityHelper;
+import com.susy.plusplus.machine.MachineNameHelper;
 import com.susy.plusplus.waterproof.WaterproofHelper;
 
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -85,12 +86,12 @@ public final class ConfiguratorEventHandler {
         }
 
         // 主手优先，副手兜底（玩家可能把配置器拿在副手）
-        ItemStack stack = player.getHeldItem(event.getHand());
+        ItemStack stack = com.susy.plusplus.util.PlayerHeld.get(player, event.getHand());
         if (!isConfigurator(stack)) {
-            stack = player.getHeldItemMainhand();
+            stack = com.susy.plusplus.util.PlayerHeld.main(player);
         }
         if (!isConfigurator(stack)) {
-            stack = player.getHeldItemOffhand();
+            stack = com.susy.plusplus.util.PlayerHeld.off(player);
         }
         if (!isConfigurator(stack)) {
             return;
@@ -106,9 +107,10 @@ public final class ConfiguratorEventHandler {
         boolean acted = false;
         SusyPlusPlus.LOGGER.info(
                 "[SusyPlusPlus] Configurator right-click: pos={}, sneaking={}, mode={}, machine={}",
-                event.getPos(), player.isSneaking(), mode, mte == null ? "none" : mte.getClass().getSimpleName());
+                event.getPos(), com.susy.plusplus.util.PlayerHeld.sneaking(player), mode,
+                mte == null ? "none" : mte.getClass().getSimpleName());
 
-        if (player.isSneaking()) {
+        if (com.susy.plusplus.util.PlayerHeld.sneaking(player)) {
             switch (mode) {
                 case MODIFY_OUTPUT:
                     if (mte instanceof SimpleMachineMetaTileEntity) {
@@ -158,6 +160,17 @@ public final class ConfiguratorEventHandler {
                         acted = true;
                     }
                     break;
+                case RENAME: {
+                    // 功能五：普通右键机器 → 打开「重命名」界面（输入名称 / 清空名称 / 关闭）。
+                    // 旧行为（直接写配置器的铁砧名）已改为界面操作，见 ConfiguratorRenameUI。
+                    acted = true;
+                    if (mte == null) {
+                        message(player, "susyplusplus.message.configurator.no_machine");
+                        break;
+                    }
+                    SuGuiFactories.openRenameUI(serverPlayer, event.getPos());
+                    break;
+                }
                 case FLUID_CAPACITY:
                     // 功能三：普通右键容器 → 打开「容量限制（仅流体）」界面
                     if (mte == null) {

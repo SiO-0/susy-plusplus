@@ -24,14 +24,14 @@ import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
  */
 public enum SuStorageTier {
 
-    /** 钢制：外壳 STEEL_SOLID，板条箱 1,000,000 物品。 */
-    STEEL("steel", MetalCasingType.STEEL_SOLID, 1_000_000L, 0L),
+    /** 钢制：外壳 STEEL_SOLID，板条箱 4,000,000 物品。 */
+    STEEL("steel", MetalCasingType.STEEL_SOLID, 4_000_000L),
 
-    /** 洁净不锈钢：外壳 STAINLESS_CLEAN，储罐 16,000,000 mB / 板条箱 16,000,000 物品。 */
-    CLEAN_STAINLESS_STEEL("clean_stainless_steel", MetalCasingType.STAINLESS_CLEAN, 16_000_000L, 16_000_000L),
+    /** 洁净不锈钢：外壳 STAINLESS_CLEAN，板条箱 64,000,000 物品。 */
+    CLEAN_STAINLESS_STEEL("clean_stainless_steel", MetalCasingType.STAINLESS_CLEAN, 64_000_000L),
 
-    /** 加强钛：外壳 TITANIUM_STABLE，储罐 32,000,000 mB / 板条箱 32,000,000 物品。 */
-    REINFORCED_TITANIUM("reinforced_titanium", MetalCasingType.TITANIUM_STABLE, 32_000_000L, 32_000_000L);
+    /** 加强钛：外壳 TITANIUM_STABLE，板条箱 128,000,000 物品。 */
+    REINFORCED_TITANIUM("reinforced_titanium", MetalCasingType.TITANIUM_STABLE, 128_000_000L);
 
     /** 注册名中间段，例如 {@code steel_multiblock_crate} 里的 {@code steel}。 */
     private final String id;
@@ -42,14 +42,10 @@ public enum SuStorageTier {
     /** 板条箱容量（物品数）。 */
     private final long crateCapacity;
 
-    /** 储罐容量（mB）；0 表示本档没有储罐。 */
-    private final long tankCapacity;
-
-    SuStorageTier(String id, MetalCasingType casing, long crateCapacity, long tankCapacity) {
+    SuStorageTier(String id, MetalCasingType casing, long crateCapacity) {
         this.id = id;
         this.casing = casing;
         this.crateCapacity = crateCapacity;
-        this.tankCapacity = tankCapacity;
     }
 
     public String getId() {
@@ -62,9 +58,5 @@ public enum SuStorageTier {
 
     public long getCrateCapacity() {
         return crateCapacity;
-    }
-
-    public long getTankCapacity() {
-        return tankCapacity;
     }
 }

@@ -1,6 +1,7 @@
 package com.susy.plusplus;
 
 import com.susy.plusplus.integration.top.SuTopIntegration;
+import com.susy.plusplus.pipe.steam.TileEntitySteamPipe;
 import com.susy.plusplus.item.SuMetaItems;
 import com.susy.plusplus.client.SuClientEvents;
 import com.susy.plusplus.gui.SuGuiFactories;
@@ -10,8 +11,10 @@ import com.susy.plusplus.network.SuNetwork;
 import com.susy.plusplus.pipe.SuPipeTweaks;
 import com.susy.plusplus.recipe.SuRecipes;
 
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -43,6 +46,15 @@ public class SusyPlusPlus {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        // ⚠ 方块实体必须注册：
+        // Minecraft 的 TileEntity.writeInternal() 会用 "类 → 注册名" 反查映射来写 NBT，
+        // 未注册的方块实体在区块同步（SPacketChunkData）/ 存档时直接抛
+        //   RuntimeException: class ... is missing a mapping!
+        // 并且是"Exception ticking world"——表现为一放管道、或打开任何会触发区块更新的界面就崩。
+        // （TileEntitySteamPipe 已实际踩到：crash-2026-10-18_13.08.03-server.txt）
+        GameRegistry.registerTileEntity(TileEntitySteamPipe.class,
+                new ResourceLocation(Tags.MOD_ID, "steam_pipe"));
+
         // 构造我们的 MetaItem（会被 GT 的 MetaItem.META_ITEMS 静态列表收集，
         // 随后由 GT 在 RegistryEvent.Register<Item> 中统一注册）。
         SuMetaItems.init();

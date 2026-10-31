@@ -21,7 +21,7 @@
 | 配置开关 | `enableConfigurator`（默认 `true`） |
 | 快捷键 | **Shift + V** 打开主界面（`key.susyplusplus.configurator.open`） |
 
-### 三种模式
+### 五种模式
 
 | 模式 | 值 | Shift + 右键机器 | 普通右键机器 |
 | --- | --- | --- | --- |
@@ -29,6 +29,42 @@
 | 修改机器输出面 | 1 | 打开「输出面」界面（仅 `SimpleMachineMetaTileEntity`） | — |
 | 复制机器配置 | 2 | 复制机器配置进配置器（提示「配置已复制」） | 把配置写进机器（提示「配置已粘贴」） |
 | 机器工具箱 | 3 | — | 打开「机器工具箱」界面 |
+| 容量限制（仅流体） | 4 | — | 打开「流体容量」界面（无流体槽则提示不支持） |
+| **给机器重命名** | 5 | — | 打开「重命名机器」界面（输入名称 / 清空名称 / 关闭） |
+
+### 重命名（模式 5）怎么用
+
+1. `Shift+V` → 选「给机器重命名」（模式值 5）；
+2. **普通右键**目标机器 → 打开「重命名机器」界面（[`ConfiguratorRenameUI`](src/main/java/com/susy/plusplus/gui/ConfiguratorRenameUI.java:1)）：
+   - **输入框**：预填当前名字；
+   - **应用**：把输入框内容写入 `CustomName`（留空 = 清除）；
+   - **清空名称**：无条件删除 `CustomName`（恢复机器默认名）；
+   - **关闭**：不做修改。
+
+实现要点：
+
+- 名字存在 GT 的 `MetaTileEntityHolder#customName`（NBT 键 `CustomName`），由
+  [`MachineNameHelper`](src/main/java/com/susy/plusplus/machine/MachineNameHelper.java:1) 反射调用
+  `setCustomName(String)`（不直接引用 `MetaTileEntityHolder`，避免强制依赖 AE2）；
+- 写入走 [`PacketRenameMachine`](src/main/java/com/susy/plusplus/network/PacketRenameMachine.java:1)
+  （客户端发包 → 服务端落盘；带 8 格距离校验），服务端写完回
+  [`PacketSyncMachineName`](src/main/java/com/susy/plusplus/network/PacketSyncMachineName.java:1)；
+- **中文不乱码**：两个包都按 **UTF-8 字节数组**收发（长度写 `bytes.length`，
+  上限为字符上限 ×4）。早期版本写的是 `String.length()`（字符数）却按字节读，
+  中文（3 字节/字）因此被截断成乱码；
+- **"改了 CustomName 但悬浮名牌不变"的修复**：GT 的
+  `MetaTileEntityHolder#updateNameTagParticle()` 只在 `nameTagParticle == null` 时
+  **新建**粒子，已有粒子不会随字段变化更新（javap 核实 2.8.7 字节码）。
+  客户端收到同步包后由 `MachineNameHelper#applyNameOnClient` 先写空名（让 GT 回收旧粒子），
+  再写目标名（重建粒子），因此名字**立刻**可见；
+- `ConfiguratorMode#write` 切换模式时**保留 `display` 标签**（否则铁砧名字会被写模式清掉）。
+
+### TOP 显示机器名
+
+装上 The One Probe 后，指向任何**有自定义名字**的 GT 机器会多显示一行
+`名称：<名字>`（金色）。provider 是
+[`MachineNameInfoProvider`](src/main/java/com/susy/plusplus/integration/top/MachineNameInfoProvider.java:1)，
+在 `SuTopIntegration` 里注册（服务端组装，读到的是权威名字）。
 
 ---
 
@@ -37,13 +73,16 @@
 三层界面，全部用 **ModularUI**（`com.cleanroommc.modularui`，编译期 3.0.4）：
 
 ```
-主界面 ConfiguratorMainUI      （Shift+V）
- ├─ 按钮 1 修改机器输出面 ──► MachineFaceUI    （Shift+右键机器，仅单方块机器）
+主界面 ConfiguratorMainUI      （Shift+V，5 个模式按钮）
+ ├─ 按钮 1 修改机器输出面 ──► MachineFaceUI      （Shift+右键机器，仅单方块机器）
  ├─ 按钮 2 复制机器配置   ──► 无界面，直接写 NBT
- └─ 按钮 3 机器工具箱     ──► MachineToolboxUI （普通右键机器）
+ ├─ 按钮 3 机器工具箱     ──► MachineToolboxUI   （普通右键机器）
+ ├─ 按钮 4 容量限制       ──► FluidCapacityUI    （普通右键容器）
+ └─ 按钮 5 重命名         ──► ConfiguratorRenameUI （普通右键机器）
 
 MachineFaceUI（3 行 × 4 列按钮 + 确认）
-MachineToolboxUI（6 个即时生效的按钮）
+MachineToolboxUI（动态按钮）
+FluidCapacityUI（可翻页的容量编辑）
 ```
 
 ### 界面为什么由服务端发起
@@ -149,7 +188,7 @@ MUI2 的工厂按**名字**在两瑞匹配，所以：
 
 ```
 {
-  "Mode": 0|1|2|3,                 // 当前模式（切换模式会清空整个 tag，只留 Mode）
+  "Mode": 0|1|2|3|4|5,             // 当前模式（切换模式会清空旧 tag，只留 Mode + 铁砧改名 display）
   "CopiedConfig": {                // 仅复制过配置后存在
      "HasFront": true, "Front": 2,
      "HasPainting": true, "Painting": 1234567,
@@ -163,7 +202,8 @@ MUI2 的工厂按**名字**在两瑞匹配，所以：
 }
 ```
 
-- **切换模式时清空旧 NBT**：`ConfiguratorMode#write` 直接 `setTagCompound(new NBTTagCompound())` 再写 `Mode`；
+- **切换模式时清空旧 NBT**：`ConfiguratorMode#write` 用新的 `NBTTagCompound` 重写，只保留 `Mode`
+  与**铁砧改名产生的 `display` 标签**（保留 `display` 是为了让模式 5 能读到名字）；
 - tooltip 会显示：当前模式 / 该模式的操作提示 / 是否已存有配置。
 
 ---
@@ -243,7 +283,8 @@ GT 本体的机器面模型（**编译用 jar `2.8.7-beta` 已用 javap 逐条�
 | `metaitem.configurator.name` | 物品名 |
 | `key.categories.susyplusplus`、`key.susyplusplus.configurator.open` | 按键分类/名称 |
 | `susyplusplus.tooltip.configurator.*` | tooltip（模式、提示、是否已复制） |
-| `susyplusplus.configurator.mode.*` | 模式名（`none` / `modify_output` / `copy_config` / `machine_toolbox`） |
+| `susyplusplus.configurator.mode.*` | 模式名（`none` / `modify_output` / `copy_config` / `machine_toolbox` / `fluid_capacity` / `rename`） |
+| `susyplusplus.message.configurator.renamed` / `renamed_cleared` / `rename_failed` | 重命名模式的反馈消息 |
 | `susyplusplus.configurator.face.*` | 面状态（`none` / `fluid` / `item` / `both`） |
 | `susyplusplus.gui.configurator.*` | 三个界面的标题、提示、按钮、状态文本 |
 | `susyplusplus.message.configurator.*` | 聊天栏动作反馈（已复制 / 已粘贴 / 不支持 …） |
@@ -270,7 +311,7 @@ GT 本体的机器面模型（**编译用 jar `2.8.7-beta` 已用 javap 逐条�
 
 1. **编译**：`gradlew.bat build` → `BUILD SUCCESSFUL`；
 2. **创造模式**：物品栏里能找到「配置器」（模型/材质正常，不是紫黑格）；
-3. **Shift+V**：手持配置器按 Shift+V → 打开半透明灰背景的主界面（3 个模式按钮）；
+3. **Shift+V**：手持配置器按 Shift+V → 打开半透明灰背景的主界面（5 个模式按钮）；
 4. **写入 NBT**：点「修改机器输出面」→ 界面关闭 + 聊天栏提示「配置器模式：修改机器输出面」；
    再 Shift+V 打开，应看到该按钮为高亮（已选中）；
 5. **切换清空**：从模式 2 切到模式 3 后，`CopiedConfig` 应被清空（tooltip 不再显示「已复制机器配置」）；
@@ -283,4 +324,8 @@ GT 本体的机器面模型（**编译用 jar `2.8.7-beta` 已用 javap 逐条�
    音效/开关机/输出口允许输入/变压器模式/修复维护逐个点击并观察机器状态变化；
    不支持的项**不会创建按钮**（面板高度随按钮数收缩，不留空位）；
 9. **tooltip**：任意时刻悬停配置器，应显示当前模式（未见过的机器则是「当前模式：无」）；
-10. **持久化**：退出存档再进，配置器的模式与已复制配置仍在（NBT 写在物品上）。
+10. **重命名**：铁砧里把配置器改成「主熔炉」→ 模式 5 → 普通右键机器：
+    聊天栏提示「机器已重命名为：主熔炉」，机器**头顶立即出现**该名字；破坏机器后掉落的物品名也带这个名字；
+    再用一个**未改名**的配置器（模式 5）右键 → 名字被清除、恢复默认；
+11. **持久化**：退出存档再进，配置器的模式与已复制配置仍在（NBT 写在物品上）；
+    机器名字同样保留（存在方块实体 NBT 的 `CustomName`）。

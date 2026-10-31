@@ -33,3 +33,22 @@ def copyModToRunMods = tasks.register('copyModToRunMods', Copy) {
 tasks.matching { it.name in ['runClient', 'runServer', 'runObfClient', 'runObfServer'] }.configureEach {
     dependsOn copyModToRunMods
 }
+
+/**
+ * 限制 dev-run 的**原生**内存增长（Metaspace / CodeCache / C2 arena）。
+ *
+ * 背景：本机 15 GB 内存、页面文件很小 ⇒ 提交内存（commit）上限约 20 GB。
+ * 220 个 mod 的 Metaspace + C2 编译 arena 很容易把原生内存撑爆，JVM 会直接死在
+ *   hs_err_pid*.log: "Native memory allocation (malloc/mmap) failed ..."
+ * 这是**原生** OOM，不是堆 OOM，也不是模组异常。
+ *
+ * 为什么不写进 gradle.properties 的 extra_jvm_args：
+ * 实测那条路径只有 -Xms/-Xmx 会被转发到真正的游戏子进程，-XX 参数会被启动器丢掉。
+ * 而**环境变量 JAVA_TOOL_OPTIONS** 会被所有 JVM（包括 Cleanroom 重新拉起的子进程）继承，
+ * 日志里会出现 "Picked up JAVA_TOOL_OPTIONS: ..."，可据此确认已生效。
+ */
+def nativeMemoryLimits = '-XX:MaxMetaspaceSize=1024m -XX:ReservedCodeCacheSize=256m -XX:CICompilerCount=2'
+
+tasks.matching { it.name in ['runClient', 'runServer', 'runObfClient', 'runObfServer'] }.configureEach {
+    environment 'JAVA_TOOL_OPTIONS', nativeMemoryLimits
+}

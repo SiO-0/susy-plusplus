@@ -29,13 +29,15 @@
 | `batteryCaseNesting` | boolean | `false` | 允许把电池盒放进另一个电池盒（套娃）；盒中的电池盒会被当作一块电池参与充放电 |
 | `enableReinforcedPbf` | boolean | `true` | 强化土高炉多方块机器，以及其工作台配方（强化耐火砖方块始终可用） |
 | `reinforcedPbfParallel` | int (1~64) | `4` | 强化土高炉的并行数 |
-| `enableElectricGrinder` | boolean | `true` | **电动碾磨机**（LV 电动矿石粗碎多方块；见 [`electric_grinder.md`](electric_grinder.md)） |
-| `electricGrinderParallel` | int (1~64) | `16` | 电动碾磨机的并行数（LV 下 16 已是理论上限） |
+| `enableElectricGrinder` | boolean | `true` | **电动碾磨机**（LV 电动矿石粗碎多方块，并行固定 32；见 [`electric_grinder.md`](electric_grinder.md)） |
 | `enableWirelessEnergyTower` | boolean | `true` | 无线能量传输塔多方块机器（见 [`wireless_energy_tower.md`](wireless_energy_tower.md)） |
 | `enableConfigurator` | boolean | `true` | 配置器物品（Shift+V 打开界面；见 [`configurator.md`](configurator.md)） |
 | `enableTrolley` | boolean | `true` | 手推车物品（Shift+右键搬起机器 / 右键放下；见 [`trolley.md`](trolley.md)） |
 | `enableStorageScanner` | boolean | `true` | 存储检测器机器（MV 扫描周围容器并聚合暴露库存；见 [`storage_scanner.md`](storage_scanner.md)） |
-| `enableMultiblockStorage` | boolean | `true` | 多方块存储升级：板条箱 / 储罐 / 物品阀门 / 储罐阀门（见 [`multiblock_crate_and_tank_upgrades.md`](multiblock_crate_and_tank_upgrades.md)） |
+| `enableRedstoneValves` | boolean | `true` | 红石控制阀门：流体阀 / 物流阀 / IR 流体阀（见 [`redstone_valves.md`](redstone_valves.md)） |
+| `enableSteamPump` | boolean | `true` | **蒸汽泵覆盖板**（1024 L/t、只过蒸汽、不耗电、无缓存；见 [`steam_pump_and_pipes.md`](steam_pump_and_pipes.md)） |
+| `enableSusyTranslations` | boolean | `false` | **Susy-Core 2.0 中文补充翻译**（默认关闭；开启后在资源包重载时注入客户端语言表；见 [`steam_pump_and_pipes.md`](steam_pump_and_pipes.md) §1） |
+| `enableMultiblockStorage` | boolean | `true` | 多方块存储升级：板条箱 / 物品阀门（储罐已移除，改用 Susy-Core 自带的；见 [`multiblock_crate_and_tank_upgrades.md`](multiblock_crate_and_tank_upgrades.md)） |
 | `enableFluidSamplesStorage` | boolean | `true` | 流体样品存储 MV / HV / EV（32 格 × 32,000 / 64,000 / 128,000 L、不耗电；见 [`fluid_samples_storage.md`](fluid_samples_storage.md)） |
 | `enableThirdPartyPatches` | boolean | `true` | 第三方补丁总开关：XNet 硬编码文字本地化 + HoloInventory 显示 GT 机器名（见 [`third_party_patches.md`](third_party_patches.md)；**没装对应 mod 时完全不生效**） |
 | `enableRubberPipeTweaks` | boolean | `false` | 橡胶管道修改（见 §3） |

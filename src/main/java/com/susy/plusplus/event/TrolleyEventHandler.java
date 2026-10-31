@@ -3,6 +3,7 @@ package com.susy.plusplus.event;
 import com.susy.plusplus.Tags;
 import com.susy.plusplus.item.SuMetaItems;
 import com.susy.plusplus.item.trolley.TrolleyHelper;
+import com.susy.plusplus.util.PlayerHeld;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -78,7 +79,7 @@ public final class TrolleyEventHandler {
             return;
         }
 
-        EnumActionResult result = player.isSneaking()
+        EnumActionResult result = PlayerHeld.sneaking(player)
                 ? TrolleyHelper.pickUp(world, event.getPos(), trolley, player)
                 : TrolleyHelper.place(world, event.getPos(), event.getFace(), trolley, player);
 
@@ -92,15 +93,15 @@ public final class TrolleyEventHandler {
 
     /** 主手优先、副手兜底（玩家可能把手推车拿在副手）。 */
     private static ItemStack findTrolley(EntityPlayer player, EnumHand hand) {
-        ItemStack held = player.getHeldItem(hand);
+        ItemStack held = PlayerHeld.get(player, hand);
         if (isTrolley(held)) {
             return held;
         }
-        ItemStack main = player.getHeldItemMainhand();
+        ItemStack main = PlayerHeld.main(player);
         if (isTrolley(main)) {
             return main;
         }
-        ItemStack off = player.getHeldItemOffhand();
+        ItemStack off = PlayerHeld.off(player);
         return isTrolley(off) ? off : ItemStack.EMPTY;
     }
 

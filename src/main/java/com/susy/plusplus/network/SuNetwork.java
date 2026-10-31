@@ -45,11 +45,27 @@ public final class SuNetwork {
         // 功能三：把「容量限制（仅流体）」界面填的容量写进机器
         instance.registerMessage(PacketSetFluidCapacity.Handler.class, PacketSetFluidCapacity.class,
                 nextMessageId++, Side.SERVER);
+        // 功能五：把「重命名」界面填的名字写进机器
+        instance.registerMessage(PacketRenameMachine.Handler.class, PacketRenameMachine.class,
+                nextMessageId++, Side.SERVER);
+        // 功能五：服务端把新名字推回客户端，立刻刷新悬浮名牌
+        instance.registerMessage(PacketSyncMachineName.Handler.class, PacketSyncMachineName.class,
+                nextMessageId++, Side.CLIENT);
         SusyPlusPlus.LOGGER.info("[SusyPlusPlus] Network channel '{}' registered.", CHANNEL_NAME);
     }
 
     public static SimpleNetworkWrapper get() {
         return instance;
+    }
+
+    /** 服务端 → 指定客户端。 */
+    public static void sendTo(IMessage message, net.minecraft.entity.player.EntityPlayerMP player) {
+        if (instance == null) {
+            SusyPlusPlus.LOGGER.warn("[SusyPlusPlus] Network not initialised; message {} dropped.",
+                    message.getClass().getSimpleName());
+            return;
+        }
+        instance.sendTo(message, player);
     }
 
     /** 客户端 → 服务端。 */

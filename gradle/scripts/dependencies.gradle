@@ -80,6 +80,14 @@ dependencies {
     //    仅编译期需要（运行期由 run/mods 提供）；用 fileTree 而非固定文件名，
     //    文件不存在时不会让构建直接失败。
     compileOnly fileTree(dir: 'run/mods', include: ['Susy-Core-*.jar'])
+    // 6) CTM（Chisel Team Mod）—— GT 的 gregtech.api.pipenet.block.BlockPipe 实现了
+    //    gregtech.integration.ctm.IFacadeWrapper，而该接口 extends
+    //    team.chisel.ctm.api.IFacade。GT 发布的 jar 不含这个可选依赖的 class，
+    //    所以"继承 BlockPipe"（本模组的蒸汽管道）在编译期会报
+    //    "找不到 team.chisel.ctm.api.IFacade 的类文件"。
+    //    这里把整合包里的 CTM 放进编译 classpath（仅编译期，不会打进 jar）；
+    //    运行期由 run/mods 里的 CTM 提供（整合包已包含 CTM + Chisel）。
+    compileOnly fileTree(dir: 'run/mods', include: ['CTM-*.jar'])
     // ============================================================================
 
     // Example - Dependency descriptor:

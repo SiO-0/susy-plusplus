@@ -94,8 +94,8 @@ public class BatteryCaseBehaviour implements IItemComponent, IItemCapabilityProv
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
-        ItemStack stack = player.getHeldItem(hand);
-        if (player.isSneaking()) {
+        ItemStack stack = com.susy.plusplus.util.PlayerHeld.get(player, hand);
+        if (com.susy.plusplus.util.PlayerHeld.sneaking(player)) {
             // 潜行右键：切换释能模式（与 GT 电池 ElectricStats 行为一致）
             if (!world.isRemote) {
                 boolean enabled = isInDischargeMode(stack);

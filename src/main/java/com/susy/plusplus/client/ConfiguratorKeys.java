@@ -3,6 +3,7 @@ package com.susy.plusplus.client;
 import com.susy.plusplus.item.SuMetaItems;
 import com.susy.plusplus.network.PacketOpenConfigurator;
 import com.susy.plusplus.network.SuNetwork;
+import com.susy.plusplus.util.PlayerHeld;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
@@ -62,9 +63,9 @@ public final class ConfiguratorKeys {
             return;
         }
         // 手里要拿着配置器（客户端先筛一次，避免无意义的包）
-        ItemStack held = minecraft.player.getHeldItemMainhand();
+        ItemStack held = PlayerHeld.main(minecraft.player);
         if (held.isEmpty() || SuMetaItems.CONFIGURATOR == null || !SuMetaItems.CONFIGURATOR.isItemEqual(held)) {
-            held = minecraft.player.getHeldItemOffhand();
+            held = PlayerHeld.off(minecraft.player);
             if (held.isEmpty() || SuMetaItems.CONFIGURATOR == null || !SuMetaItems.CONFIGURATOR.isItemEqual(held)) {
                 return;
             }

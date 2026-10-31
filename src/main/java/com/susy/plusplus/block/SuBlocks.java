@@ -1,6 +1,10 @@
 package com.susy.plusplus.block;
 
 import com.susy.plusplus.Tags;
+import com.susy.plusplus.pipe.steam.BlockSteamPipe;
+import com.susy.plusplus.pipe.steam.ItemBlockSteamPipe;
+import com.susy.plusplus.pipe.steam.SteamPipeType;
+import com.susy.plusplus.pipe.steam.SuSteamPipes;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -18,6 +22,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
  * （该事件在 preInit 之前触发），因此这里用 {@link Mod.EventBusSubscriber}
  * 挂到模组事件总线上，而不是在 preInit 里手动调用。
  * </p>
+ *
+ * <p>
+ * 也正因为注册时机早于配置注入，这里的方块<b>不受</b> {@code SuConfig} 开关控制
+ * （否则会出现"配置了关闭但依然注册"的假开关）。
+ * </p>
  */
 @Mod.EventBusSubscriber(modid = Tags.MOD_ID)
 public final class SuBlocks {
@@ -34,17 +43,38 @@ public final class SuBlocks {
         block.setRegistryName(new ResourceLocation(Tags.MOD_ID, "reinforced_firebrick"));
         event.getRegistry().register(block);
         REINFORCED_FIREBRICK = block;
+
+        // ---- 蒸汽管道：2 个压力等级 × 5 种粗细 = 10 个方块 ----
+        for (SteamPipeType type : SteamPipeType.VALUES) {
+            BlockSteamPipe pipe = new BlockSteamPipe(type);
+            event.getRegistry().register(pipe);
+            SuSteamPipes.putBlock(type, pipe);
+        }
     }
 
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event) {
-        if (REINFORCED_FIREBRICK == null) {
-            return;
+        if (REINFORCED_FIREBRICK != null) {
+            ItemBlock itemBlock = new ItemBlock(REINFORCED_FIREBRICK);
+            // 用 ItemBlock 让方块能以物品形式存在/被放置；
+            // 其本地化键自动继承方块：tile.reinforced_firebrick.name
+            itemBlock.setRegistryName(REINFORCED_FIREBRICK.getRegistryName());
+            event.getRegistry().register(itemBlock);
         }
-        ItemBlock itemBlock = new ItemBlock(REINFORCED_FIREBRICK);
-        // 用 ItemBlock 让方块能以物品形式存在/被放置；
-        // 其本地化键自动继承方块：tile.reinforced_firebrick.name
-        itemBlock.setRegistryName(REINFORCED_FIREBRICK.getRegistryName());
-        event.getRegistry().register(itemBlock);
+
+        // 管道必须用 GT 的 ItemBlockPipe：
+        // 它负责把物品放成"带 PipeType 的管道方块实体"（placeBlockAt），
+        // 并且 PipeRenderer 的物品渲染只认 ItemBlockPipe。
+        for (SteamPipeType type : SteamPipeType.VALUES) {
+            BlockSteamPipe pipe = SuSteamPipes.getBlock(type);
+            if (pipe == null) {
+                continue;
+            }
+            // 用本模组自己的 ItemBlock（继承 GT 的 ItemBlockPipe，额外带速率 tooltip）
+            ItemBlockSteamPipe item = new ItemBlockSteamPipe(pipe);
+            item.setRegistryName(pipe.getRegistryName());
+            event.getRegistry().register(item);
+            SuSteamPipes.putItem(type, item);
+        }
     }
 }

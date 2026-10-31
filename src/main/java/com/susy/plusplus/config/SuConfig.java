@@ -139,6 +139,43 @@ public class SuConfig {
         public static boolean enableStorageScanner = true;
 
         @Config.Comment({
+                        "Enable the Steam Pump cover (susyplusplus:steam_pump).",
+                        "Acts exactly like GT's LV Electric Pump cover but is limited to STEAM",
+                        "(gregtech:steam and susy:dense_steam) at a fixed 1024 L/t; no EU, no internal buffer.",
+                        "启用「蒸汽泵」覆盖板：与 GT 的 LV 电动泵覆盖板行为一致，但只允许通过蒸汽",
+                        "（gregtech:steam / susy:dense_steam），固定 1024 L/t、不耗电、无内部缓存。",
+                        "Default: true"
+        })
+        public static boolean enableSteamPump = true;
+
+        @Config.Comment({
+                        "Enable the built-in Chinese translations for Susy-Core 2.0 content that ships untranslated",
+                        "(materials / machines / blocks / metaitems). DEFAULT: false = keep the pack's English text.",
+                        "Implementation: the file is shipped as assets/susyplusplus/lang_override/susy_zh_cn.lang",
+                        "(NOT a real lang file, so Minecraft never loads it) and is injected into the client's",
+                        "language map on resource reload only when this option is true.",
+                        "Takes effect after restarting the game (the config is read at load time).",
+                        "启用本模组内置的 Susy-Core 2.0 中文补充翻译（默认关闭 = 保持英文）。",
+                        "开启后需要重启游戏（资源包重载）才生效。",
+                        "Default: false"
+        })
+        public static boolean enableSusyTranslations = false;
+
+        @Config.Comment({
+                        "Enable the redstone-controlled valves added by this mod:",
+                        "  - Fluid Valve  (susyplusplus:fluid_valve)     : no buffer, does NOT pull by itself",
+                        "  - Logistics Valve (susyplusplus:logistics_valve): no buffer, does NOT pull by itself",
+                        "  - IR Fluid Valve (susyplusplus:ir_fluid_valve) : no buffer, actively pulls (unlimited rate)",
+                        "Behaviour: open with no redstone signal, CLOSED while powered. Wrench = set input face,",
+                        "Shift+Wrench = set output face. While closed the pipes stay connected; only the flow stops.",
+                        "启用本模组添加的红石控制阀门（流体阀 / 物流阀 / IR 流体阀）：",
+                        "无信号导通、有信号断开；扳手设输入面、Shift+扳手设输出面；",
+                        "关闭时管道仍保持连接，只是流体/物品无法通过。",
+                        "Default: true"
+        })
+        public static boolean enableRedstoneValves = true;
+
+        @Config.Comment({
                         "Storage Scanner: de-duplicate containers that share ONE inventory.",
                         "Multiblock storages (e.g. Industrial Renewal's storage rank) return the SAME",
                         "inventory from every block entity, which would make the scanned items count",
@@ -170,13 +207,13 @@ public class SuConfig {
         public static boolean enablePyrotechRecipeTweaks = true;
 
         @Config.Comment({
-                        "Enable the multiblock storage upgrades added by this mod:",
-                        "  - Steel Multiblock Crate (1,000,000 items) + Steel Item Valve",
-                        "  - Clean Stainless Steel Multiblock Tank (16,000,000 mB) + Tank Valve",
-                        "  - Clean Stainless Steel Multiblock Crate (16,000,000 items) + Item Valve",
-                        "  - Reinforced Titanium Multiblock Tank (32,000,000 mB) + Tank Valve",
-                        "  - Reinforced Titanium Multiblock Crate (32,000,000 items) + Item Valve",
-                        "启用本模组添加的多方块存储升级（板条箱 / 储罐 / 对应阀门，详见 docs/multiblock_crate_and_tank_upgrades.md）。",
+                        "Enable the multiblock crates added by this mod:",
+                        "  - Steel Multiblock Crate (4,000,000 items) + Steel Item Valve",
+                        "  - Clean Stainless Steel Multiblock Crate (64,000,000 items) + Item Valve",
+                        "  - Reinforced Titanium Multiblock Crate (128,000,000 items) + Item Valve",
+                        "Multiblock tanks are NOT part of this mod (Susy-Core provides its own).",
+                        "启用本模组添加的多方块板条箱（含对应物品阀门，详见 docs/multiblock_crate_and_tank_upgrades.md）。",
+                        "多方块储罐不在本模组（Susy-Core 自带）。",
                         "Default: true"
         })
         public static boolean enableMultiblockStorage = true;

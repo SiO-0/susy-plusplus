@@ -62,14 +62,25 @@ public final class SuGuiFactories {
     private static final SuPosGuiFactory FLUID_CAPACITY_UI = new SuPosGuiFactory(FluidCapacityUI.FACTORY_NAME,
             data -> new FluidCapacityUI());
 
+    /** 重命名机器界面工厂（功能五）。 */
+    private static final SuPosGuiFactory RENAME_UI = new SuPosGuiFactory(ConfiguratorRenameUI.FACTORY_NAME,
+            data -> new ConfiguratorRenameUI());
+
     private SuGuiFactories() {
     }
 
     /** 在 {@code preInit}（客户端与服务端都执行）调用。 */
     public static void init() {
         ConfiguratorMainUI.init();
-        SusyPlusPlus.LOGGER.info("[SusyPlusPlus] Configurator GUI factories: faceUI={}, toolboxUI={}, fluidCapacityUI={}",
-                FACE_UI.getFactoryName(), TOOLBOX_UI.getFactoryName(), FLUID_CAPACITY_UI.getFactoryName());
+        SusyPlusPlus.LOGGER.info(
+                "[SusyPlusPlus] Configurator GUI factories: faceUI={}, toolboxUI={}, fluidCapacityUI={}, renameUI={}",
+                FACE_UI.getFactoryName(), TOOLBOX_UI.getFactoryName(), FLUID_CAPACITY_UI.getFactoryName(),
+                RENAME_UI.getFactoryName());
+    }
+
+    /** 服务端：打开「重命名机器」界面。 */
+    public static void openRenameUI(EntityPlayerMP player, BlockPos pos) {
+        RENAME_UI.open(player, pos);
     }
 
     /** 服务端：打开「修改机器输出面」界面。 */
@@ -98,11 +109,11 @@ public final class SuGuiFactories {
         if (player == null || SuMetaItems.CONFIGURATOR == null) {
             return ItemStack.EMPTY;
         }
-        ItemStack main = player.getHeldItemMainhand();
+        ItemStack main = com.susy.plusplus.util.PlayerHeld.main(player);
         if (!main.isEmpty() && SuMetaItems.CONFIGURATOR.isItemEqual(main)) {
             return main;
         }
-        ItemStack off = player.getHeldItemOffhand();
+        ItemStack off = com.susy.plusplus.util.PlayerHeld.off(player);
         if (!off.isEmpty() && SuMetaItems.CONFIGURATOR.isItemEqual(off)) {
             return off;
         }

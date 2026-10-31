@@ -53,9 +53,9 @@ public class PacketOpenConfigurator implements IMessage {
             if (player == null || SuMetaItems.CONFIGURATOR == null) {
                 return;
             }
-            ItemStack held = player.getHeldItemMainhand();
+            ItemStack held = com.susy.plusplus.util.PlayerHeld.main(player);
             if (!isConfigurator(held)) {
-                held = player.getHeldItemOffhand();
+                held = com.susy.plusplus.util.PlayerHeld.off(player);
             }
             if (!isConfigurator(held)) {
                 return;

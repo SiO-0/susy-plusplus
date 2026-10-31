@@ -1,14 +1,18 @@
 package com.susy.plusplus.item;
 
 import com.susy.plusplus.SusyPlusPlus;
+import com.susy.plusplus.Tags;
 import com.susy.plusplus.config.SuConfig;
+import com.susy.plusplus.cover.SteamPumpCover;
 import com.susy.plusplus.item.battery.BatteryCaseBaubles;
 import com.susy.plusplus.item.battery.ItemBatteryCase;
 import com.susy.plusplus.item.configurator.ItemConfigurator;
 import com.susy.plusplus.item.trolley.ItemTrolley;
 
 import gregtech.api.items.metaitem.MetaItem;
+import gregtech.common.covers.CoverBehaviors;
 
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;
 
 /**
@@ -48,6 +52,14 @@ public final class SuMetaItems {
 
     public static ItemTrolley TROLLEY_ITEM;
     public static MetaItem<?>.MetaValueItem TROLLEY;
+
+    // ---------- 蒸汽泵（覆盖板） ----------
+
+    public static ItemSteamPump STEAM_PUMP_ITEM;
+    public static MetaItem<?>.MetaValueItem STEAM_PUMP;
+
+    /** 蒸汽泵的覆盖板注册名（{@code CoverDefinition} 的 id）。 */
+    public static final ResourceLocation STEAM_PUMP_COVER_ID = new ResourceLocation(Tags.MOD_ID, "cover.steam_pump");
 
     private SuMetaItems() {
     }
@@ -99,6 +111,21 @@ public final class SuMetaItems {
             SusyPlusPlus.LOGGER.info("[SusyPlusPlus] Registered item: susyplusplus:trolley");
         } else {
             SusyPlusPlus.LOGGER.info("[SusyPlusPlus] Trolley is DISABLED in config.");
+        }
+
+        // ---------- 蒸汽泵（覆盖板） ----------
+        if (SuConfig.enableSteamPump) {
+            STEAM_PUMP_ITEM = new ItemSteamPump();
+            STEAM_PUMP = STEAM_PUMP_ITEM.steamPump;
+            // 与 GT 自己的泵完全相同的注册方式：
+            // CoverBehaviors.registerBehavior 会给物品挂上 CoverItemBehavior（手持右键机器/管道即可安装），
+            // 同时把 CoverDefinition 注册进 GT 的覆盖板注册表。
+            CoverBehaviors.registerBehavior(STEAM_PUMP_COVER_ID, STEAM_PUMP,
+                    (definition, coverableView, side) -> new SteamPumpCover(definition, coverableView, side));
+            SusyPlusPlus.LOGGER.info(
+                    "[SusyPlusPlus] Registered cover: susyplusplus:steam_pump (1024 L/t, steam only)");
+        } else {
+            SusyPlusPlus.LOGGER.info("[SusyPlusPlus] Steam Pump is DISABLED in config.");
         }
     }
 }

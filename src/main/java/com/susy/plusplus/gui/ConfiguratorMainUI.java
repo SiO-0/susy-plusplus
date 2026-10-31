@@ -49,8 +49,8 @@ public final class ConfiguratorMainUI implements IGuiHolder<GuiData> {
 
     private static final String PANEL_NAME = "configurator_main";
     private static final int WIDTH = 176;
-    /** 面板高度：每多一个模式按钮 +26，当前 4 个模式。 */
-    private static final int HEIGHT = 158;
+    /** 面板高度：每多一个模式按钮 +26，当前 5 个模式。 */
+    private static final int HEIGHT = 184;
     private static final int BUTTON_X = 8;
     private static final int BUTTON_W = WIDTH - BUTTON_X * 2;
     private static final int BUTTON_H = 22;
@@ -87,7 +87,7 @@ public final class ConfiguratorMainUI implements IGuiHolder<GuiData> {
                 .left(BUTTON_X).top(8));
 
         ConfiguratorMode[] modes = { ConfiguratorMode.MODIFY_OUTPUT, ConfiguratorMode.COPY_CONFIG,
-                ConfiguratorMode.MACHINE_TOOLBOX, ConfiguratorMode.FLUID_CAPACITY };
+                ConfiguratorMode.MACHINE_TOOLBOX, ConfiguratorMode.FLUID_CAPACITY, ConfiguratorMode.RENAME };
         int y = FIRST_BUTTON_Y;
         for (ConfiguratorMode mode : modes) {
             panel.child(modeButton(panel, player, mode, current, y));

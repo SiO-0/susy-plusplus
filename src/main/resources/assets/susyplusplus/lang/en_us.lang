@@ -1,4 +1,9 @@
-# Susy Plus Plus - en_us
+1# Susy Plus Plus - en_us
+# Steam Pump cover
+metaitem.steam_pump.name=Steam Pump
+susyplusplus.tooltip.steam_pump.rate=Transfer rate: %s L/t
+susyplusplus.tooltip.steam_pump.steam_only=Transfers STEAM only (gregtech:steam / susy:dense_steam)
+susyplusplus.tooltip.steam_pump.install=Right-click a machine or pipe face to install (cover)
 # 物品（MetaItem 默认翻译键格式：metaitem.<unlocalizedName>.name）
 metaitem.waterproof_spray_can.name=Waterproof Spray Can
 
@@ -82,6 +87,8 @@ susyplusplus.configurator.mode.copy_config=Copy machine config
 susyplusplus.configurator.mode.machine_toolbox=Machine toolbox
 susyplusplus.configurator.mode.fluid_capacity=Fluid capacity limit
 susyplusplus.tooltip.configurator.hint.fluid_capacity=Right-click a container: edit each fluid slot capacity
+susyplusplus.configurator.mode.rename=Rename machine
+susyplusplus.tooltip.configurator.hint.rename=Plain right-click a machine: apply this item's anvil name (no anvil name = clear it)
 susyplusplus.configurator.face.none=No config
 susyplusplus.configurator.face.fluid=Fluid auto-output
 susyplusplus.configurator.face.item=Item auto-output
@@ -133,6 +140,9 @@ susyplusplus.message.configurator.unsupported=This machine does not support outp
 susyplusplus.message.configurator.toolbox_done=Done: %s
 susyplusplus.message.configurator.no_fluid_tank=This machine has no fluid tank
 susyplusplus.message.configurator.capacity_set=Fluid capacities applied
+susyplusplus.message.configurator.renamed=Machine renamed to: %s
+susyplusplus.message.configurator.renamed_cleared=Machine name cleared
+susyplusplus.message.configurator.rename_failed=This block does not support renaming
 
 # Trolley
 metaitem.trolley.name=Trolley
@@ -175,14 +185,10 @@ block.susyplusplus.electric_grinder=Electric Grinder
 
 # Multiblock storage upgrades
 susyplusplus.machine.steel_multiblock_crate.name=Steel Multiblock Crate
-susyplusplus.machine.clean_stainless_steel_multiblock_tank.name=Clean Stainless Steel Multiblock Tank
 susyplusplus.machine.clean_stainless_steel_multiblock_crate.name=Clean Stainless Steel Multiblock Crate
-susyplusplus.machine.reinforced_titanium_multiblock_tank.name=Reinforced Titanium Multiblock Tank
 susyplusplus.machine.reinforced_titanium_multiblock_crate.name=Reinforced Titanium Multiblock Crate
 susyplusplus.machine.steel_item_valve.name=Steel Item Valve
-susyplusplus.machine.clean_stainless_steel_tank_valve.name=Clean Stainless Steel Tank Valve
 susyplusplus.machine.clean_stainless_steel_item_valve.name=Clean Stainless Steel Item Valve
-susyplusplus.machine.reinforced_titanium_tank_valve.name=Reinforced Titanium Tank Valve
 susyplusplus.machine.reinforced_titanium_item_valve.name=Reinforced Titanium Item Valve
 susyplusplus.machine.multiblock_crate.tooltip.single_type=Single-item-type bulk storage (empty it before switching item type)
 susyplusplus.machine.multiblock_crate.tooltip.valve=Needs the matching Item Valve to interact with pipes / hoppers / AE2
@@ -218,12 +224,62 @@ susyplusplus.patch.xnet.err.partial_paste=Not everything could be pasted!
 
 # Compatibility (GT may use block.<ns>.<path> as the key in some paths)
 block.susyplusplus.steel_multiblock_crate=Steel Multiblock Crate
-block.susyplusplus.clean_stainless_steel_multiblock_tank=Clean Stainless Steel Multiblock Tank
 block.susyplusplus.clean_stainless_steel_multiblock_crate=Clean Stainless Steel Multiblock Crate
-block.susyplusplus.reinforced_titanium_multiblock_tank=Reinforced Titanium Multiblock Tank
 block.susyplusplus.reinforced_titanium_multiblock_crate=Reinforced Titanium Multiblock Crate
 block.susyplusplus.steel_item_valve=Steel Item Valve
-block.susyplusplus.clean_stainless_steel_tank_valve=Clean Stainless Steel Tank Valve
 block.susyplusplus.clean_stainless_steel_item_valve=Clean Stainless Steel Item Valve
-block.susyplusplus.reinforced_titanium_tank_valve=Reinforced Titanium Tank Valve
 block.susyplusplus.reinforced_titanium_item_valve=Reinforced Titanium Item Valve
+
+# ------------------------------------------------------------------
+# Redstone-controlled valves
+# ------------------------------------------------------------------
+susyplusplus.machine.fluid_valve.name=Fluid Valve
+susyplusplus.machine.logistics_valve.name=Logistics Valve
+susyplusplus.machine.ir_fluid_valve.name=IR Fluid Valve
+block.susyplusplus.fluid_valve=Fluid Valve
+block.susyplusplus.logistics_valve=Logistics Valve
+block.susyplusplus.ir_fluid_valve=IR Fluid Valve
+susyplusplus.machine.redstone_valve.tooltip.default_open=Open by default; a redstone signal closes it
+susyplusplus.machine.redstone_valve.tooltip.no_buffer=No internal buffer (pure pass-through)
+susyplusplus.machine.redstone_valve.tooltip.faces=Input: %s / Output: %s
+susyplusplus.machine.redstone_valve.tool_usage.set_input=Wrench: set the input face
+susyplusplus.machine.redstone_valve.tool_usage.set_output=Shift + Wrench: set the output face
+susyplusplus.direction.north=North
+susyplusplus.direction.south=South
+susyplusplus.direction.east=East
+susyplusplus.direction.west=West
+susyplusplus.direction.up=Up
+susyplusplus.direction.down=Down
+
+# The One Probe: redstone valves
+susyplusplus.top.valve.open=Valve: Open
+susyplusplus.top.valve.closed=Valve: Closed
+susyplusplus.top.valve.input=Input face:
+susyplusplus.top.valve.output=Output face:
+
+# Steam pipes: 2 pressures x 5 sizes (rate = pressure base x size multiplier)
+tile.susyplusplus.low_pressure_steam_pipe_tiny.name=Low Pressure Steam Pipe (Tiny)
+tile.susyplusplus.low_pressure_steam_pipe_small.name=Low Pressure Steam Pipe (Small)
+tile.susyplusplus.low_pressure_steam_pipe_normal.name=Low Pressure Steam Pipe (Normal)
+tile.susyplusplus.low_pressure_steam_pipe_large.name=Low Pressure Steam Pipe (Large)
+tile.susyplusplus.low_pressure_steam_pipe_huge.name=Low Pressure Steam Pipe (Huge)
+tile.susyplusplus.high_pressure_steam_pipe_tiny.name=High Pressure Steam Pipe (Tiny)
+tile.susyplusplus.high_pressure_steam_pipe_small.name=High Pressure Steam Pipe (Small)
+tile.susyplusplus.high_pressure_steam_pipe_normal.name=High Pressure Steam Pipe (Normal)
+tile.susyplusplus.high_pressure_steam_pipe_large.name=High Pressure Steam Pipe (Large)
+tile.susyplusplus.high_pressure_steam_pipe_huge.name=High Pressure Steam Pipe (Huge)
+
+# Steam pipe tooltips
+susyplusplus.tooltip.steam_pipe.rate=Transfer rate: %s L/t
+susyplusplus.tooltip.steam_pipe.pressure=Pressure: %s
+susyplusplus.tooltip.steam_pipe.steam_only=Transfers steam only
+susyplusplus.pressure.low=Low pressure
+susyplusplus.pressure.high=High pressure
+
+# Rename machine (configurator mode 5)
+susyplusplus.gui.configurator.rename.title=Rename Machine
+susyplusplus.gui.configurator.rename.hint=Enter a new name (empty = clear the name)
+susyplusplus.gui.configurator.rename.clear=Clear name
+
+# The One Probe: machine custom name
+susyplusplus.top.machine_name=Name:

@@ -2,7 +2,10 @@ package com.susy.plusplus.client;
 
 import com.susy.plusplus.SusyPlusPlus;
 import com.susy.plusplus.block.SuBlocks;
+import com.susy.plusplus.client.renderer.SteamPipeRenderer;
 import com.susy.plusplus.config.SuConfig;
+import com.susy.plusplus.pipe.steam.SteamPipeType;
+import com.susy.plusplus.pipe.steam.SuSteamPipes;
 import com.susy.plusplus.item.ItemWaterproofSprayCan;
 import com.susy.plusplus.item.battery.ItemBatteryCase;
 import com.susy.plusplus.item.configurator.ItemConfigurator;
@@ -57,6 +60,13 @@ public final class SuClientEvents {
         // 配置器快捷键（Shift+V）+ 它的按键事件监听。
         ConfiguratorKeys.init();
         MinecraftForge.EVENT_BUS.register(ConfiguratorKeys.class);
+
+        // Susy 中文补充翻译：默认关闭，只有 enableSusyTranslations=true 时才注入语言表
+        SusyLangOverride.init();
+
+        // 蒸汽管道渲染器：必须在 preInit 里调用（创建 CCL 渲染类型 + 登记贴图回调），
+        // 与 GT 自己的 FluidPipeRenderer.INSTANCE.preInit() 同一时机。
+        SteamPipeRenderer.INSTANCE.preInit();
 
         SusyPlusPlus.LOGGER.info("[SusyPlusPlus] SuClientEvents registered on client event bus.");
     }
@@ -127,5 +137,32 @@ public final class SuClientEvents {
             trolley.registerTextureMesh();
             SusyPlusPlus.LOGGER.info("[SusyPlusPlus] Registered models + texture mesh for trolley.");
         }
+
+        // 蒸汽管道（CCL 渲染器）：10 种管道的物品模型都指向同一个 ModelResourceLocation，
+        // 具体粗细/压力由 Stack 里的方块决定，渲染器自己读取。
+        for (SteamPipeType type : SteamPipeType.VALUES) {
+            registerPipeItemModel(SuSteamPipes.getItem(type), type.getRegistryName());
+        }
+    }
+
+    /**
+     * 管道物品的模型注册。
+     *
+     * <p>
+     * 管道的形状依赖连接状态，无法用普通 JSON 模型表达；GT 的做法是让
+     * {@code PipeRenderer} 自己充当 {@code IItemRenderer}，并把它注册到
+     * {@code PipeRenderer#getModelLocation()} 这个 {@code ModelResourceLocation} 上
+     * （见 {@code PipeRenderer#onModelsBake}）。这里只需要把物品的 mesh 指向该位置。
+     * </p>
+     */
+    private static void registerPipeItemModel(Item item, String name) {
+        if (item == null) {
+            SusyPlusPlus.LOGGER.warn("[SusyPlusPlus] {} item is null; skip pipe model registration.", name);
+            return;
+        }
+        ModelResourceLocation location = SteamPipeRenderer.INSTANCE.getModelLocation();
+        ModelLoader.setCustomMeshDefinition(item, stack -> location);
+        ModelLoader.registerItemVariants(item, location);
+        SusyPlusPlus.LOGGER.info("[SusyPlusPlus] Registered pipe item model: {} -> {}", name, location);
     }
 }

@@ -36,5 +36,11 @@ public final class SuTopIntegration {
 
         oneProbe.registerProvider(new WirelessTowerInfoProvider());
         SusyPlusPlus.LOGGER.info("已注册 The One Probe 无线能量传输塔进度显示。");
+
+        oneProbe.registerProvider(new ValveInfoProvider());
+        SusyPlusPlus.LOGGER.info("已注册 The One Probe 红石阀门开关状态显示。");
+
+        oneProbe.registerProvider(new MachineNameInfoProvider());
+        SusyPlusPlus.LOGGER.info("已注册 The One Probe 机器自定义名称显示。");
     }
 }

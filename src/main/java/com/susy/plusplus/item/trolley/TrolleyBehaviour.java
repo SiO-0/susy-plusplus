@@ -50,6 +50,7 @@ public class TrolleyBehaviour implements IItemComponent, IItemBehaviour {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
         // 空中右键：什么也不做（放下走 RightClickBlock 事件）
-        return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem(hand));
+        return new ActionResult<>(EnumActionResult.PASS,
+                com.susy.plusplus.util.PlayerHeld.get(player, hand));
     }
 }

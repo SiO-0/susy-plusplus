@@ -5,6 +5,9 @@ import com.susy.plusplus.block.SuBlocks;
 import com.susy.plusplus.config.SuConfig;
 import com.susy.plusplus.item.SuMetaItems;
 import com.susy.plusplus.material.SuMaterials;
+import com.susy.plusplus.pipe.steam.SteamPipePressure;
+import com.susy.plusplus.pipe.steam.SteamPipeType;
+import com.susy.plusplus.pipe.steam.SuSteamPipes;
 import com.susy.plusplus.multiblock.SuMetaTileEntities;
 
 import gregtech.api.GTValues;
@@ -13,6 +16,7 @@ import gregtech.api.recipes.ModHandler;
 import gregtech.api.recipes.RecipeMaps;
 import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.material.MarkerMaterials;
+import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.api.unification.stack.UnificationEntry;
@@ -92,6 +96,11 @@ public final class SuRecipes {
             registerTrolleyRecipe();
         }
 
+        // 蒸汽泵（覆盖板）
+        if (SuConfig.enableSteamPump) {
+            registerSteamPumpRecipe();
+        }
+
         // 存储检测器
         if (SuConfig.enableStorageScanner) {
             registerStorageScannerRecipe();
@@ -120,6 +129,164 @@ public final class SuRecipes {
         // 流体样品存储（MV / HV / EV；适配原版 GT 时跳过）
         if (SuConfig.enableFluidSamplesStorage && !SuConfig.vanillaGtCompat) {
             registerFluidSamplesStorageRecipes();
+        }
+
+        // 红石控制阀门：流体阀 / 物流阀 / IR 流体阀
+        if (SuConfig.enableRedstoneValves) {
+            registerRedstoneValveRecipes();
+        }
+
+        // 蒸汽管道：低压 64 L/t / 高压 256 L/t
+        registerSteamPipeRecipes();
+    }
+
+    /**
+     * 蒸汽管道的**合金炉**配方（2 个压力 × 5 种粗细 = 10 个配方）。
+     *
+     * <p>
+     * 出口：
+     * </p>
+     * <ul>
+     * <li>低压 → <b>粗青铜合金</b>（{@link Materials#Potin}，GT 中文名「粗青铜合金」）；高压 → <b>钢</b>；</li>
+     * <li>机器 → <b>合金炉</b>（{@code ALLOY_SMELTER_RECIPES}）。GT 的
+     * <b>蒸汽合金炉（Steam Alloy Smelter）</b>用的就是这张表，所以蒸汽时代即可制造；
+     * 电力合金炉同样可以；</li>
+     * <li>粗细 → 用<b>不同模头</b>（{@code notConsumable}）区分，见 {@link #pipeMold(int)}。</li>
+     * </ul>
+     *
+     * <p>
+     * 成本对齐 GT 自身的流体管道：{@code pipeTinyFluid = M/2}、{@code small = M}、
+     * {@code normal = 3M}、{@code large = 6M}、{@code huge = 12M}（M = 1 锭）：
+     * </p>
+     *
+     * <table border="1">
+     * <tr><th>规格</th><th>锭</th><th>产出</th><th>模头</th></tr>
+     * <tr><td>微型</td><td>1</td><td>2 根</td><td>粒模</td></tr>
+     * <tr><td>小型</td><td>1</td><td>1 根</td><td>球模</td></tr>
+     * <tr><td>中型</td><td>3</td><td>1 根</td><td>锭模</td></tr>
+     * <tr><td>大型</td><td>6</td><td>1 根</td><td>圆柱模</td></tr>
+     * <tr><td>巨型</td><td>12</td><td>1 根</td><td>块模</td></tr>
+     * </table>
+     *
+     * <p>
+     * <b>为什么不用虚拟电路</b>：蒸汽合金炉没有电路槽；<b>为什么不能用"不同数量"区分</b>：
+     * GT 的配方匹配允许输入数量大于配方量，同材料不同数量的两条配方会互相覆盖。
+     * 模头是 {@code notConsumable} 输入，参与匹配但不消耗，天然区分五种粗细。
+     * </p>
+     */
+    private static void registerSteamPipeRecipes() {
+        if (!SuSteamPipes.isReady()) {
+            SusyPlusPlus.LOGGER.warn("[SusyPlusPlus] Steam pipes are not registered; skip pipe recipes.");
+            return;
+        }
+
+        // 每档的材料量，对齐 GT 的 pipeTinyFluid(M/2) … pipeHugeFluid(12M)。
+        // 粗细用**不同模头**区分（而不是电路 / 数量）：蒸汽合金炉没有电路槽，
+        // 而同一张配方表里"同材料不同数量"会互相覆盖（GT 的匹配允许输入数量大于配方量）。
+        int[] ingotCost = { 1, 1, 3, 6, 12 };
+
+        for (SteamPipeType type : SteamPipeType.VALUES) {
+            int sizeIndex = type.getSize().getIndex();
+            int outputAmount = sizeIndex == 0 ? 2 : 1; // 微型一板出两根
+            ItemStack output = SuSteamPipes.getStack(type, outputAmount);
+            if (output.isEmpty()) {
+                continue;
+            }
+
+            int ingots = ingotCost[Math.min(sizeIndex, ingotCost.length - 1)];
+            int duration = 100 + 50 * sizeIndex;
+
+            // 低压用粗青铜合金（Potin）、高压用钢；在**合金炉**里"材料 + 模头"成形。
+            // ALLOY_SMELTER_RECIPES 同时被**蒸汽合金炉**（Steam Alloy Smelter）使用，
+            // 所以蒸汽时代就能造。
+            boolean highPressure = type.getPressure() == SteamPipePressure.HIGH_PRESSURE;
+            Material material = highPressure ? Materials.Steel : Materials.Potin;
+            ItemStack mold = pipeMold(sizeIndex);
+            if (mold.isEmpty()) {
+                continue;
+            }
+
+            RecipeMaps.ALLOY_SMELTER_RECIPES.recipeBuilder()
+                    .input(OrePrefix.ingot, material, ingots)
+                    .notConsumable(mold)
+                    .outputs(output)
+                    .duration(duration)
+                    .EUt(GTValues.VA[GTValues.LV])
+                    .buildAndRegister();
+        }
+    }
+
+    /**
+     * 按粗细选择模头：{@code gregtech:meta_item_1} 的 meta 38 ~ 42。
+     *
+     * <p>
+     * 这五个就是 GT 的**管道模头**（微型 / 小型 / 中型 / 大型 / 巨型），
+     * 用物品 ID + meta 直接取，避免依赖 GT 内部的 {@code MetaValueItem} 字段名；
+     * 取不到时返回 {@link ItemStack#EMPTY}，配方会跳过（不会注册出空模具配方）。
+     * </p>
+     */
+    private static ItemStack pipeMold(int sizeIndex) {
+        int meta = 38 + Math.max(0, Math.min(4, sizeIndex));
+        return modItem("gregtech", "meta_item_1", 1, meta);
+    }
+
+    // ==========================================================================
+    // 红石控制阀门：流体阀 / 物流阀 / IR 流体阀
+    // ==========================================================================
+
+    /**
+     * 三个阀门都用<b>组装机</b>制造，材料刻意保持「MV 级别、不含锰钢 / 不锈钢」，
+     * 让玩家在拿到 MV 电路后就能用上。
+     *
+     * <table border="1">
+     * <tr><th>产物</th><th>材料</th></tr>
+     * <tr><td>流体阀</td><td>编程电路 14 + 钢制机械方块 ×2 + MV 电动泵 + 红石 ×2</td></tr>
+     * <tr><td>物流阀</td><td>编程电路 15 + 钢制机械方块 ×2 + MV 传送带 + 红石 ×2</td></tr>
+     * <tr><td>IR 流体阀</td><td>编程电路 16 + 洁净不锈钢机械方块 ×2 + HV 电动泵 ×2 + 红石 ×2 + 流体阀 ×1</td></tr>
+     * </table>
+     *
+     * <p>
+     * 电路编号 12 / 13 已被手推车 / 电动碾磨机占用，因此这里从 14 开始。
+     * </p>
+     */
+    private static void registerRedstoneValveRecipes() {
+        ItemStack steelCasing = MetaBlocks.METAL_CASING
+                .getItemVariant(BlockMetalCasing.MetalCasingType.STEEL_SOLID);
+        ItemStack stainlessCasing = MetaBlocks.METAL_CASING
+                .getItemVariant(BlockMetalCasing.MetalCasingType.STAINLESS_CLEAN);
+
+        if (SuMetaTileEntities.FLUID_VALVE != null) {
+            RecipeMaps.ASSEMBLER_RECIPES.recipeBuilder()
+                    .circuitMeta(14)
+                    .inputs(MetaItems.ELECTRIC_PUMP_MV.getStackForm())
+                    .inputs(new ItemStack(Items.REDSTONE, 2))
+                    .outputs(SuMetaTileEntities.FLUID_VALVE.getStackForm())
+                    .duration(200)
+                    .EUt(GTValues.VA[GTValues.LV])
+                    .buildAndRegister();
+        }
+
+        if (SuMetaTileEntities.LOGISTICS_VALVE != null) {
+            RecipeMaps.ASSEMBLER_RECIPES.recipeBuilder()
+                    .circuitMeta(15)
+                    .inputs(MetaItems.CONVEYOR_MODULE_MV.getStackForm())
+                    .inputs(new ItemStack(Items.REDSTONE, 2))
+                    .outputs(SuMetaTileEntities.LOGISTICS_VALVE.getStackForm())
+                    .duration(200)
+                    .EUt(GTValues.VA[GTValues.LV])
+                    .buildAndRegister();
+        }
+
+        if (SuMetaTileEntities.IR_FLUID_VALVE != null) {
+            RecipeMaps.ASSEMBLER_RECIPES.recipeBuilder()
+                    .circuitMeta(16)
+                    .inputs(MetaItems.ELECTRIC_PUMP_HV.getStackForm(2))
+                    .inputs(new ItemStack(Items.REDSTONE, 2))
+                    .inputs(SuMetaTileEntities.FLUID_VALVE.getStackForm())
+                    .outputs(SuMetaTileEntities.IR_FLUID_VALVE.getStackForm())
+                    .duration(300)
+                    .EUt(GTValues.VA[GTValues.MV])
+                    .buildAndRegister();
         }
     }
 
@@ -204,11 +371,10 @@ public final class SuRecipes {
      * </p>
      *
      * <ul>
-     * <li>储罐用<b>环</b>（照 GT 储罐）、板条箱用<b>板</b>（照 GT 箱子）→ 互不相同；</li>
-     * <li>储罐阀门底部是<b>转子</b>（照 GT 储罐阀门）、物品阀门底部是<b>传送带</b> → 互不相同；</li>
+     * <li>板条箱用<b>板</b>（照 GT 箱子）、物品阀门底部是<b>传送带</b> → 互不相同；</li>
      * <li>各档材质不同（钢 / 不锈钢 / 钛），互不相同；</li>
-     * <li>也与 GT 自己的 {@code steel_multiblock_tank} / {@code steel_tank_valve} / {@code steel_crate}
-     * 不同（它们用的是环 / 转子 / 长杆）。</li>
+     * <li>也与 GT 自己的 {@code steel_crate} / {@code steel_tank_valve}
+     * 不同（它们用的是环 / 转子）。</li>
      * </ul>
      */
     private static void registerMultiblockStorageRecipes() {
@@ -234,25 +400,6 @@ public final class SuRecipes {
         }
 
         // ---------------- 洁净不锈钢档 ----------------
-        // ---------- 洁净不锈钢储罐：照 GT 储罐形状（" R ","hCw"," R "）----------
-        if (SuMetaTileEntities.CLEAN_STAINLESS_STEEL_MULTIBLOCK_TANK != null) {
-            ModHandler.addShapedRecipe("susyplusplus_clean_stainless_steel_multiblock_tank",
-                    SuMetaTileEntities.CLEAN_STAINLESS_STEEL_MULTIBLOCK_TANK.getStackForm(),
-                    " R ", "hCw", " R ",
-                    'R', new UnificationEntry(OrePrefix.ring, Materials.StainlessSteel),
-                    'C', MetaBlocks.METAL_CASING
-                            .getItemVariant(BlockMetalCasing.MetalCasingType.STAINLESS_CLEAN));
-        }
-        // ---------- 洁净不锈钢储罐阀门：照 GT 储罐阀门形状（底部转子）----------
-        if (SuMetaTileEntities.CLEAN_STAINLESS_STEEL_TANK_VALVE != null) {
-            ModHandler.addShapedRecipe("susyplusplus_clean_stainless_steel_tank_valve",
-                    SuMetaTileEntities.CLEAN_STAINLESS_STEEL_TANK_VALVE.getStackForm(),
-                    " R ", "hCw", " O ",
-                    'R', new UnificationEntry(OrePrefix.ring, Materials.StainlessSteel),
-                    'C', MetaBlocks.METAL_CASING
-                            .getItemVariant(BlockMetalCasing.MetalCasingType.STAINLESS_CLEAN),
-                    'O', new UnificationEntry(OrePrefix.rotor, Materials.StainlessSteel));
-        }
         // ---------- 洁净不锈钢板条箱：板版（照 GT 箱子）----------
         if (SuMetaTileEntities.CLEAN_STAINLESS_STEEL_MULTIBLOCK_CRATE != null) {
             ModHandler.addShapedRecipe("susyplusplus_clean_stainless_steel_multiblock_crate",
@@ -274,25 +421,6 @@ public final class SuRecipes {
         }
 
         // ---------------- 加强钛档 ----------------
-        // ---------- 加强钛储罐：照 GT 储罐形状 ----------
-        if (SuMetaTileEntities.REINFORCED_TITANIUM_MULTIBLOCK_TANK != null) {
-            ModHandler.addShapedRecipe("susyplusplus_reinforced_titanium_multiblock_tank",
-                    SuMetaTileEntities.REINFORCED_TITANIUM_MULTIBLOCK_TANK.getStackForm(),
-                    " R ", "hCw", " R ",
-                    'R', new UnificationEntry(OrePrefix.ring, Materials.Titanium),
-                    'C', MetaBlocks.METAL_CASING
-                            .getItemVariant(BlockMetalCasing.MetalCasingType.TITANIUM_STABLE));
-        }
-        // ---------- 加强钛储罐阀门：照 GT 储罐阀门形状（底部转子）----------
-        if (SuMetaTileEntities.REINFORCED_TITANIUM_TANK_VALVE != null) {
-            ModHandler.addShapedRecipe("susyplusplus_reinforced_titanium_tank_valve",
-                    SuMetaTileEntities.REINFORCED_TITANIUM_TANK_VALVE.getStackForm(),
-                    " R ", "hCw", " O ",
-                    'R', new UnificationEntry(OrePrefix.ring, Materials.Titanium),
-                    'C', MetaBlocks.METAL_CASING
-                            .getItemVariant(BlockMetalCasing.MetalCasingType.TITANIUM_STABLE),
-                    'O', new UnificationEntry(OrePrefix.rotor, Materials.Titanium));
-        }
         // ---------- 加强钛板条箱：板版 ----------
         if (SuMetaTileEntities.REINFORCED_TITANIUM_MULTIBLOCK_CRATE != null) {
             ModHandler.addShapedRecipe("susyplusplus_reinforced_titanium_multiblock_crate",
@@ -639,6 +767,28 @@ public final class SuRecipes {
                 .outputs(SuMetaItems.TROLLEY.getStackForm())
                 .duration(200)
                 .EUt(30)
+                .buildAndRegister();
+    }
+
+    /**
+     * 蒸汽泵（覆盖板）：组装机，LV 电路 + LV 电动泵 + 钢板 ×4 + 红石 ×1。
+     *
+     * <p>
+     * 电路编号 17（12–16 已被手推车 / 电动碾磨机 / 三个红石阀门占用）。
+     * </p>
+     */
+    private static void registerSteamPumpRecipe() {
+        if (SuMetaItems.STEAM_PUMP == null) {
+            return;
+        }
+        RecipeMaps.ASSEMBLER_RECIPES.recipeBuilder()
+                .circuitMeta(17)
+                .inputs(MetaItems.ELECTRIC_PUMP_LV.getStackForm())
+                .input(OrePrefix.plate, Materials.Steel, 4)
+                .inputs(new ItemStack(Items.REDSTONE, 1))
+                .outputs(SuMetaItems.STEAM_PUMP.getStackForm())
+                .duration(200)
+                .EUt(GTValues.VA[GTValues.LV])
                 .buildAndRegister();
     }
 

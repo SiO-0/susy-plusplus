@@ -1,4 +1,9 @@
 # Susy Plus Plus - zh_cn
+# 蒸汽泵覆盖板
+metaitem.steam_pump.name=蒸汽泵
+susyplusplus.tooltip.steam_pump.rate=传输速率：%s L/t
+susyplusplus.tooltip.steam_pump.steam_only=只传输蒸汽（gregtech:steam / susy:dense_steam）
+susyplusplus.tooltip.steam_pump.install=手持右键机器或管道的一面即可安装（覆盖板）
 # 物品（MetaItem 默认翻译键格式：metaitem.<unlocalizedName>.name）
 metaitem.waterproof_spray_can.name=防水喷漆
 
@@ -82,6 +87,8 @@ susyplusplus.configurator.mode.copy_config=复制机器配置
 susyplusplus.configurator.mode.machine_toolbox=机器工具箱
 susyplusplus.configurator.mode.fluid_capacity=容量限制（仅流体）
 susyplusplus.tooltip.configurator.hint.fluid_capacity=普通右键容器：修改各流体槽位容量
+susyplusplus.configurator.mode.rename=给机器重命名
+susyplusplus.tooltip.configurator.hint.rename=普通右键机器：套用本物品的铁砧名字（没有铁砧名字则清除）
 susyplusplus.configurator.face.none=无配置
 susyplusplus.configurator.face.fluid=流体自动输出
 susyplusplus.configurator.face.item=物品自动输出
@@ -133,6 +140,9 @@ susyplusplus.message.configurator.unsupported=该机器不支持修改输出面
 susyplusplus.message.configurator.toolbox_done=已执行：%s
 susyplusplus.message.configurator.no_fluid_tank=该机器没有流体槽位
 susyplusplus.message.configurator.capacity_set=已应用流体容量设置
+susyplusplus.message.configurator.renamed=机器已重命名为：%s
+susyplusplus.message.configurator.renamed_cleared=已清除机器名字
+susyplusplus.message.configurator.rename_failed=该方块不支持重命名
 
 # 手推车
 metaitem.trolley.name=手推车
@@ -175,14 +185,10 @@ block.susyplusplus.electric_grinder=电动碾磨机
 
 # 多方块存储升级 / Multiblock storage upgrades
 susyplusplus.machine.steel_multiblock_crate.name=钢制多方块板条箱
-susyplusplus.machine.clean_stainless_steel_multiblock_tank.name=洁净不锈钢多方块储罐
 susyplusplus.machine.clean_stainless_steel_multiblock_crate.name=洁净不锈钢多方块板条箱
-susyplusplus.machine.reinforced_titanium_multiblock_tank.name=加强钛多方块储罐
 susyplusplus.machine.reinforced_titanium_multiblock_crate.name=加强钛多方块板条箱
 susyplusplus.machine.steel_item_valve.name=钢制物品阀门
-susyplusplus.machine.clean_stainless_steel_tank_valve.name=洁净不锈钢储罐阀门
 susyplusplus.machine.clean_stainless_steel_item_valve.name=洁净不锈钢物品阀门
-susyplusplus.machine.reinforced_titanium_tank_valve.name=加强钛储罐阀门
 susyplusplus.machine.reinforced_titanium_item_valve.name=加强钛物品阀门
 susyplusplus.machine.multiblock_crate.tooltip.single_type=单物品类型大容量存储（换物品种类需先取空）
 susyplusplus.machine.multiblock_crate.tooltip.valve=需要对应物品阀门才能与管道 / 漏斗 / AE2 交互
@@ -331,12 +337,62 @@ susyplusplus.patch.xnet.logic.rsout=红石输出值
 
 # 兼容用（部分情况下 GT 用 block.<ns>.<path> 作键）
 block.susyplusplus.steel_multiblock_crate=钢制多方块板条箱
-block.susyplusplus.clean_stainless_steel_multiblock_tank=洁净不锈钢多方块储罐
 block.susyplusplus.clean_stainless_steel_multiblock_crate=洁净不锈钢多方块板条箱
-block.susyplusplus.reinforced_titanium_multiblock_tank=加强钛多方块储罐
 block.susyplusplus.reinforced_titanium_multiblock_crate=加强钛多方块板条箱
 block.susyplusplus.steel_item_valve=钢制物品阀门
-block.susyplusplus.clean_stainless_steel_tank_valve=洁净不锈钢储罐阀门
 block.susyplusplus.clean_stainless_steel_item_valve=洁净不锈钢物品阀门
-block.susyplusplus.reinforced_titanium_tank_valve=加强钛储罐阀门
 block.susyplusplus.reinforced_titanium_item_valve=加强钛物品阀门
+
+# ------------------------------------------------------------------
+# 红石控制阀门
+# ------------------------------------------------------------------
+susyplusplus.machine.fluid_valve.name=流体阀
+susyplusplus.machine.logistics_valve.name=物流阀
+susyplusplus.machine.ir_fluid_valve.name=IR 流体阀
+block.susyplusplus.fluid_valve=流体阀
+block.susyplusplus.logistics_valve=物流阀
+block.susyplusplus.ir_fluid_valve=IR 流体阀
+susyplusplus.machine.redstone_valve.tooltip.default_open=默认导通；有红石信号时关闭
+susyplusplus.machine.redstone_valve.tooltip.no_buffer=无内部缓存（仅作为通路）
+susyplusplus.machine.redstone_valve.tooltip.faces=输入面：%s / 输出面：%s
+susyplusplus.machine.redstone_valve.tool_usage.set_input=扳手：设置输入面
+susyplusplus.machine.redstone_valve.tool_usage.set_output=Shift + 扳手：设置输出面
+susyplusplus.direction.north=北
+susyplusplus.direction.south=南
+susyplusplus.direction.east=东
+susyplusplus.direction.west=西
+susyplusplus.direction.up=上
+susyplusplus.direction.down=下
+
+# The One Probe：红石阀门
+susyplusplus.top.valve.open=阀门：开启
+susyplusplus.top.valve.closed=阀门：关闭
+susyplusplus.top.valve.input=输入面：
+susyplusplus.top.valve.output=输出面：
+
+# 蒸汽管道：2 个压力 × 5 种粗细（速率 = 压力基础速率 × 规格倍率）
+tile.susyplusplus.low_pressure_steam_pipe_tiny.name=低压微型蒸汽管道
+tile.susyplusplus.low_pressure_steam_pipe_small.name=低压小型蒸汽管道
+tile.susyplusplus.low_pressure_steam_pipe_normal.name=低压中型蒸汽管道
+tile.susyplusplus.low_pressure_steam_pipe_large.name=低压大型蒸汽管道
+tile.susyplusplus.low_pressure_steam_pipe_huge.name=低压巨型蒸汽管道
+tile.susyplusplus.high_pressure_steam_pipe_tiny.name=高压微型蒸汽管道
+tile.susyplusplus.high_pressure_steam_pipe_small.name=高压小型蒸汽管道
+tile.susyplusplus.high_pressure_steam_pipe_normal.name=高压中型蒸汽管道
+tile.susyplusplus.high_pressure_steam_pipe_large.name=高压大型蒸汽管道
+tile.susyplusplus.high_pressure_steam_pipe_huge.name=高压巨型蒸汽管道
+
+# 蒸汽管道 tooltip
+susyplusplus.tooltip.steam_pipe.rate=传输速率：%s L/t
+susyplusplus.tooltip.steam_pipe.pressure=压力等级：%s
+susyplusplus.tooltip.steam_pipe.steam_only=仅可通过蒸汽
+susyplusplus.pressure.low=低压
+susyplusplus.pressure.high=高压
+
+# 重命名机器（配置器模式 5）
+susyplusplus.gui.configurator.rename.title=重命名机器
+susyplusplus.gui.configurator.rename.hint=输入新名称（留空 = 清除名称）
+susyplusplus.gui.configurator.rename.clear=清空名称
+
+# The One Probe：机器自定义名称
+susyplusplus.top.machine_name=名称：
